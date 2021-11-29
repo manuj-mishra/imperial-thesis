@@ -45,7 +45,7 @@ function visible(agent) {
 // Called initially and whenever the window resizes to update the canvas
 // size and width/height variables.
 function sizeCanvas() {
-  const canvas = document.getElementById("polygon");
+  const canvas = document.getElementById("polygon_2d");
   width = window.innerWidth;
   height = window.innerHeight;
   canvas.width = width;
@@ -135,7 +135,7 @@ function animationLoop() {
   }
 
   // Clear the canvas and redraw all the agents in their current positions
-  const ctx = document.getElementById("polygon").getContext("2d");
+  const ctx = document.getElementById("polygon_2d").getContext("2d");
   ctx.clearRect(0, 0, width, height);
   for (let agent of agents) {
     drawAgent(ctx, agent);
