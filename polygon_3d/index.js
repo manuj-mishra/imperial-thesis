@@ -1,12 +1,17 @@
+import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.135.0-pjGUcRG9Xt70OdXl97VF/mode=imports,min/optimized/three.js';
+
 // Size of canvas. These get updated to fill the whole browser.
 let width = 150;
 let height = 150;
+let scene = null;
+let camera = null;
+let renderer = null;
 
 // Constants
-const numAgents = 6;
+const numAgents = 5;
 const visualRange = 200;
-const speedLimit = 8;
-const vel_multiplier = 0.004; // adjust velocity by this %
+const speedLimit = 0.08;
+const vel_multiplier = 0.0004; // adjust velocity by this %
 const inertia = 8
 
 // Social distance parameter
@@ -18,22 +23,33 @@ const DRAW_TRAIL = true;
 
 var agents = [];
 
+function randFloat(min, max) {
+  return Math.random() * (max - min) + max
+}
+
+function randVect(min, max) {
+  return new THREE.Vector3(randFloat(min, max), randFloat(min, max), randFloat(min, max))
+}
+
 function initAgents() {
   for (var i = 0; i < numAgents; i += 1) {
+    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+    const cube = new THREE.Mesh( geometry, material );
     agents[i] = {
-      x: Math.random() * width,
-      y: Math.random() * height,
-      dx: Math.random() * 10 - 5,
-      dy: Math.random() * 10 - 5,
+      vel: randVect(0, 0.01),
       near: [],
       history: [],
+      object: cube,
     };
+    scene.add( cube );
+    cube.position.set(randFloat(-10, 10), randFloat(-10, 10), randFloat(-10, -40))
   }
 }
 
 function distance(agent1, agent2) {
   return Math.sqrt(
-    (agent1.x - agent2.x) ** 2 + (agent1.y - agent2.y) ** 2,
+    (agent1.x - agent2.x) ** 2 + (agent1.y - agent2.y) ** 2 + (agent1.z - agent2.z) ** 2,
   );
 }
 
@@ -45,11 +61,13 @@ function visible(agent) {
 // Called initially and whenever the window resizes to update the canvas
 // size and width/height variables.
 function sizeCanvas() {
-  const canvas = document.getElementById("polygon_2d");
   width = window.innerWidth;
   height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize( width, height );
+  document.body.appendChild( renderer.domElement );
 }
 
 // Attempt to maintain distance of D from all other agents
@@ -57,60 +75,31 @@ function socialDistance(agent) {
 
   let moveX = 0;
   let moveY = 0;
+  let moveZ = 0;
 
   for (let other of agents) {
     if (other !== agent) {
-      vel_base = D - distance(agent, other)
+      const vel_base = D - distance(agent, other)
       moveX += vel_base * (agent.x - other.x);
       moveY += vel_base * (agent.y - other.y);
+      moveZ += vel_base * (agent.z - other.z);
     }
   }
-  agent.dx += moveX * vel_multiplier;
-  agent.dy += moveY * vel_multiplier;
-  agent.dx /= inertia
-  agent.dy /= inertia
+  agent.vel.x += moveX * vel_multiplier;
+  agent.vel.y += moveY * vel_multiplier;
+  agent.vel.z += moveZ * vel_multiplier;
+  agent.vel.x /= inertia
+  agent.vel.y /= inertia
+  agent.vel.z /= inertia
 }
 
 function limitSpeed(agent) {
 
-  const speed = Math.sqrt(agent.dx * agent.dx + agent.dy * agent.dy);
+  const speed = Math.sqrt(agent.vel.x ** 2 + agent.vel.y ** 2 + agent.vel.z ** 2);
   if (speed > speedLimit) {
-    agent.dx = (agent.dx / speed) * speedLimit;
-    agent.dy = (agent.dy / speed) * speedLimit;
-  }
-}
-
-
-function drawAgent(ctx, agent) {
-  const angle = Math.atan2(agent.dy, agent.dx);
-  ctx.translate(agent.x, agent.y);
-  ctx.rotate(angle);
-  ctx.translate(-agent.x, -agent.y);
-  ctx.fillStyle = "#558cf4";
-  ctx.beginPath();
-  ctx.moveTo(agent.x, agent.y);
-  ctx.arc(agent.x, agent.y, 5, 0, 2 * Math.PI);
-  ctx.fill();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-  if (DRAW_NEAR) {
-    ctx.strokeStyle = "#558cf466";
-    ctx.beginPath();
-    for (const point of agent.near) {
-      ctx.moveTo(agent.x, agent.y);
-      ctx.lineTo(point[0], point[1]);
-    }
-    ctx.stroke();
-  }
-
-  if (DRAW_TRAIL) {
-    ctx.strokeStyle = "rgba(64,11,20,0.4)";
-    ctx.beginPath();
-    ctx.moveTo(agent.history[0][0], agent.history[0][1]);
-    for (const point of agent.history) {
-      ctx.lineTo(point[0], point[1]);
-    }
-    ctx.stroke();
+    agent.vel.x = (agent.vel.x / speed) * speedLimit;
+    agent.vel.y = (agent.vel.y / speed) * speedLimit;
+    agent.vel.z = (agent.vel.z / speed) * speedLimit;
   }
 }
 
@@ -123,36 +112,23 @@ function animationLoop() {
     limitSpeed(agent);
 
     // Update the position based on the current velocity
-    agent.x += agent.dx;
-    agent.y += agent.dy;
-    agent.near = []
-    for (let other of visible(agent)) {
-      agent.near.push([other.x, other.y])
-    }
-
-    agent.history.push([agent.x, agent.y])
-    agent.history = agent.history.slice(-50);
-  }
-
-  // Clear the canvas and redraw all the agents in their current positions
-  const ctx = document.getElementById("polygon_2d").getContext("2d");
-  ctx.clearRect(0, 0, width, height);
-  for (let agent of agents) {
-    drawAgent(ctx, agent);
+    const oldPos = agent.object.position
+    agent.object.position.set(oldPos.x + 0.1, oldPos.y, oldPos.z)
   }
 
   // Schedule the next frame
+  renderer.render( scene, camera );
   window.requestAnimationFrame(animationLoop);
 }
 
 window.onload = () => {
   // Make sure the canvas always fills the whole window
-  window.addEventListener("resize", sizeCanvas, false);
+  // window.addEventListener("resize", sizeCanvas, false);
   sizeCanvas();
 
   // Randomly distribute the agents to start
   initAgents();
-
+  renderer.render(scene, camera)
   // Schedule the main animation loop
   window.requestAnimationFrame(animationLoop);
 };
