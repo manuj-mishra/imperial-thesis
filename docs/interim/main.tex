@@ -1,0 +1,57 @@
+\documentclass[a4paper, twoside]{report}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage[capposition=top]{floatrow}
+\usepackage{subfig}
+\usepackage[numbers]{natbib}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+% Shorthand commands
+\newcommand{\R}{\mathbb{R}}
+
+\title{Regenerating Graph Cellular Automata}
+\author{Manuj Mishra}
+
+\begin{document}
+\input{title/title.tex}
+
+\begin{abstract}
+[Abstract here]
+\end{abstract}
+
+\renewcommand{\abstractname}{Acknowledgements}
+\begin{abstract}
+[Acknowledgements here]
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\listofalgorithms
+
+\input{introduction/introduction}
+\input{preliminaries/preliminaries}
+\input{related_works/related_works}
+\input{project_plan/project_plan}
+\input{evaluation_plan/evaluation_plan}
+% \input{conclusion/conclusion}
+\input{appendix/appendix}
+
+\bibliographystyle{unsrtnat}
+\bibliography{bibs/bib}
+
+\end{document}

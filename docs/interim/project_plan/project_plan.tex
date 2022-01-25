@@ -1,0 +1,38 @@
+\chapter{Project Plan}
+
+This project is based on improving and building upon very recent work in a relatively new area of work.
+As such, much of the work is exploratory.
+Early on, this project involves becoming familiar with the relevant theory, methods, and technologies around CA and machine learning.
+The next stage begins by replicating existing results from recent work on CA morphogenesis and regeneration. Following this, the key goal is to developing theoretical ideas to improve the methods used to produce these results.
+Finally, the project aims to test the efficacy of these ideas through experimentation and interactive demonstrations.
+Each of these 3 stages is expected to take a roughly equal amount of time.
+Throughout each of the stages, the project write-up will continue to develop.
+The interim report will be written during the latter half of stage 1 and the earlier half of stage 2.
+This will provide a strong basis for the final report which will be written in the latter half of stage 2 and the earlier half of stage 1.
+
+\section{Key Milestones}
+The key milestones in this project along with the projected dates of completion are outlined as follows.\\
+
+\textbf{December 2021}: The first milestone is to decide on specific aims for the project. 
+This was achieved by the planned deadline. 
+The goals for this project came naturally out of an exploration into the literature around morphogenesis in cellular automata.
+Since CA are a relatively old concept, there is a large body of research in this area.
+However, the background reading for this project focused largely on applying machine learning to learn transition rules for specific goals.
+Since the seminal paper by Wulff and Hertz in 1992 \cite{wulff1992learning}, this was a relatively stagnant area of research until the breakthrough work by Mordvintsev et al in 2020 \cite{mordvintsev2020growing}.
+This opened up many possible areas of exploration including self-classifying CAs \cite{randazzo2020self-classifying}, adversarial attacks on morphogenetic CAs \cite{randazzo2021adversarial}, and growing graph CA \cite{grattarola2021learning}.
+
+
+
+The first milestone is to replicate the procedure outlined in the \textbf{Learning Graph Cellular Automata} paper \cite{grattarola2021learning}. This will involve reproducing the results on the 5 example point clouds as well as experimenting on new point clouds, eliciting both periodic and fixed-point behaviour.
+
+
+    \item Devise an appropriate training scheme and loss function to perform morphogenesis on point clouds that are smaller in number than the target.
+    \item Adapt this schema to include damage-based training to induce regenerative behaviour in solutions.
+    \item Produce interactive web-based examples to showcase the 
+    regenerative capabilities of the GNCA.
+    \item Write up the full project report.
+    
+\section{Fall-Back Positions}
+
+\section{Extensions}
+If there is more time, it would be worth investigating how to reduce the probability of the converging to long-period oscillating attractors. This is an exciting avenue of exploration because 

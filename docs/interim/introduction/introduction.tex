@@ -1,0 +1,16 @@
+\chapter{Introduction}
+
+Self-organisation is a remarkable phenomenon in which basic rules and feedback loops between a set of simple, unintelligent agents can lead to the emergence of complex, intelligent-looking behaviour. Many examples of self-organisation have been noted in nature from colony-building ants to flocking starlings. Morphogenesis is a form of self-organising behaviour in which agents can self-assemble into highly complex shapes. Another property of interest is robustness. When damaged, most organisms have the ability to heal on a cellular level, taking on a shape very similar to the original. \\
+
+Building computational models of this behaviour can help us understand the processes that generate and sustain self-organising systems in nature. With this knowledge, we can hope to capture the potential of highly distributed self-organising systems in areas such as swarm robotics and computer networks. \\
+
+Cellular automata (CA) are discrete computational models originally studied by von Neumann in the 1940s. They can exhibit self-organising features and have been widely studied in the field of artificial life. There has been a long history of work leveraging artificial neural networks to learn and simulate the behaviour of various classes of CA. With the surge of interest in graph neural networks over the last decade, very recent work has started to extend these techniques to a more general class of CA in which the cells no longer have to exist in a regular lattice structure. These generalised CA are called Graph Cellular Automata (GCA). \\
+
+With this in mind, we aim to "grow" graph cellular automata, leveraging graph neural networks to learn the rules that will allow a GCA point cloud of arbitrary size to approximate a given shape and maintain that shape when subject to perturbation. The key technical challenges throughout this work are as follows:
+
+\begin{enumerate}
+    \item Develop a novel loss function to ensure training done on point clouds of a given size can be extrapolated to smaller point clouds.
+    \item Develop a damage-based training pipeline to allow GCAs to learn regenerative behaviour
+    \item Reduce the probability of convergence to long-period attractors
+    \item Test the approach on different point clouds and produce interactive examples
+\end{enumerate}
