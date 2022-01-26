@@ -143,7 +143,7 @@ f(x) &= xe^{5(x-1)} \\
 \end{align}
 
 \noindent
-where $r_t$ is the ratio of cells with the correct state at time $t$.
+where $r_t$ is the proportion of cells with the correct state at time $t$.
 This exponential fitness function suppresses the contribution of dormant cells (i.e. low values of $x$) while maintaining the essential invariant $f(1) = 1$.
 This choice biases the algorithm towards more active CA.\\
 
@@ -189,7 +189,7 @@ The hidden vectors can be thought of as an opaque encoding mechanism in the cell
 
 The training pipeline features 4 key steps.
 The first is \textit{perception} in which a 3x3 convolution is applied.
-Two classical Sobel filters are used estimate the partial derivative of the state vectors in the $\overrightarrow{x}$ and $\overrightarrow{y}$ directions.
+Two classical Sobel filters (see Figure \ref{fig:sobel} are used estimate the partial derivative of the state vectors in the $\overrightarrow{x}$ and $\overrightarrow{y}$ directions.
 These represent the cells' signalling mechanism.
 The biological analogy here would be chemical gradients or electrical signal pathways.
 The gradients are flattened into a vector which is fed into a neural network of multiple layers including 1x1 convolutions and ReLU activations.
@@ -198,22 +198,28 @@ At each update, a per-cell stochastic dropout is applied to simulate the a rando
 This is to avoid the possibly misleading assumption of global synchronisation between cells.
 The pixel-wise Euclidean loss between the RGBA channels is then optimized through backpropagation-through-time. The resultant networks from this training represent candidate update rules that can induce the growth of a pattern from a single seed.\\
 
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=5in]{images/sobel.png}
+    \caption{Sobel filters in the x direction (left) and y direction (right) \cite{sodha}}
+    \label{fig:sobel}
+\end{figure}
+
 However, these networks exhibited drastic instability in the long term.
 To produce persistent patterns, a sample pool strategy is used whereby the network is trained on a pool of automata simultaneously.
 At each step, a batch of this pool are iterated using the network.
-The individual with the highest loss in the batch is reset to the seed state to prevent catastrophic forgetting. 
+The individual with the highest loss in the batch is reset to the seed state to prevent catastrophic forgetting \cite{mccloskey1989catastrophic}. 
 Using this method, the network learns to recover from incomplete and incorrect states which makes it more likely to converge towards a persistent solution.
 A simpler option to acheive persistence would've been to let the model train for longer and periodically apply a loss with exponential decaying intervals between these applications.
 However, this would have drastically increased memory and training time requirements.\\
 
 One surprising finding of this paper was that some of the resultant models exhibited regenerative behaviour when damaged, despite not being explicitly trained to do so. 
-This indicates a strong overlap between solutions that exhibit persistance and those that exhibit regenerative properties.\\
-
+This indicates a strong overlap between solutions that exhibit persistance and those that exhibit regenerative properties. 
 In order to further explore these regenerative properties, a new experiment was conducted in which a few samples in each batch were damaged before each training step. 
 The system is therefore trained to recover from half-formed states.
 This proved very successful. The models produced were able to grow, persist, and recover from different types of damage.\\
 
-[PUT CRITICISM HERE]
+Overall, this paper was a very successful breakthrough in using artificial neural networks for morphogenesis. It opened up many possible areas of exploration including self-classifying CAs \cite{randazzo2020self-classifying}, adversarial attacks on morphogenetic CAs \cite{randazzo2021adversarial}, and learning graph CA \cite{grattarola2021learning}.
 
 \section{Using graph neural networks}
 \label{sec: using-gnn}
@@ -227,15 +233,20 @@ This paper uses two multilayer preceptrons (MLPs) connected with a message passi
 The powerful capabilities of this simple architecture are exhibited in 3 experiments of increasing difficulty. They are:
 
 \begin{enumerate}
-  \item Voronoi: Learn an outer-totalistic rule that flips the binary state of a cell depending on the density of neighbours. This is analagous to Conway's Game of Life except on a Voronoi tessellation instead of a regular lattice. This is fairly easy since there is a explicit, known target rule and the graph topology is static. 
+  \item Voronoi: Learn a rule which flips the binary state of a cell depending on the number of living neighbours. This is analagous to Conway's Game of Life except on a Voronoi tessellation (see Figure \ref{fig:voronoi}) instead of a regular lattice. This is fairly easy since there is a explicit, known target rule and the graph topology is static. 
   \item Boids : Learn Reynold's algorithm \cite{reynolds1987flocks} to simulate the flocking of birds. This GCNA learns on a multi-agent system of points. The state of each point is a multidimensional continuous vector containing the position and velocity of each point as "visible" characteristics. This problem is more difficult. Although the target transition rule is still known, it is far more complex than the Voronoi experiment. Moreover, the graph topology is constantly changing as the points move.
   \item 3D Morphogenesis : Learn a rule for a point cloud to converge to a specified shape such that the connectivity of points have some geometrical meaning. The difficulty here arises from the fact that the target rule is unknown. This means we have little information about the attractiveness and periodicity of solutions.
 \end{enumerate}
 
-This work was successful at discovering rules that can converge and persist complex target graphs including the Stanford Bunny \todo{cite} and Minnesota road network \todo{cite}.
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/voronoi.png}
+    \caption{A GCNA learning on a Voronoi tessellation \cite{grattarola2021learning}}
+    \label{fig:voronoi}
+\end{figure}
+
+This work was successful at discovering rules that can converge and persist complex target graphs including the Stanford Bunny \cite{turk} and Minnesota road network.
 The key problem with the approach is that the GNCA sometimes converges to periodic solutions that orbit around the target state. 
-Both fixed point solutions and periodic solutions are class 2 CA under the Wolfram classification.\todo{put smth here}
+Both fixed point solutions and periodic solutions are class 2 CA under the Wolfram classification and, naturally, we can consider fixed point solutions to be a subset of periodic solutions with a period of 1.
+However, for the goal of producing stable shapes through morphogenesis, we are interested in discovering ways to seperate these two types of solutions.
 We can speculate that the model converges to periodic solutions at times because they are "close" to fixed point solutions in the rule space.
-
-
-

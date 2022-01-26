@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.24)  26 JAN 2022 21:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.24)  26 JAN 2022 23:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -662,7 +662,7 @@ Package epstopdf Info: Source file: <title/logo.eps>
 (epstopdf)             Command: <repstopdf --outfile=title/logo-eps-converted-to.pdf title/logo.eps>
 (epstopdf)             \includegraphics on input line 9.
 Package epstopdf Info: Output file is already uptodate.
-<title/logo-eps-converted-to.pdf, id=59, 362.35374pt x 95.35625pt>
+<title/logo-eps-converted-to.pdf, id=63, 362.35374pt x 95.35625pt>
 File: title/logo-eps-converted-to.pdf Graphic file (type pdf)
 <use title/logo-eps-converted-to.pdf>
 Package pdftex.def Info: title/logo-eps-converted-to.pdf  used on input line 9.
@@ -725,7 +725,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-<images/neighbourhoods.png, id=162, 277.035pt x 170.6375pt>
+<images/neighbourhoods.png, id=176, 277.035pt x 170.6375pt>
 File: images/neighbourhoods.png Graphic file (type png)
 <use images/neighbourhoods.png>
 Package pdftex.def Info: images/neighbourhoods.png  used on input line 9.
@@ -736,12 +736,12 @@ Underfull \vbox (badness 1082) has occurred while \output is active []
  [6
 
  <./images/neighbourhoods.png>]
-<images/life-patterns.png, id=177, 403.5075pt x 251.94125pt>
+<images/life-patterns.png, id=192, 403.5075pt x 251.94125pt>
 File: images/life-patterns.png Graphic file (type png)
 <use images/life-patterns.png>
 Package pdftex.def Info: images/life-patterns.png  used on input line 32.
 (pdftex.def)             Requested size: 341.43437pt x 213.18614pt.
-<images/life-glider.png, id=180, 853.1875pt x 209.78375pt>
+<images/life-glider.png, id=195, 853.1875pt x 209.78375pt>
 File: images/life-glider.png Graphic file (type png)
 <use images/life-glider.png>
 Package pdftex.def Info: images/life-glider.png  used on input line 40.
@@ -752,12 +752,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 55--56
  []
 
 [7 <./images/life-patterns.png> <./images/life-glider.png>]
-<images/rule-space.png, id=203, 636.3775pt x 515.9275pt>
+<images/rule-space.png, id=217, 636.3775pt x 515.9275pt>
 File: images/rule-space.png Graphic file (type png)
 <use images/rule-space.png>
 Package pdftex.def Info: images/rule-space.png  used on input line 61.
 (pdftex.def)             Requested size: 384.1096pt x 311.40103pt.
-<images/rule-110.png, id=206, 1553.805pt x 1270.7475pt>
+<images/rule-110.png, id=220, 1553.805pt x 1270.7475pt>
 File: images/rule-110.png Graphic file (type png)
 <use images/rule-110.png>
 Package pdftex.def Info: images/rule-110.png  used on input line 68.
@@ -806,7 +806,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 90--94
 
  []
 
-<images/austria-flag.png, id=242, 853.1875pt x 355.3275pt>
+<images/austria-flag.png, id=256, 853.1875pt x 355.3275pt>
 File: images/austria-flag.png Graphic file (type png)
 <use images/austria-flag.png>
 Package pdftex.def Info: images/austria-flag.png  used on input line 97.
@@ -814,12 +814,12 @@ Package pdftex.def Info: images/austria-flag.png  used on input line 97.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/animal-patterns.png, id=245, 853.1875pt x 491.8375pt>
+<images/animal-patterns.png, id=259, 853.1875pt x 491.8375pt>
 File: images/animal-patterns.png Graphic file (type png)
 <use images/animal-patterns.png>
 Package pdftex.def Info: images/animal-patterns.png  used on input line 107.
 (pdftex.def)             Requested size: 192.0548pt x 110.71118pt.
-<images/mona-lisa.png, id=248, 853.1875pt x 319.1925pt>
+<images/mona-lisa.png, id=262, 853.1875pt x 319.1925pt>
 File: images/mona-lisa.png Graphic file (type png)
 <use images/mona-lisa.png>
 Package pdftex.def Info: images/mona-lisa.png  used on input line 112.
@@ -840,7 +840,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 145--149
  []
 
 [12 <./images/austria-flag.png> <./images/animal-patterns.png> <./images/mona-lisa.png>]
-<images/five-flags.png, id=272, 823.075pt x 144.54pt>
+<images/five-flags.png, id=286, 823.075pt x 144.54pt>
 File: images/five-flags.png Graphic file (type png)
 <use images/five-flags.png>
 Package pdftex.def Info: images/five-flags.png  used on input line 153.
@@ -850,7 +850,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 159--160
 
  []
 
-<images/tricolor-cppn.png, id=274, 767.86874pt x 481.8pt>
+<images/tricolor-cppn.png, id=288, 767.86874pt x 481.8pt>
 File: images/tricolor-cppn.png Graphic file (type png)
 <use images/tricolor-cppn.png>
 Package pdftex.def Info: images/tricolor-cppn.png  used on input line 167.
@@ -870,36 +870,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 190--200
 
  []
 
+<images/sobel.png, id=300, 564.60938pt x 215.30438pt>
+File: images/sobel.png Graphic file (type png)
+<use images/sobel.png>
+Package pdftex.def Info: images/sobel.png  used on input line 203.
+(pdftex.def)             Requested size: 361.34999pt x 137.7976pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 201--208
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 209--211
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 212--215
+Underfull \hbox (badness 10000) in paragraph at lines 208--215
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 221--225
+Underfull \hbox (badness 10000) in paragraph at lines 216--221
 
  []
 
-[14]
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 235.
 
+Underfull \hbox (badness 10000) in paragraph at lines 227--231
 
-LaTeX Warning: Marginpar on page 15 moved.
+ []
 
-
-LaTeX Warning: Marginpar on page 15 moved.
-
-) (./chapters/project_plan.tex [15]
+[14 <./images/sobel.png>]
+<images/voronoi.png, id=319, 299.1175pt x 302.12875pt>
+File: images/voronoi.png Graphic file (type png)
+<use images/voronoi.png>
+Package pdftex.def Info: images/voronoi.png  used on input line 243.
+(pdftex.def)             Requested size: 213.39568pt x 215.54556pt.
+) (./chapters/project_plan.tex [15 <./images/voronoi.png>]
 Chapter 4.
 
 Underfull \hbox (badness 10000) in paragraph at lines 18--19
@@ -907,89 +904,103 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--19
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--27
+Underfull \hbox (badness 10000) in paragraph at lines 27--33
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 28--34
+Underfull \hbox (badness 10000) in paragraph at lines 34--40
 
  []
 
 [16
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 35--41
-
- []
-
-) (./chapters/evaluation_plan.tex [17]
+]) (./chapters/evaluation_plan.tex [17]
 Chapter 5.
 
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-<images/gnca_loss.png, id=328, 315.1775pt x 199.24437pt>
-File: images/gnca_loss.png Graphic file (type png)
-<use images/gnca_loss.png>
-Package pdftex.def Info: images/gnca_loss.png  used on input line 9.
-(pdftex.def)             Requested size: 361.34999pt x 228.44519pt.
-) (./main.bbl [18
+<images/gnca-loss.png, id=351, 315.1775pt x 199.24437pt>
+File: images/gnca-loss.png Graphic file (type png)
+<use images/gnca-loss.png>
+Package pdftex.def Info: images/gnca-loss.png  used on input line 9.
+(pdftex.def)             Requested size: 426.79135pt x 269.81955pt.
+) (./chapters/ethical_issues.tex [18
 
- <./images/gnca_loss.png>]
+ <./images/gnca-loss.png>]
+Chapter 6.
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 7--52
+
+ []
+
+(./main.bbl [19
+
+]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 18.
  (c:/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-Underfull \hbox (badness 7576) in paragraph at lines 62--69
+Underfull \hbox (badness 7576) in paragraph at lines 74--81
 []\T1/cmr/m/n/10 John Gra-ham Da-lyell.  \T1/cmr/m/it/10 Ob-ser-va-tions on some in-ter-est-ing phe-nom-ena in an-i-
  []
 
 
-Underfull \hbox (badness 2762) in paragraph at lines 62--69
+Underfull \hbox (badness 2762) in paragraph at lines 74--81
 \T1/cmr/m/it/10 mal phys-i-ol-ogy, ex-hib-ited by sev-eral species of Pla-nariae : il-lus-trated by coloured
  []
 
 
-Underfull \hbox (badness 7851) in paragraph at lines 62--69
+Underfull \hbox (badness 7851) in paragraph at lines 74--81
 \T1/cmr/m/it/10 fig-ures of liv-ing an-i-mals / by John Gra-ham Da-lyell.  \T1/cmr/m/n/10 Ed-in-burgh :Archibald
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 62--69
+Underfull \hbox (badness 10000) in paragraph at lines 74--81
 \T1/cmr/m/n/10 Con-sta-ble,, 1814.  URL [][]$\T1/cmtt/m/n/10 https : / / www . biodiversitylibrary . org / item / 40487$[][]\T1/cmr/m/n/10 .
  []
 
-[19
+[20
 
 ]
-Underfull \hbox (badness 4505) in paragraph at lines 125--130
+Underfull \hbox (badness 4505) in paragraph at lines 137--142
 []\T1/cmr/m/n/10 Alexander Mord-v-int-sev, Et-tore Ran-dazzo, Eyvind Niklas-son, and Michael Levin.
  []
 
 
-Underfull \hbox (badness 4621) in paragraph at lines 125--130
+Underfull \hbox (badness 4621) in paragraph at lines 137--142
 \T1/cmr/m/n/10 Grow-ing neu-ral cel-lu-lar au-tomata.  \T1/cmr/m/it/10 Dis-till\T1/cmr/m/n/10 , 2020.  doi: $10 . 23915 / distill . 00023$.
  []
 
-) [20] (./main.aux)
+) [21] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 830C4696B8EE5402E5C572BE1BFF218F;2028.
+(rerunfilecheck)             Checksum: 94B4D33D281C669289E1F2F12A6DDC95;2145.
  ) 
 Here is how much of TeX's memory you used:
- 25143 strings out of 478287
- 464211 string characters out of 5850749
- 750756 words of memory out of 5000000
- 42766 multiletter control sequences out of 15000+600000
+ 25058 strings out of 478287
+ 462142 string characters out of 5850749
+ 750632 words of memory out of 5000000
+ 42672 multiletter control sequences out of 15000+600000
  485506 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,14n,94p,1137b,954s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,14n,94p,1137b,570s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2021/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfbx2074.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on main.pdf (20 pages, 1623950 bytes).
+Output written on main.pdf (21 pages, 1706017 bytes).
 PDF statistics:
- 470 PDF objects out of 1000 (max. 8388607)
- 367 compressed objects within 4 object streams
- 98 named destinations out of 1000 (max. 500000)
- 177 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 504 PDF objects out of 1000 (max. 8388607)
+ 394 compressed objects within 4 object streams
+ 102 named destinations out of 1000 (max. 500000)
+ 195 words of extra memory for PDF output out of 10000 (max. 10000000)
 

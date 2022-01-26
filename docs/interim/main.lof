@@ -13,6 +13,9 @@
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Attempt at learning the Mona Lisa over 500 generations. Depicted from left to right are the original, the reference, and the best reproduction attempt \cite {elmenreich2011evolving}}}}{12}{subfigure.2.2}%
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Five goal patterns for CA-NEAT\relax }}{13}{figure.caption.11}%
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Fixed point CPPN solution found for \textit {Tricolor} morphogenesis\relax }}{13}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Sobel filters in the x direction (left) and y direction (right) \cite {sodha}\relax }}{14}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces A GCNA learning on a Voronoi tessellation \cite {grattarola2021learning}\relax }}{15}{figure.caption.14}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces State of each point cloud between $t=10$ and $t=20$ alongside mean squared error between current and target state\relax }}{18}{figure.caption.16}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces State of each point cloud between $t=10$ and $t=20$ alongside mean squared error between current and target state \cite {grattarola2021learning}\relax }}{18}{figure.caption.15}%
+\addvspace {10\p@ }

@@ -1,4 +1,4 @@
-\begin{thebibliography}{24}
+\begin{thebibliography}{27}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -43,6 +43,18 @@ Wilfried Elmenreich and Istv{\'a}n Feh{\'e}rv{\'a}ri.
   genotypes.
 \newblock In \emph{International Workshop on Self-Organizing Systems}, pages
   16--25. Springer, 2011.
+
+\bibitem[Sodha()]{sodha}
+Sean Sodha.
+\newblock An implementation of sobel edge detection.
+\newblock URL
+  \url{https://www.projectrhea.org/rhea/index.php/An_Implementation_of_Sobel_Edge_Detection}.
+
+\bibitem[Grattarola et~al.(2021)Grattarola, Livi, and
+  Alippi]{grattarola2021learning}
+Daniele Grattarola, Lorenzo Livi, and Cesare Alippi.
+\newblock Learning graph cellular automata.
+\newblock \emph{Advances in Neural Information Processing Systems}, 34, 2021.
 
 \bibitem[Bonabeau et~al.(1997)Bonabeau, Theraulaz, Deneubourg, Aron, and
   Camazine]{bonabeau1997self}
@@ -128,17 +140,15 @@ Alexander Mordvintsev, Ettore Randazzo, Eyvind Niklasson, and Michael Levin.
 \newblock \doi{10.23915/distill.00023}.
 \newblock https://distill.pub/2020/growing-ca.
 
-\bibitem[Grattarola et~al.(2021)Grattarola, Livi, and
-  Alippi]{grattarola2021learning}
-Daniele Grattarola, Lorenzo Livi, and Cesare Alippi.
-\newblock Learning graph cellular automata.
-\newblock \emph{Advances in Neural Information Processing Systems}, 34, 2021.
-
-\bibitem[Reynolds(1987)]{reynolds1987flocks}
-Craig~W Reynolds.
-\newblock Flocks, herds and schools: A distributed behavioral model.
-\newblock In \emph{Proceedings of the 14th annual conference on Computer
-  graphics and interactive techniques}, pages 25--34, 1987.
+\bibitem[McCloskey and Cohen(1989)]{mccloskey1989catastrophic}
+Michael McCloskey and Neal~J. Cohen.
+\newblock Catastrophic interference in connectionist networks: The sequential
+  learning problem.
+\newblock volume~24 of \emph{Psychology of Learning and Motivation}, pages
+  109--165. Academic Press, 1989.
+\newblock \doi{https://doi.org/10.1016/S0079-7421(08)60536-8}.
+\newblock URL
+  \url{https://www.sciencedirect.com/science/article/pii/S0079742108605368}.
 
 \bibitem[Randazzo et~al.(2020)Randazzo, Mordvintsev, Niklasson, Levin, and
   Greydanus]{randazzo2020self-classifying}
@@ -156,6 +166,17 @@ Ettore Randazzo, Alexander Mordvintsev, Eyvind Niklasson, and Michael Levin.
 \newblock \emph{Distill}, 2021.
 \newblock \doi{10.23915/distill.00027.004}.
 \newblock https://distill.pub/selforg/2021/adversarial.
+
+\bibitem[Reynolds(1987)]{reynolds1987flocks}
+Craig~W Reynolds.
+\newblock Flocks, herds and schools: A distributed behavioral model.
+\newblock In \emph{Proceedings of the 14th annual conference on Computer
+  graphics and interactive techniques}, pages 25--34, 1987.
+
+\bibitem[Turk()]{turk}
+Greg Turk.
+\newblock The stanford bunny.
+\newblock URL \url{https://faculty.cc.gatech.edu/~turk/bunny/bunny.html}.
 
 \bibitem[dis()]{distill}
 Latest articles about machine learning.
