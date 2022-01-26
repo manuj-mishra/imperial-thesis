@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2021/W32TeX)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: unsrtnat.bst
+Database file #1: bibs/bib.bib
+Warning--empty year in distill
+You've used 20 entries,
+            2481 wiz_defined-function locations,
+            677 strings with 8094 characters,
+and the built_in function-call counts, 7628 in all, are:
+= -- 669
+> -- 353
+< -- 13
++ -- 142
+- -- 102
+* -- 555
+:= -- 1199
+add.period$ -- 71
+call.type$ -- 20
+change.case$ -- 38
+chr.to.int$ -- 20
+cite$ -- 22
+duplicate$ -- 402
+empty$ -- 717
+format.name$ -- 130
+if$ -- 1639
+int.to.chr$ -- 1
+int.to.str$ -- 21
+missing$ -- 21
+newline$ -- 117
+num.names$ -- 57
+pop$ -- 169
+preamble$ -- 1
+purify$ -- 20
+quote$ -- 0
+skip$ -- 247
+stack$ -- 0
+substring$ -- 334
+swap$ -- 66
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 134
+warning$ -- 1
+while$ -- 65
+width$ -- 0
+write$ -- 279
+(There was 1 warning)

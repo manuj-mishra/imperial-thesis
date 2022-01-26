@@ -14,7 +14,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{graphicx}
-\usepackage[capposition=top]{floatrow}
+% \usepackage[capposition=top]{floatrow}
 \usepackage{subfig}
 \usepackage[numbers]{natbib}
 \usepackage[colorinlistoftodos]{todonotes}
@@ -29,27 +29,25 @@
 \begin{document}
 \input{title/title.tex}
 
-\begin{abstract}
-[Abstract here]
-\end{abstract}
+% \begin{abstract}
+% [Abstract here]
+% \end{abstract}
 
-\renewcommand{\abstractname}{Acknowledgements}
-\begin{abstract}
-[Acknowledgements here]
-\end{abstract}
+% \renewcommand{\abstractname}{Acknowledgements}
+% \begin{abstract}
+% [Acknowledgements here]
+% \end{abstract}
 
 \tableofcontents
 \listoffigures
-\listoftables
+% \listoftables
 \listofalgorithms
 
-\input{introduction/introduction}
-\input{preliminaries/preliminaries}
-\input{related_works/related_works}
-\input{project_plan/project_plan}
-\input{evaluation_plan/evaluation_plan}
-% \input{conclusion/conclusion}
-\input{appendix/appendix}
+\input{chapters/introduction}
+\input{chapters/preliminaries}
+\input{chapters/related_works}
+\input{chapters/project_plan}
+\input{chapters/evaluation_plan}
 
 \bibliographystyle{unsrtnat}
 \bibliography{bibs/bib}

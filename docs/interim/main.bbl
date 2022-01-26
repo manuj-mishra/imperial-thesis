@@ -1,0 +1,139 @@
+\begin{thebibliography}{20}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Li et~al.(1990)Li, Packard, et~al.]{li1990structure}
+Wentian Li, Norman Packard, et~al.
+\newblock The structure of the elementary cellular automata rule space.
+\newblock \emph{Complex systems}, 4\penalty0 (3):\penalty0 281--297, 1990.
+
+\bibitem[Wolfram(2002)]{wolfram2002}
+Stephen Wolfram.
+\newblock \emph{A New Kind of Science}.
+\newblock Wolfram Media, 2002.
+\newblock ISBN 1579550088.
+\newblock URL \url{https://www.wolframscience.com}.
+
+\bibitem[Elmenreich and Feh{\'e}rv{\'a}ri(2011)]{elmenreich2011evolving}
+Wilfried Elmenreich and Istv{\'a}n Feh{\'e}rv{\'a}ri.
+\newblock Evolving self-organizing cellular automata based on neural network
+  genotypes.
+\newblock In \emph{International Workshop on Self-Organizing Systems}, pages
+  16--25. Springer, 2011.
+
+\bibitem[Bonabeau et~al.(1997)Bonabeau, Theraulaz, Deneubourg, Aron, and
+  Camazine]{bonabeau1997self}
+Eric Bonabeau, Guy Theraulaz, Jean-Louls Deneubourg, Serge Aron, and Scott
+  Camazine.
+\newblock Self-organization in social insects.
+\newblock \emph{Trends in ecology \& evolution}, 12\penalty0 (5):\penalty0
+  188--193, 1997.
+
+\bibitem[Couzin et~al.(2003)Couzin, Krause, et~al.]{couzin2003self}
+Iain~D Couzin, Jens Krause, et~al.
+\newblock Self-organization and collective behavior in vertebrates.
+\newblock \emph{Advances in the Study of Behavior}, 32\penalty0 (1):\penalty0
+  10--1016, 2003.
+
+\bibitem[Dalyell(1814)]{dalyell1814observations}
+John~Graham Dalyell.
+\newblock \emph{Observations on some interesting phenomena in animal
+  physiology, exhibited by several species of Planariae : illustrated by
+  coloured figures of living animals / by John Graham Dalyell.}
+\newblock Edinburgh :Archibald Constable,, 1814.
+\newblock URL \url{https://www.biodiversitylibrary.org/item/40487}.
+\newblock https://www.biodiversitylibrary.org/bibliography/10135.
+
+\bibitem[Pai et~al.(2012)Pai, Aw, Shomrat, Lemire, and
+  Levin]{pai2012transmembrane}
+Vaibhav~P Pai, Sherry Aw, Tal Shomrat, Joan~M Lemire, and Michael Levin.
+\newblock Transmembrane voltage potential controls embryonic eye patterning in
+  xenopus laevis.
+\newblock \emph{Development}, 139\penalty0 (2):\penalty0 313--323, 2012.
+
+\bibitem[Wolfram(1986)]{wolfram1986theory}
+Stephen Wolfram.
+\newblock Theory and applications of cellular automata.
+\newblock \emph{World Scientific}, 1986.
+
+\bibitem[Cook et~al.(2004)]{cook2004universality}
+Matthew Cook et~al.
+\newblock Universality in elementary cellular automata.
+\newblock \emph{Complex systems}, 15\penalty0 (1):\penalty0 1--40, 2004.
+
+\bibitem[Wulff and Hertz(1992)]{wulff1992learning}
+N~Wulff and J~A Hertz.
+\newblock Learning cellular automaton dynamics with neural networks.
+\newblock \emph{Advances in Neural Information Processing Systems}, 5:\penalty0
+  631--638, 1992.
+
+\bibitem[Gurney(1992)]{gurney1992training}
+Kevin~N Gurney.
+\newblock Training nets of hardware realizable sigma-pi units.
+\newblock \emph{Neural Networks}, 5\penalty0 (2):\penalty0 289--303, 1992.
+
+\bibitem[Nichele et~al.(2017)Nichele, Ose, Risi, and Tufte]{nichele2017neat}
+Stefano Nichele, Mathias~Berild Ose, Sebastian Risi, and Gunnar Tufte.
+\newblock Ca-neat: evolved compositional pattern producing networks for
+  cellular automata morphogenesis and replication.
+\newblock \emph{IEEE Transactions on Cognitive and Developmental Systems},
+  10\penalty0 (3):\penalty0 687--700, 2017.
+
+\bibitem[Stanley and Miikkulainen(2002)]{stanley2002evolving}
+Kenneth~O Stanley and Risto Miikkulainen.
+\newblock Evolving neural networks through augmenting topologies.
+\newblock \emph{Evolutionary computation}, 10\penalty0 (2):\penalty0 99--127,
+  2002.
+
+\bibitem[Nichele and Tufte(2014)]{nichele2014evolutionary}
+Stefano Nichele and Gunnar Tufte.
+\newblock Evolutionary growth of genomes for the development and replication of
+  multicellular organisms with indirect encoding.
+\newblock In \emph{2014 IEEE International Conference on Evolvable Systems},
+  pages 141--148. IEEE, 2014.
+
+\bibitem[Mordvintsev et~al.(2020)Mordvintsev, Randazzo, Niklasson, and
+  Levin]{mordvintsev2020growing}
+Alexander Mordvintsev, Ettore Randazzo, Eyvind Niklasson, and Michael Levin.
+\newblock Growing neural cellular automata.
+\newblock \emph{Distill}, 2020.
+\newblock \doi{10.23915/distill.00023}.
+\newblock https://distill.pub/2020/growing-ca.
+
+\bibitem[Grattarola et~al.(2021)Grattarola, Livi, and
+  Alippi]{grattarola2021learning}
+Daniele Grattarola, Lorenzo Livi, and Cesare Alippi.
+\newblock Learning graph cellular automata.
+\newblock \emph{Advances in Neural Information Processing Systems}, 34, 2021.
+
+\bibitem[Reynolds(1987)]{reynolds1987flocks}
+Craig~W Reynolds.
+\newblock Flocks, herds and schools: A distributed behavioral model.
+\newblock In \emph{Proceedings of the 14th annual conference on Computer
+  graphics and interactive techniques}, pages 25--34, 1987.
+
+\bibitem[Randazzo et~al.(2020)Randazzo, Mordvintsev, Niklasson, Levin, and
+  Greydanus]{randazzo2020self-classifying}
+Ettore Randazzo, Alexander Mordvintsev, Eyvind Niklasson, Michael Levin, and
+  Sam Greydanus.
+\newblock Self-classifying mnist digits.
+\newblock \emph{Distill}, 2020.
+\newblock \doi{10.23915/distill.00027.002}.
+\newblock https://distill.pub/2020/selforg/mnist.
+
+\bibitem[Randazzo et~al.(2021)Randazzo, Mordvintsev, Niklasson, and
+  Levin]{randazzo2021adversarial}
+Ettore Randazzo, Alexander Mordvintsev, Eyvind Niklasson, and Michael Levin.
+\newblock Adversarial reprogramming of neural cellular automata.
+\newblock \emph{Distill}, 2021.
+\newblock \doi{10.23915/distill.00027.004}.
+\newblock https://distill.pub/selforg/2021/adversarial.
+
+\bibitem[dis()]{distill}
+Latest articles about machine learning.
+\newblock URL \url{https://distill.pub/}.
+
+\end{thebibliography}

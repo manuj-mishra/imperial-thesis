@@ -17,13 +17,13 @@ f(S_1, S_2, ..., S_N) = sgn\left[ \sum_{j=1}^{N} w_j \prod_{i \in I_j} S_i(t) \r
 where index set $I_j$ is randomly drawn from the integers $\{1, 2, ..., N\}$ without replacement.
 Notably, these units do not require input from every neighbour to learn successfully.
 In fact, this paper found any index set of size $|I_j| \geq \frac{N}{2}$ to be sufficient.
-This insight significantly reduced training time. \\ 
+This insight significantly reduced training time.\\ 
 3 learning goals were established for the network.
 In order of increasing difficulty they were:
 
 \begin{enumerate}
-  \item Extrapolation: Learn to simulate a CA for a particular initial condition at any time
-  \item Dynamics : Learn to simulate a CA for any initial condition after short-lived transient patterns have been exhausted
+  \item Extrapolation: Learn to simulate a CA for a \textit{particular} initial condition at any time
+  \item Dynamics : Learn to simulate a CA for \textit{any} initial condition after short-lived patterns have been exhausted
   \item Full Rule : Learn to simulate a CA for any initial condition at any time
 \end{enumerate}
 
@@ -41,7 +41,7 @@ There were two settings under which testing was done.
 With shared weights, this approach was very promising, with extrapolation and dynamics being very easy in the 1D and 2D case.
 Learning the full rule was much harder with the network only being able to do so for 4 out of the 9 candidates in the 1D case. \\ 
 
-Without individual weights, all learning was difficult. 
+With individual weights, all learning was difficult. 
 In the 1D case, extrapolation was still possible for all candidates but dynamics was only possible for a single candidate, rule 22. 
 Learning Life was also impossible with the network failing to extrapolate even when given several hundred steps of history.\\ 
 
@@ -75,14 +75,15 @@ The evolution procedure begins by initialising a population of 100 candidate ANN
 \State{Rank networks and create new population as follows:}
 \State{Elitism: Select top 15 candidates}
 \State{Selection: Randomly select 10 from remainder with a small bias towards fitness and diversity}
-\State{Mutations: Copy 30 selected candidates and mutate their weights and biases}
-\State{Recombinations: Copy 40 pairs of selected candidates with replacement and apply crossover}
+\State{Mutations: Copy a randomly selected candidate and mutate its weights and biases. Repeatedly apply this operation until there is a new set of 30 mutated candidates.}
+\State{Recombinations: Copy a randomly selected pair of candidates and apply crossover. Repeatedly apply this operation until there is a new set of 40 recombined candidates.}
+\State{Concatenate mutated and recombined candidates with the original selected candidates.}
 \State{Reinitalise: Initialise 5 new networks with random weights and add to new population}
 \EndFor
 \end{algorithmic}
 \end{algorithm}
 
-Although this work was able to successfully learn simple pattern like flags \ref{fig:austria-flag}, it failed to learn on more complicated structures like animal skin patterns \ref{fig:animal-patterns} or the Mona Lisa \ref{fig:mona-lisa}.
+Although this work was able to successfully learn simple pattern like flags (\ref{fig:austria-flag}), it failed to learn on more complicated structures like animal skin patterns (\ref{fig:animal-patterns}) or the Mona Lisa (\ref{fig:mona-lisa}).
 This is likely due to a poor choice of fitness function given the task at hand.
 By comparing pixel-by-pixel, candidates with a largely similar pattern to the reference image in a qualitative sense are scored poorly compared to those that can precisely imitate very small portions of the image.\\
 
@@ -93,7 +94,7 @@ Therefore this solution is likely to scale poorly as was seen in the 20x29 Mona 
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=5in]{related_works/austria-flag.png}
+    \includegraphics[width=5in]{images/austria-flag.png}
     \caption{Successful reproduction of the the Austrian Flag over 90 generations \cite{elmenreich2011evolving}}
     \label{fig:austria-flag}
 \end{figure}
@@ -101,12 +102,12 @@ Therefore this solution is likely to scale poorly as was seen in the 20x29 Mona 
 \begin{figure}[htp] 
     \centering
     \subfloat[Attempt at learning cow and zebra skin patterns over 300 generations \cite{elmenreich2011evolving}]{%
-        \includegraphics[width=0.45\textwidth]{related_works/animal-patterns.png}%
+        \includegraphics[width=0.45\textwidth]{images/animal-patterns.png}%
         \label{fig:animal-patterns}%
         }%
     \hfill%
     \subfloat[Attempt at learning the Mona Lisa over 500 generations. Depicted from left to right are the original, the reference, and the best reproduction attempt \cite{elmenreich2011evolving}]{%
-        \includegraphics[width=0.45\textwidth]{related_works/mona-lisa.png}%
+        \includegraphics[width=0.45\textwidth]{images/mona-lisa.png}%
         \label{fig:mona-lisa}%
         }%
     \caption{Unsuccessful attempts to learn complex patterns over 300+ generations}
@@ -149,7 +150,7 @@ This choice biases the algorithm towards more active CA.\\
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=5in]{related_works/five-flags.png}
+    \includegraphics[width=5in]{images/five-flags.png}
     \caption{Five goal patterns for CA-NEAT}
     \caption*{(a) \textit{Mosaic}, (b) \textit{Border}, (c) \textit{Tricolor}, (d) \textit{Swiss}, (e) \textit{Nordic}}
     \label{fig:five-flags}
@@ -157,13 +158,13 @@ This choice biases the algorithm towards more active CA.\\
 
 This method was tested on 5 simplistic patterns and proved to have improvements over existing techniques like table-based evolution and instruction-based evolution \cite{nichele2014evolutionary} for certain structures like the \textit{Mosaic} and \textit{Tricolor} patterns while performing worse for others like the \textit{Border} pattern.\\
 
-In order to further improve the model, it would be useful to include a bias against complexity in the topology of the CPPNs.
+In order to further improve the model, it would be useful to include a bias against complexity in the topology of the CPPNs because simpler models tend to generalise better to unseen scenarios.
 It would also be useful to penalise the length of cycles of periodic attractors to incentivise the model to find fixed-point solutions.
 Finally, a novelty search approach may be an interesting avenue of exploration to avoid getting trapped in local maxima.
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=5in]{related_works/tricolor-cppn.png}
+    \includegraphics[width=5in]{images/tricolor-cppn.png}
     \caption{Fixed point CPPN solution found for \textit{Tricolor} morphogenesis}
     \caption*{Dotted lines indicate disabled connections. Note the two vestigial hidden layer nodes}
     \label{fig:tricolor-cppn}
@@ -173,9 +174,7 @@ Finally, a novelty search approach may be an interesting avenue of exploration t
 \section{Using convolutional neural networks}
 
 \noindent
-\textbf{Growing Neural Cellular Automata} (Mordvintsev et al., 2020) \cite{mordvintsev2020growing} is a recent paper showing how CNNs can be applied to the problem of morphogenesis, producing stable complex image patterns from a single seed state.
-
-These structures are made extremely robust to perturbation through damage-based training. \\
+\textbf{Growing Neural Cellular Automata} (Mordvintsev et al., 2020) \cite{mordvintsev2020growing} is a recent paper showing how CNNs can be applied to the problem of morphogenesis, producing stable complex image patterns from a single seed state. These structures are made extremely robust to perturbation through damage-based training. \\
 
 A 2D CA model with a Moore neighbourhood and continuous vector state variable is used.
 The continuous state allows the system to learn a differentiable update rule which can be optimized through a convolutional neural network.
@@ -189,23 +188,22 @@ All other cells are considered "dead" and have their state vector reset to $\und
 The hidden vectors can be thought of as an opaque encoding mechanism in the cell, much like chemical concentration or electric potentials in biological cells.\\
 
 The training pipeline features 4 key steps.
-The first is perception in which a 3x3 convolution is applied.
+The first is \textit{perception} in which a 3x3 convolution is applied.
 Two classical Sobel filters are used estimate the partial derivative of the state vectors in the $\overrightarrow{x}$ and $\overrightarrow{y}$ directions.
 These represent the cells' signalling mechanism.
 The biological analogy here would be chemical gradients or electrical signal pathways.
-The gradients are concatenated into a vector which is fed into a neural network of multiple layers including 1x1 convolutions and ReLU layers.
+The gradients are flattened into a vector which is fed into a neural network of multiple layers including 1x1 convolutions and ReLU activations.
 The result is iteratively fed through this network for a random number of steps in the range $[64, 96]$.
 At each update, a per-cell stochastic dropout is applied to simulate the a random time-interval between cell updates.
 This is to avoid the possibly misleading assumption of global synchronisation between cells.
 The pixel-wise Euclidean loss between the RGBA channels is then optimized through backpropagation-through-time. The resultant networks from this training represent candidate update rules that can induce the growth of a pattern from a single seed.\\
 
 However, these networks exhibited drastic instability in the long term.
-To produce persistent patterns, a sample pool strategy is used. 
-The network is trained on a pool of automata simultaneously.
+To produce persistent patterns, a sample pool strategy is used whereby the network is trained on a pool of automata simultaneously.
 At each step, a batch of this pool are iterated using the network.
-The sample with the highest loss in the batch is reset to the seed state to prevent catastrophic forgetting. 
+The individual with the highest loss in the batch is reset to the seed state to prevent catastrophic forgetting. 
 Using this method, the network learns to recover from incomplete and incorrect states which makes it more likely to converge towards a persistent solution.
-A simpler option to acheive persistance would've been to let the model train for longer and periodically apply a loss with exponential decaying intervals between these applications.
+A simpler option to acheive persistence would've been to let the model train for longer and periodically apply a loss with exponential decaying intervals between these applications.
 However, this would have drastically increased memory and training time requirements.\\
 
 One surprising finding of this paper was that some of the resultant models exhibited regenerative behaviour when damaged, despite not being explicitly trained to do so. 
@@ -218,6 +216,7 @@ This proved very successful. The models produced were able to grow, persist, and
 [PUT CRITICISM HERE]
 
 \section{Using graph neural networks}
+\label{sec: using-gnn}
 
 \noindent
 \textbf{Learning Graph Cellular Automata} (Grattarola et al., 2021) \cite{grattarola2021learning} is a recent work introducing the concept of Graph Neural Cellular Automata (GNCA).
