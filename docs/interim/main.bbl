@@ -1,9 +1,29 @@
-\begin{thebibliography}{20}
+\begin{thebibliography}{24}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Das(2011)]{debasis2011survey}
+Debasis Das.
+\newblock A survey on cellular automata and its applications.
+\newblock volume 269, 12 2011.
+\newblock ISBN 978-3-642-29218-7.
+\newblock \doi{10.1007/978-3-642-29219-4_84}.
+
+\bibitem[Lipa()]{lipa}
+Chris Lipa.
+\newblock Conway's game of life.
+\newblock URL \url{http://pi.math.cornell.edu/~lipa/mec/lesson6.html}.
+
+\bibitem[Dorin et~al.(2012)Dorin, McCabe, McCormack, Monro, and
+  Whitelaw]{dorin2012framework}
+Alan Dorin, Jonathan McCabe, Jon McCormack, Gordon Monro, and Mitchell
+  Whitelaw.
+\newblock A framework for understanding generative art.
+\newblock \emph{Digital Creativity}, 23, 12 2012.
+\newblock \doi{10.1080/14626268.2012.709940}.
 
 \bibitem[Li et~al.(1990)Li, Packard, et~al.]{li1990structure}
 Wentian Li, Norman Packard, et~al.
@@ -53,6 +73,11 @@ Vaibhav~P Pai, Sherry Aw, Tal Shomrat, Joan~M Lemire, and Michael Levin.
 \newblock Transmembrane voltage potential controls embryonic eye patterning in
   xenopus laevis.
 \newblock \emph{Development}, 139\penalty0 (2):\penalty0 313--323, 2012.
+
+\bibitem[Gardner(1970)]{gardner1970fantastic}
+Martin Gardner.
+\newblock The fantastic combinations of jhon conway's new solitaire game'life.
+\newblock \emph{Sc. Am.}, 223:\penalty0 20--123, 1970.
 
 \bibitem[Wolfram(1986)]{wolfram1986theory}
 Stephen Wolfram.

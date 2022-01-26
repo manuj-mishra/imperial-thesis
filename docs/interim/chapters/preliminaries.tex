@@ -1,12 +1,48 @@
 \chapter{Preliminaries}
 
-A cellular automaton (CA) is a regular lattice of computational units called cells. Each cell $v$ is characterised by a state variable $S_i(t) \in \Sigma$, where $i$ indicates the position of the cell in the lattice, $t$ indicates the time, and $\Sigma$ denotes the (possibly infinite) set of all state variables. Each cell also has a finite local neighbourhood set $\mathcal{N}(v)$ with cardinality $N$. Typically, the neighbourhood of a cell contains the cell itself (i.e. $v \in \mathcal{N}(v)$). At each time step, the state of every cell is simultaneously updated according to a fixed transition rule; $\phi:\Sigma^N \to \Sigma$ which takes the neighbour states as input. This rule is typically shared across all cells in the CA.
+A cellular automaton (CA) is a regular lattice of computational units called cells. Each cell $v$ is characterised by a state variable $S_i(t) \in \Sigma$, where $i$ indicates the position of the cell in the lattice, $t$ indicates the time, and $\Sigma$ denotes the (possibly infinite) set of all state variables. Each cell also has a finite local neighbourhood set $\mathcal{N}(v)$ with cardinality $N$. Typically, the neighbourhood of a cell contains the cell itself (i.e. $v \in \mathcal{N}(v)$). At each time step, the state of every cell is simultaneously updated according to a fixed transition rule; $\phi:\Sigma^N \to \Sigma$ which takes the neighbour states as input. This rule is typically shared across all cells in the CA.\\
+
+There choice of neighbourhood function is largely directed by the choice in lattice structure. The primary considerations when choosing a neighbour function are the distance metric used to measure proximity of cells and the value of this metric used to define the neighbourhood boundary. There are two very common neighbourhoods used on Euclidean lattices. The \textit{von Neumann neighbourhood} contains all cells within a Manhattan distance of 1. For a 2D square lattice, this contains the cell itself and the 4 cells in the cardinal directions. For a 3D cubic lattice, it contains the central cell and a 6-cell octahedron around it. The \textit{Moore neighbourhood} contains all cells at a Chebyshev distance of 1. For a 2D square lattice, this is the central cell with the 8 neighbouring cells in a square around it. In the 3D case, it is a cube. These are shown in figure \ref{fig:neighbourhoods}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{images/neighbourhoods.png}
+\caption{(a) von Neumann Neighbourhood and (b) Moore neighbourhood on a 2D square lattice \cite{debasis2011survey}}
+\label{fig:neighbourhoods}
+\end{figure}
 
 \section{Conway's Game of Life}
-The most popular example of a CA is the Game of Life formulated by John Conway 
+The most popular example of a CA is the Game of Life (henceforth "Life") formulated by John Conway in 1970 \cite{gardner1970fantastic}. It consists of a 2D grid of cells, each with a boolean state variable signifying that the cell is either "alive" or "dead". The transition rule is a function of the cell's own state $S_i(t)$ and number of living individuals in the cell's Moore neighbourhood (excluding itself), denoted $n$. This is as follows:
+
+\begin{equation}
+  \phi(S_i(t), n) = 
+\begin{cases}
+  0 & S_i(t) = 1 \text{ and } n < 2 \text{  (Death by "loneliness")}\\
+  0 & S_i(t) = 1 \text{ and } n > 3 \text{  (Death by "overcrowding")}\\
+  1 & S_i(t) = 1 \text{ and } n \in \{2,3\} \text{  (Survival)}\\
+  1 & S_i(t) = 0 \text{ and } n = 3 \text{  (Resurrection)}\\
+  0 & \text{otherwise}
+\end{cases}
+\end{equation}
+
+Despite its simplicity, the Life is Turing complete. There has been a lot of experimentation with Life to discover and classify patterns that can exist within it. Some examples include periodic oscillators like the \textit{beacon} which has period 2 or still lifes like the \textit{block} which are fixed-point solutions \ref{fig:life-patterns}. These can alternatively be thought of as having period 1. There are also periodic patterns which move across the lattice such as the \textit{glider} pattern.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/life-patterns.png}
+\caption{Patterns within the Game of Life. From top to bottom: blinker, block, unnamed \cite{lipa}}
+\label{fig:life-patterns}
+\end{figure}
 
 
-\section{Classification}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/life-glider.png}
+\caption{The glider pattern within the Game of Life \cite{dorin2012framework}}
+\label{fig:life-glider}
+\end{figure}
+
+\section{Wolfram's Classification}
 
 The choice of lattice geometry, neighbourhood function, state variable, and transition rule define the behaviour of a CA given some initial condition. Fixing the former three factors, Wolfram \cite{wolfram1986theory} has classified CAs based on transition rules as follows:
 \begin{enumerate}

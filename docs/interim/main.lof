@@ -1,15 +1,18 @@
 \babel@toc {english}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Schematic illustration of elementary CA rule space from Li and Packard \cite {li1990structure}\relax }}{7}{figure.caption.4}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Rule 110 progression with random initialisation \cite {wolfram2002}\relax }}{7}{figure.caption.5}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces (a) von Neumann Neighbourhood and (b) Moore neighbourhood on a 2D square lattice \cite {debasis2011survey}\relax }}{6}{figure.caption.4}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Patterns within the Game of Life. From top to bottom: blinker, block, unnamed \cite {lipa}\relax }}{7}{figure.caption.5}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces The glider pattern within the Game of Life \cite {dorin2012framework}\relax }}{7}{figure.caption.6}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Schematic illustration of elementary CA rule space from Li and Packard \cite {li1990structure}\relax }}{8}{figure.caption.7}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Rule 110 progression with random initialisation \cite {wolfram2002}\relax }}{9}{figure.caption.8}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Successful reproduction of the the Austrian Flag over 90 generations \cite {elmenreich2011evolving}\relax }}{11}{figure.caption.6}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Unsuccessful attempts to learn complex patterns over 300+ generations\relax }}{11}{figure.caption.7}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Attempt at learning cow and zebra skin patterns over 300 generations \cite {elmenreich2011evolving}}}}{11}{subfigure.2.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Attempt at learning the Mona Lisa over 500 generations. Depicted from left to right are the original, the reference, and the best reproduction attempt \cite {elmenreich2011evolving}}}}{11}{subfigure.2.2}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Five goal patterns for CA-NEAT\relax }}{12}{figure.caption.8}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Fixed point CPPN solution found for \textit {Tricolor} morphogenesis\relax }}{12}{figure.caption.9}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Successful reproduction of the the Austrian Flag over 90 generations \cite {elmenreich2011evolving}\relax }}{12}{figure.caption.9}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Unsuccessful attempts to learn complex patterns over 300+ generations\relax }}{12}{figure.caption.10}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Attempt at learning cow and zebra skin patterns over 300 generations \cite {elmenreich2011evolving}}}}{12}{subfigure.2.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Attempt at learning the Mona Lisa over 500 generations. Depicted from left to right are the original, the reference, and the best reproduction attempt \cite {elmenreich2011evolving}}}}{12}{subfigure.2.2}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Five goal patterns for CA-NEAT\relax }}{13}{figure.caption.11}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Fixed point CPPN solution found for \textit {Tricolor} morphogenesis\relax }}{13}{figure.caption.12}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces State of each point cloud between $t=10$ and $t=20$ alongside mean squared error between current and target state\relax }}{17}{figure.caption.13}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces State of each point cloud between $t=10$ and $t=20$ alongside mean squared error between current and target state\relax }}{18}{figure.caption.16}%
