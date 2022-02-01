@@ -2,7 +2,7 @@
 
 A cellular automaton (CA) is a regular lattice of computational units called cells. Each cell $v$ is characterised by a state variable $S_i(t) \in \Sigma$, where $i$ indicates the position of the cell in the lattice, $t$ indicates the time, and $\Sigma$ denotes the (possibly infinite) set of all state variables. Each cell also has a finite local neighbourhood set $\mathcal{N}(v)$ with cardinality $N$. Typically, the neighbourhood of a cell contains the cell itself (i.e. $v \in \mathcal{N}(v)$). At each time step, the state of every cell is simultaneously updated according to a fixed transition rule; $\phi:\Sigma^N \to \Sigma$ which takes the neighbour states as input. This rule is typically shared across all cells in the CA.\\
 
-There choice of neighbourhood function is largely directed by the choice in lattice structure. The primary considerations when choosing a neighbour function are the distance metric used to measure proximity of cells and the value of this metric used to define the neighbourhood boundary. There are two very common neighbourhoods used on Euclidean lattices. The \textit{von Neumann neighbourhood} contains all cells within a Manhattan distance of 1. For a 2D square lattice, this contains the cell itself and the 4 cells in the cardinal directions. For a 3D cubic lattice, it contains the central cell and a 6-cell octahedron around it. The \textit{Moore neighbourhood} contains all cells at a Chebyshev distance of 1. For a 2D square lattice, this is the central cell with the 8 neighbouring cells in a square around it. In the 3D case, it is a cube. These are shown in figure \ref{fig:neighbourhoods}
+The choice of neighbourhood function is largely directed by the choice of lattice structure. The primary considerations when choosing a neighbour function are the distance metric used to measure proximity of cells and the value of this metric used to define the neighbourhood boundary. There are two very common neighbourhoods used on Euclidean lattices. The \textit{von Neumann neighbourhood} contains all cells within a Manhattan distance of 1. For a 2D square lattice, this contains the cell itself and the 4 cells in the cardinal directions. For a 3D cubic lattice, it contains the central cell and a 6-cell octahedron around it. The \textit{Moore neighbourhood} contains all cells at a Chebyshev distance of 1. For a 2D square lattice, this is the central cell with the 8 neighbouring cells in a square around it. In the 3D case, it is a cube. These are shown in figure \ref{fig:neighbourhoods}
 
 \begin{figure}[!h]
 \centering
@@ -12,7 +12,7 @@ There choice of neighbourhood function is largely directed by the choice in latt
 \end{figure}
 
 \section{Conway's Game of Life}
-The most popular example of a CA is the Game of Life (henceforth "Life") formulated by John Conway in 1970 \cite{gardner1970fantastic}. It consists of a 2D grid of cells, each with a boolean state variable signifying that the cell is either "alive" or "dead". The transition rule is a function of the cell's own state $S_i(t)$ and number of living individuals in the cell's Moore neighbourhood (excluding itself), denoted $n$. This is as follows:
+The most popular example of a CA is the Game of Life (henceforth "Life") formulated by John Conway in 1970 \cite{gardner1970fantastic}. It consists of a 2D grid of cells, each with a boolean state variable signifying that the cell is either "alive" or "dead". The transition rule is a function of the cell's own state $S_i(t)$ and the number of living individuals in the cell's Moore neighbourhood (excluding itself), denoted $n$. This is as follows:
 
 \begin{equation}
   \phi(S_i(t), n) = 
@@ -25,7 +25,7 @@ The most popular example of a CA is the Game of Life (henceforth "Life") formula
 \end{cases}
 \end{equation}
 
-Despite its simplicity, the Life is Turing complete. There has been a lot of experimentation with Life to discover and classify patterns that can exist within it. Some examples include periodic oscillators like the \textit{beacon} which has period 2 or still lifes like the \textit{block} which are fixed-point solutions \ref{fig:life-patterns}. These can alternatively be thought of as having period 1. There are also periodic patterns which move across the lattice such as the \textit{glider} pattern.
+Despite its simplicity, Life is Turing complete. There has been a lot of experimentation with Life to discover and classify patterns that can exist within it. Some examples include periodic oscillators like the \textit{beacon} which has period 2 or still lifes like the \textit{block} which are fixed-point solutions \ref{fig:life-patterns}. These can alternatively be thought of as having period 1. There are also periodic patterns that move across the lattice such as the \textit{glider} pattern.
 
 \begin{figure}[!h]
 \centering
@@ -44,10 +44,10 @@ Despite its simplicity, the Life is Turing complete. There has been a lot of exp
 
 \section{Wolfram's Classification}
 
-The choice of lattice geometry, neighbourhood function, state variable, and transition rule define the behaviour of a CA given some initial condition. Fixing the former three factors, Wolfram \cite{wolfram1986theory} has classified CAs based on transition rules as follows:
+The choices of lattice geometry, neighbourhood function, state variable, and transition rule define the behaviour of a CA. Fixing the former three factors, Wolfram \cite{wolfram1986theory} has classified CAs based on transition rules as follows:
 \begin{enumerate}
   \item Class 1 (Null) : Rules that lead to a trivial, uniform state
-  \item Class 2 (Fixed point + periodic) : Rules that lead to stable or periodic patterns
+  \item Class 2 (fixed-point + periodic) : Rules that lead to stable or periodic patterns
   \item Class 3 (Chaotic) : Rules that lead to chaotic patterns
   \item Class 4 (Complex) : Rules that lead to complex, long-lived impermanent patterns
 \end{enumerate}
@@ -79,7 +79,7 @@ Emulating this behaviour \textit{in silico} can provide great insight into the w
 Cellular automata are a promising model of computation for artificial life simulation because, much like biological agents, their behaviour follows logically from combining information in their surroundings and internal programming.
 In the context of morphogenesis, we are interested in rules that form stable class 2 patterns from random initial conditions.
 We are also interested in rules that are resistant to noise.
-This is analagous to the behaviour of biological cells which grow into stable configurations and are robust to pertubation and damage during growth.
+This is analogous to the behaviour of biological cells which grow into stable configurations and are robust to perturbation and damage during growth.
 
 % \section{Neural Networks}
 % This section explores different categories of artificial neural networks that have been used to learn transition rules for cellular automata.
