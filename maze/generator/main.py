@@ -2,8 +2,8 @@ from generator.generate_maze import generate_maze
 from generator.media import make_files, clear_temp_folders
 from generator.region_merge import get_regions, region_merge
 
-B = [3]
-S = [1, 2, 3, 4]
+B = [2, 3]
+S = [2, 3, 4]
 
 # Rulestring is in B/S notation (Birth/Survival)
 rulestring = ''.join(str(i) for i in B) + '_' + ''.join(str(i) for i in S)
@@ -19,8 +19,10 @@ cells, regions, M, n = get_regions(X, folder='reg_frames')
 make_files(frame_folder='reg_frames', rstring=rulestring, name="regions", final_state=M, clear=False)
 
 print("3. Merging regions ...")
-R = region_merge(regions, cells, M, n, folder='merge_frames')
-make_files(frame_folder='merge_frames', rstring=rulestring, name="merging", final_state=R, clear=False)
+M = region_merge(regions, cells, M, n, folder='merge_frames')
+make_files(frame_folder='merge_frames', rstring=rulestring, name="merging", final_state=M, clear=False)
 
 # print("4. Evaluating maze ...")
-# evaluate(R)
+# evaluate(M)
+
+clear_temp_folders()
