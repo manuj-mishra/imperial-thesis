@@ -1,3 +1,4 @@
+from generator.evaluate import solution_length
 from generator.generate_maze import generate_maze
 from generator.media import make_files, clear_temp_folders
 from generator.region_merge import get_regions, region_merge
@@ -22,7 +23,7 @@ print("3. Merging regions ...")
 M = region_merge(regions, cells, M, n, folder='merge_frames')
 make_files(frame_folder='merge_frames', rstring=rulestring, name="merging", final_state=M, clear=False)
 
-# print("4. Evaluating maze ...")
-# evaluate(M)
+print("4. Evaluating maze ...")
+solution_length(M, n)
 
 clear_temp_folders()
