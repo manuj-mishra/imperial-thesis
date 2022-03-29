@@ -55,7 +55,7 @@ def get_regions(M, folder="reg_frames"):
     spaces.difference_update(reg)
     n_iter += 1
 
-  return cells, regions, M, n
+  return cells, regions, M
 
 
 def bfs(start, M, n):
@@ -71,9 +71,10 @@ def bfs(start, M, n):
   return visited
 
 
-def region_merge(regions, cells, M, n, folder="merge_frames"):
+def region_merge(regions, cells, M, folder="merge_frames"):
   curr = regions[1]
   ax = init_image()
+  n = M.shape[0]
   for i in range(300):
     fringe = set().union(*(near(c[0], c[1], n) for c in curr)) - curr
 

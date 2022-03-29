@@ -42,14 +42,15 @@ def save_image(M, i, ax, folder, cmap=ListedColormap(["w", "k", "y", "g", "r"]),
   plt.cla()
 
 def clear_temp_folders():
-  parent = f"{root}"
-  dirs = ["gen_frames", "reg_frames", "merge_frames"]
+  parent = f"{root}/temp"
+  dirs = next(os.walk(parent))[1]
   for dir in dirs:
-    for file in os.scandir(f"{parent}/{dir}"):
-      os.remove(file.path)
+    droot, _, files = next(os.walk(f"{parent}/{dir}"))
+    for file in files:
+      os.remove(os.path.join(droot, file))
 
-def make_files(frame_folder, rstring, name, final_state=None, clear=True):
-  dirname = f"{root}/{rstring}"
+def make_files(rstring, name, frame_folder=None, final_state=None, clear=True):
+  dirname = f"{root}/out/{rstring}"
 
   dirs = ["gifs", "final_frames", "np_arrays"]
   if os.path.exists(dirname):
@@ -61,12 +62,13 @@ def make_files(frame_folder, rstring, name, final_state=None, clear=True):
     for dir in dirs:
       os.makedirs(f"{dirname}/{dir}")
 
-  frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/{frame_folder}/*.png"))]
-  frame_one = frames[0]
-  frame_one.save(f"{dirname}/gifs/{name}.gif", format="GIF", append_images=frames,
-                 save_all=True, duration=50)
-  frame_last = frames[-1]
-  frame_last.save(f"{dirname}/final_frames/{name}.png")
+  if frame_folder is not None:
+    frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/temp/{frame_folder}/*.png"))]
+    frame_one = frames[0]
+    frame_one.save(f"{dirname}/gifs/{name}.gif", format="GIF", append_images=frames,
+                   save_all=True, duration=50)
+    frame_last = frames[-1]
+    frame_last.save(f"{dirname}/final_frames/{name}.png")
 
   if final_state is not None:
     fname = f"{dirname}/np_arrays/{name}.npy"
