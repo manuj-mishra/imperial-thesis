@@ -2,7 +2,8 @@ from collections import deque
 
 from generator.region_merge import near
 
-def solution_length(M, size):
+def solution_length(M):
+  size = M.shape[0]
   q = deque([(size-1, 0, 0)])
   visited = set()
   while q:

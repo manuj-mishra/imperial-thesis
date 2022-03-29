@@ -11,7 +11,7 @@ def near(x, y, n):
   return set((i, j) for (i, j) in adj if 0 <= i < n and 0 <= j < n)
 
 
-def get_regions(M, folder="reg_frames"):
+def get_regions(M, media=True, folder="temp/reg_frames"):
   # cells = {(x,y):region}
   # regions = {region:set((x1, y1), ... , (xn, yn))}
 
@@ -37,8 +37,10 @@ def get_regions(M, folder="reg_frames"):
   spaces.difference_update(r1)
 
   ax = init_image()
+  if media:
+    save_image(M_copy, regnum, ax, folder=folder)
+
   reg = r1
-  save_image(M_copy, regnum, ax, folder=folder)
   n_iter = 0
   #TODO: Remove hard cap on n_iter
   while spaces and n_iter < 300:
@@ -46,7 +48,8 @@ def get_regions(M, folder="reg_frames"):
     start = spaces.pop()
     for cell in reg:
       M_copy[cell[0], cell[1]] = 2
-    save_image(M_copy, regnum, ax, folder=folder)
+    if media:
+      save_image(M_copy, regnum, ax, folder=folder)
     reg = bfs(start, M, n)
     for cell in reg:
       M_copy[cell[0], cell[1]] = 3
@@ -71,7 +74,7 @@ def bfs(start, M, n):
   return visited
 
 
-def region_merge(regions, cells, M, folder="merge_frames"):
+def region_merge(regions, cells, M, media=True, folder="temp/merge_frames"):
   curr = regions[1]
   ax = init_image()
   n = M.shape[0]
@@ -79,15 +82,17 @@ def region_merge(regions, cells, M, folder="merge_frames"):
     fringe = set().union(*(near(c[0], c[1], n) for c in curr)) - curr
 
     if (0, n - 1) in fringe:
-      save_image(M, i, ax, folder=folder)
+      if media:
+        save_image(M, i, ax, folder=folder)
       return M
 
-    M_copy = M.copy()
-    for x, y in curr:
-      M_copy[x, y] = 2
-    for x, y in fringe:
-      M_copy[x, y] = 3
-    save_image(M_copy, i, ax, folder=folder)
+    if media:
+      M_copy = M.copy()
+      for x, y in curr:
+        M_copy[x, y] = 2
+      for x, y in fringe:
+        M_copy[x, y] = 3
+      save_image(M_copy, i, ax, folder=folder)
 
     cands = []
     for f in fringe:
