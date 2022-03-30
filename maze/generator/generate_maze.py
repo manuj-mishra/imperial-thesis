@@ -9,7 +9,7 @@ def ca_step(X, B, S):
   return np.isin(n, B) | (X & np.isin(n, S))
 
 
-def generate_maze(B, S, n_iter=150, media=True, folder="temp/gen_frames"):
+def generate_maze(B, S, n_iter=150, media=True, folder="temp/gen_frames", ax=None):
   # Maze size
   nx, ny = 32, 32
   X = np.zeros((ny, nx), dtype=np.bool)
@@ -22,7 +22,6 @@ def generate_maze(B, S, n_iter=150, media=True, folder="temp/gen_frames"):
 
   frames_per_image = 2
 
-  ax = init_image()
   for i in range(n_iter):
     X = ca_step(X, B, S)
     if not i % frames_per_image and media:

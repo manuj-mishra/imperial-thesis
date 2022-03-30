@@ -7,38 +7,22 @@ from generator.region_merge import get_regions, region_merge
 
 
 class Rulestring:
-  def __init__(self):
+  def __init__(self, rstring = None):
 
-    birth = []
-    survival = []
+    if rstring is None:
+      rstring = random.randint(0, 2**16 - 1)
 
-    for i in range(1,9):
-      if random.random() < 0.5:
-        birth.append(i)
+    self.b = self._ones(rstring >> 8)
+    self.s = self._ones(rstring)
+    self.rstring = rstring
 
-    for i in range(1,9):
-      if random.random() < 0.5:
-        survival.append(i)
-
-    self.b = birth
-    self.s = survival
-    self.rstring = self._rstring(birth, survival)
-
-  def _rstring(self, b, s):
-    rstring = 0
-
-    for i in range(1,9):
-      if i in b:
-        rstring |= 1
-      rstring <<= 1
-
-    for i in range(1,9):
-      if i in s:
-        rstring |= 1
-      rstring <<= 1
-
-    rstring >>= 1
-    return rstring
+  def _ones(self, rstring):
+    ixs = []
+    for i in range(8, 0, -1):
+      if rstring & 1:
+        ixs.append(i)
+      rstring >>= 1
+    return ixs
 
   def get_rstring(self):
     return format(self.rstring, 'b').zfill(16)
@@ -56,8 +40,8 @@ class Rulestring:
   def evaluate(self):
     X = generate_maze(self.b, self.s, media=False)
     cells, regions, M = get_regions(X, media=False)
-    M = region_merge(regions, cells, M, media=False)
-    return solution_length(M)
+    M, success = region_merge(regions, cells, M, media=False)
+    return 1 / solution_length(M) if success else 0
 
 
 if __name__ == "__main__":
