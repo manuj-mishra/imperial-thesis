@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 from maze.evaluate import dead_ends_and_path_length
-from maze.maze import generate_maze, get_regions, region_merge
+from maze.maze_ca import generate_maze, get_regions, region_merge
 
 
 class Rulestring:

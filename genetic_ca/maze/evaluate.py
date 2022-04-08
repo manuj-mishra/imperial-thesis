@@ -1,5 +1,7 @@
 from collections import deque
-from maze.maze import near
+from maze.maze_ca import near
+
+#TODO: Eventually move this all to maze.py
 
 def dead_ends_and_path_length(M):
   size = M.shape[0]
