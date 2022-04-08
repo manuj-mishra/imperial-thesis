@@ -3,15 +3,15 @@ import random
 import numpy as np
 from collections import deque, defaultdict
 
-from generator.media import intmap, save_image, init_image
+from maze.media import save_image, init_image
 
 
 def near(x, y, n):
   adj = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
-  return set((i, j) for (i, j) in adj if 0 <= i < n and 0 <= j < n)
+  return [(i, j) for (i, j) in adj if 0 <= i < n and 0 <= j < n]
 
 
-def get_regions(M, media=True, folder="temp/reg_frames", ax=None):
+def get_regions(M, media=False, folder="temp/reg_frames", ax=None):
   # cells = {(x,y):region}
   # regions = {region:set((x1, y1), ... , (xn, yn))}
 
@@ -72,7 +72,7 @@ def bfs(start, M, n):
   return visited
 
 
-def region_merge(regions, cells, M, media=True, folder="temp/merge_frames", ax=None):
+def region_merge(regions, cells, M, media=False, folder="temp/merge_frames", ax=None):
   curr = regions[1]
   n = M.shape[0]
   for i in range(3000):
