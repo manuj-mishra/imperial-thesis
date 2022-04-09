@@ -19,7 +19,7 @@ class Population:
     self.crossover()
 
     # Mutate
-    self.mutate(0)
+    self.mutate(self.elite_n // 2)
 
     return avg, max, fail
 
@@ -51,8 +51,8 @@ class Population:
   def evaluate(self):
     scores = []
     for r in self.inds:
-      sol_len, n_ends = r.evaluate(n_iters=5)
-      scores.append(self.fit_ratio * sol_len + (1 - self.fit_ratio) * n_ends)
+      dead_ends, path_lengths = r.evaluate(n_iters=5)
+      scores.append(self.fit_ratio * path_lengths + (1 - self.fit_ratio) * dead_ends)
     scores = np.array(scores)
     fails = np.count_nonzero(scores == 0)
     return scores, fails

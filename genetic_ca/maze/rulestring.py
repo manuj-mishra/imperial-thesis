@@ -2,8 +2,7 @@ import random
 
 import numpy as np
 
-from maze.evaluate import dead_ends_and_path_length
-from maze.maze_ca import generate_maze, get_regions, region_merge
+from maze.maze_ca import MazeCA
 
 
 class Rulestring:
@@ -22,7 +21,7 @@ class Rulestring:
       if rstring & 1:
         ixs.append(i)
       rstring >>= 1
-    return ixs
+    return sorted(ixs)
 
   def get_rstring(self):
     return format(self.rstring, 'b').zfill(16)
@@ -38,18 +37,15 @@ class Rulestring:
     self.rstring ^= mask
 
   def evaluate(self, n_iters):
-    sol_lens = []
-    num_ends = []
+    path_lengths = []
+    num_dead_ends = []
     for _ in range(n_iters):
-      X = generate_maze(self.b, self.s)
-      cells, regions, M = get_regions(X)
-      M, success = region_merge(regions, cells, M)
+      ca = MazeCA(self.b, self.s)
+      success = ca.run()
       if not success:
         return 0, 0
-      _, a, b = dead_ends_and_path_length(M)
-      num_ends.append(a)
-      sol_lens.append(b)
+      dead_ends, path_length = ca.dead_ends_and_path_length()
+      num_dead_ends.append(dead_ends)
+      path_lengths.append(path_length)
 
-    sol_lens = np.array(sol_lens)
-    num_ends = np.array(num_ends)
-    return np.mean(sol_lens), np.mean(num_ends)
+    return sum(num_dead_ends) / n_iters, sum(path_lengths) / n_iters

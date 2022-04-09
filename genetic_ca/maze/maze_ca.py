@@ -2,143 +2,152 @@ import random
 from collections import defaultdict, deque
 import numpy as np
 from scipy.signal import convolve2d
-from media import save_image
+from media import save_image, init_image
+from util.grid import near
+from util.maze import intmap, bfs
 
+class MazeCA:
+  def __init__(self, B, S):
+    self.nx, self.ny = 32, 32
+    self.X = np.zeros((self.ny, self.nx))
+    self.B = B
+    self.S = S
 
-def ca_step(X, B, S):
-  K = np.ones((3, 3))
-  n = convolve2d(X, K, mode='same', boundary='wrap') - X
-  return np.isin(n, B) | (X & np.isin(n, S))
+  def run(self, media=False):
+    self.generate(media=media)
+    cells, regions = self.find_regions(media=media)
+    success = self.merge_regions(cells, regions, media=media)
+    return success
 
+  def _step(self):
+    K = np.ones((3, 3))
+    n = convolve2d(self.X, K, mode='same', boundary='wrap') - self.X
+    return np.isin(n, self.B) | (self.X & np.isin(n, self.S))
 
-def generate_maze(B, S, n_iter=150, media=False, folder="temp/gen_frames", ax=None):
-  # Maze size
-  nx, ny = 32, 32
-  X = np.random.random((ny, nx)) > 0.75
-
-  frames_per_image = 2
-
-  for i in range(n_iter):
-    X = ca_step(X, B, S)
-    if not i % frames_per_image and media:
-      # print('{}/{}'.format(i, n_iter))
-      Y = intmap(X)
-      save_image(Y, i, ax, folder=folder)
-
-  if media:
-    save_image(intmap(X), n_iter, ax, folder=folder)
-  return intmap(X)
-
-
-def get_regions(M, media=False, folder="temp/reg_frames", ax=None):
-  # cells = {(x,y):region}
-  # regions = {region:set((x1, y1), ... , (xn, yn))}
-
-  n = M.shape[0]
-
-  cells = dict()
-  regions = defaultdict(set)
-
-  spaces = set()
-  for i in range(n):
-    for j in range(n):
-      if M[i][j] == 0:
-        spaces.add((i, j))
-
-  start = (n - 1, 0)
-  r1 = bfs(start, M, n)
-  M_copy = M.copy()
-  regnum = 1
-  for cell in r1:
-    M_copy[cell[0], cell[1]] = 3
-    cells[cell] = regnum
-    regions[regnum].add(cell)
-  spaces.difference_update(r1)
-
-  if media:
-    save_image(M_copy, regnum, ax, folder=folder)
-
-  reg = r1
-  n_iter = 0
-  while spaces:
-    regnum += 1
-    start = spaces.pop()
-    for cell in reg:
-      M_copy[cell[0], cell[1]] = 2
+  def generate(self, n_iter=150, media=False):
+    folder, ax = None, None
     if media:
-      save_image(M_copy, regnum, ax, folder=folder)
-    reg = bfs(start, M, n)
-    for cell in reg:
+      folder = "temp/gen_frames"
+      ax = init_image()
+
+    # Maze size
+    nx, ny = 32, 32
+    self.X = np.random.random((ny, nx)) > 0.75
+
+    frames_per_image = 2
+
+    for i in range(n_iter):
+      self.X = self._step()
+      if not i % frames_per_image and media:
+        # print('{}/{}'.format(i, n_iter))
+        Y = intmap(self.X)
+        save_image(Y, i, ax, folder=folder)
+
+    self.X = intmap(self.X)
+    if media:
+      save_image(self.X, n_iter, ax, folder=folder)
+
+  def find_regions(self, media=False):
+    # cells = {(x,y):region}
+    # regions = {region:set((x1, y1), ... , (xn, yn))}
+    folder, ax = None, None
+    if media:
+      folder = "temp/reg_frames"
+      ax = init_image()
+
+    cells = dict()
+    regions = defaultdict(set)
+
+    spaces = set()
+    for i in range(self.nx):
+      for j in range(self.ny):
+        if self.X[i][j] == 0:
+          spaces.add((i, j))
+
+    start = (self.nx - 1, 0)
+    r1 = bfs(start, self.X, self.nx)
+    M_copy = self.X.copy()
+    regnum = 1
+    for cell in r1:
       M_copy[cell[0], cell[1]] = 3
       cells[cell] = regnum
       regions[regnum].add(cell)
-    spaces.difference_update(reg)
-    n_iter += 1
-  return cells, regions, M
-
-
-def region_merge(regions, cells, M, media=False, folder="temp/merge_frames", ax=None):
-  curr = regions[1]
-  n = M.shape[0]
-  for i in range(3000):
-    fringe = set().union(*(near(c[0], c[1], n) for c in curr)) - curr
-
-    if (0, n - 1) in fringe:
-      if media:
-        save_image(M, i, ax, folder=folder)
-      return M, True
+    spaces.difference_update(r1)
 
     if media:
-      M_copy = M.copy()
-      for x, y in curr:
-        M_copy[x, y] = 2
-      for x, y in fringe:
-        M_copy[x, y] = 3
-      save_image(M_copy, i, ax, folder=folder)
+      save_image(M_copy, regnum, ax, folder=folder)
 
-    cands = []
-    for f in fringe:
-      zeros = set(z for z in near(f[0], f[1], n) if M[z[0], z[1]] == 0)
-      if len(zeros - curr) > 0:
-        cands.append(f)
-    if len(cands) > 0:
-      cx, cy = random.choice(cands)
-    else:
-      return M, False
-    curr.add((cx, cy))
-    M[cx, cy] = 0
-    new_regs = [cells[around] for around in near(cx, cy, n) if around in cells]
-    curr = curr.union(*(regions[r] for r in new_regs))
-  print("MAXED OUT MERGE")
-  return M, False
+    reg = r1
+    n_iter = 0
+    while spaces:
+      regnum += 1
+      start = spaces.pop()
+      for cell in reg:
+        M_copy[cell[0], cell[1]] = 2
+      if media:
+        save_image(M_copy, regnum, ax, folder=folder)
+      reg = bfs(start, self.X, self.nx)
+      for cell in reg:
+        M_copy[cell[0], cell[1]] = 3
+        cells[cell] = regnum
+        regions[regnum].add(cell)
+      spaces.difference_update(reg)
+      n_iter += 1
+    return cells, regions
 
+  def merge_regions(self, cells, regions, media=False):
+    folder, ax = None, None
+    if media:
+      folder = "temp/mer_frames"
+      ax = init_image()
+    curr = regions[1]
+    for i in range(3000):
+      fringe = set().union(*(near(c[0], c[1], self.nx) for c in curr)) - curr
+      if (0, self.ny - 1) in fringe:
+        if media:
+          save_image(self.X, i, ax, folder=folder)
+        return True
 
-# AUXILIARY FUNCTIONS
+      if media:
+        M_copy = self.X.copy()
+        for x, y in curr:
+          M_copy[x, y] = 2
+        for x, y in fringe:
+          M_copy[x, y] = 3
+        save_image(M_copy, i, ax, folder=folder)
 
-def intmap(X):
-  """Converts bool maze to int. Sets start and goal."""
-  Y = X.astype(int)
-  Y[Y.shape[0] - 1, 0] = 2
-  Y[0, Y.shape[1] - 1] = 4
-  return Y
+      cands = []
+      for f in fringe:
+        zeros = set(z for z in near(f[0], f[1], self.nx) if self.X[z[0], z[1]] == 0)
+        if len(zeros - curr) > 0:
+          cands.append(f)
+      if len(cands) > 0:
+        cx, cy = random.choice(cands)
+      else:
+        return False
+      curr.add((cx, cy))
+      self.X[cx, cy] = 0
+      new_regs = [cells[around] for around in near(cx, cy, self.nx) if around in cells]
+      curr = curr.union(*(regions[r] for r in new_regs))
+    print("MAXED OUT MERGE")
+    return False
 
-
-def near(x, y, n):
-  """Finds valid neighbours of (x,y) in maze of size nxn"""
-  adj = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
-  return [(i, j) for (i, j) in adj if 0 <= i < n and 0 <= j < n]
-
-
-def bfs(start, M, n):
-  """Breadth first search in maze M of size nxn from cell start"""
-  q = deque([start])
-  visited = set()
-  while q:
-    curr = q.popleft()
-    if curr not in visited:
-      visited.add(curr)
-      adj = near(curr[0], curr[1], n)
-      for x, y in adj:
-        if M[x, y] == 0 and (x, y) not in visited:
-          q.append((x, y))
-  return visited
+  def dead_ends_and_path_length(self):
+    q = deque([(self.nx - 1, 0, 0)])
+    visited = set()
+    dead_ends = 0
+    result = None
+    while q:
+      curr_x, curr_y, curr_len = q.popleft()
+      if (curr_x, curr_y) not in visited:
+        visited.add((curr_x, curr_y))
+        adj = near(curr_x, curr_y, self.nx)
+        if all(self.X[x,y] == 1 or (x, y) in visited for x, y in adj):
+          dead_ends += 1
+          continue
+        for x, y in adj:
+          if self.X[x, y] == 0 and (x, y) not in visited:
+            q.append((x, y, curr_len + 1))
+          if self.X[x, y] == 4:
+            result = dead_ends, curr_len + 1
+    return result

@@ -18,7 +18,8 @@ root = "."
 """
 
 
-def make_files(rstring, name, frame_folder=None, final_state=None, clear=True):
+def make_files(final_state, name, rstring, clear=True):
+  frame_folder = name[:3] + "_frames"
   dirname = f"{root}/out/{rstring}"
 
   dirs = ["gifs", "final_frames", "np_arrays"]
@@ -31,17 +32,15 @@ def make_files(rstring, name, frame_folder=None, final_state=None, clear=True):
     for dir in dirs:
       os.makedirs(f"{dirname}/{dir}")
 
-  if frame_folder is not None:
-    frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/temp/{frame_folder}/*.png"))]
-    frames[0].save(f"{dirname}/gifs/{name}.gif", format="GIF", append_images=frames[1:],
-                   save_all=True, duration=50)
-    frame_last = frames[-1]
-    frame_last.save(f"{dirname}/final_frames/{name}.png")
+  frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/temp/{frame_folder}/*.png"))]
+  frames[0].save(f"{dirname}/gifs/{name}.gif", format="GIF", append_images=frames[1:],
+                 save_all=True, duration=50)
+  frame_last = frames[-1]
+  frame_last.save(f"{dirname}/final_frames/{name}.png")
 
-  if final_state is not None:
-    fname = f"{dirname}/np_arrays/{name}.npy"
-    with open(fname, 'wb') as f:
-      np.save(f, final_state)
+  fname = f"{dirname}/np_arrays/{name}.npy"
+  with open(fname, 'wb') as f:
+    np.save(f, final_state)
 
 
 def init_image(width=500, height=500, dpi=10):

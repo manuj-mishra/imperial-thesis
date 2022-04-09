@@ -1,17 +1,13 @@
 import csv
 import time
-
-from maze.evaluate import dead_ends_and_path_length
 from maze.evolve import Population
 import matplotlib.pyplot as plt
+from maze.maze_ca import MazeCA
+from maze.media import make_files, clear_temp_folders
 
-from maze.maze_ca import generate_maze, get_regions, region_merge
-from maze.media import init_image, make_files, clear_temp_folders
 
-
-def run_experiment(epoch_n=30, pop_size=10, fit_ratio=0.1, elitism=0.2, mutation=0.05):
+def run_experiment(epoch_n=30, pop_size=50, fit_ratio=0.2, elitism=0.2, mutation=0.05):
   start_time = time.time()
-
   avges = []
   maxes = []
   fails = []
@@ -66,22 +62,20 @@ def save_experiment(B, S, exp_n):
   print(f"Running CA {rulestring}")
   rulestring = f"{exp_n}/{rulestring}"
 
-  ax = init_image()
-  X = generate_maze(B, S, media=True, folder='temp/gen_frames', ax=ax)
-  make_files(frame_folder='gen_frames', rstring=rulestring, name="generation", final_state=X, clear=True)
+  ca = MazeCA(B, S)
+  ca.generate(media=True)
+  make_files(final_state=ca.X, name="generation", rstring=rulestring, clear=True)
 
-  ax = init_image()
-  cells, regions, M = get_regions(X, media=True, folder='temp/reg_frames', ax=ax)
-  make_files(frame_folder='reg_frames', rstring=rulestring, name="regions", final_state=M, clear=False)
+  cells, regions, = ca.find_regions(media=True)
+  make_files(final_state=ca.X, name="regions", rstring=rulestring, clear=False)
 
-  ax = init_image()
-  M, success = region_merge(regions, cells, M, media=True, folder='temp/merge_frames', ax=ax)
-  make_files(frame_folder='merge_frames', rstring=rulestring, name="merging", final_state=M, clear=False)
+  success = ca.merge_regions(cells, regions, media=True)
+  make_files(final_state=ca.X, name="merging", rstring=rulestring, clear=False)
 
   if success:
-    _, ends, length = dead_ends_and_path_length(M)
-    print("Solution length:", length)
+    ends, length = ca.dead_ends_and_path_length()
     print("Dead ends:", ends)
+    print("Solution length:", length)
     # M = find_sol_path(M)
     # save_final_image(M, path=f'./out/{rulestring}/solution.png', ax=init_image())
   else:
