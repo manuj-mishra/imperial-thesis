@@ -2,15 +2,17 @@
 
 #### Small
 - Make it so that the temp folder is automatically created and deleted
-- Remove maze/gifs folder
+- ~~Remove maze/gifs folder~~
 - Combine b_chrom and s_chrom into one dictionary
 
 #### Medium
-- Find bug with dead_ends in maze
+- ~~Media creation for dead_ends~~ and path_length
+- ~~Find bug with dead_ends in maze~~
 - Test all functions
-- Refactor maze like slime (i.e. MazeCA class which is called by Rulestring in evaluate)
+- ~~Refactor maze like slime (i.e. MazeCA class which is called by Rulestring in evaluate)~~
 - List all hyperparameters in slime and maze and try to integrate into chromosome
 
 #### Big
 1) Add sobel filter based coefficients to slime chromosome
 2) Grid search for hyperparameters on maze
+3) Profiling, what code is taking ages to run

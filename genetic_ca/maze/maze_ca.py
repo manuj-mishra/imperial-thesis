@@ -6,6 +6,7 @@ from media import save_image, init_image
 from util.grid import near
 from util.maze import intmap, bfs
 
+
 class MazeCA:
   def __init__(self, B, S):
     self.nx, self.ny = 32, 32
@@ -24,7 +25,7 @@ class MazeCA:
     n = convolve2d(self.X, K, mode='same', boundary='wrap') - self.X
     return np.isin(n, self.B) | (self.X & np.isin(n, self.S))
 
-  def generate(self, n_iter=150, media=False):
+  def generate(self, n_iter=30, media=False):
     folder, ax = None, None
     if media:
       folder = "temp/gen_frames"
@@ -34,7 +35,7 @@ class MazeCA:
     nx, ny = 32, 32
     self.X = np.random.random((ny, nx)) > 0.75
 
-    frames_per_image = 2
+    frames_per_image = 1
 
     for i in range(n_iter):
       self.X = self._step()
@@ -132,22 +133,43 @@ class MazeCA:
     print("MAXED OUT MERGE")
     return False
 
-  def dead_ends_and_path_length(self):
+  def metrics(self, media=False):
+    folder, ax, M_copy = None, None, None
+    if media:
+      folder = "temp/eva_frames"
+      ax = init_image()
+      M_copy = self.X.copy()
+
     q = deque([(self.nx - 1, 0, 0)])
     visited = set()
     dead_ends = 0
-    result = None
+    path_len = None
+
     while q:
       curr_x, curr_y, curr_len = q.popleft()
       if (curr_x, curr_y) not in visited:
         visited.add((curr_x, curr_y))
+
+        if media:
+          M_copy[curr_x, curr_y] = 2
+
         adj = near(curr_x, curr_y, self.nx)
-        if all(self.X[x,y] == 1 or (x, y) in visited for x, y in adj):
+        if all(self.X[x, y] == 1 or (x, y) in visited for x, y in adj):
           dead_ends += 1
+
+          if media:
+            M_copy[curr_x, curr_y] = 3
+            save_image(M_copy, dead_ends, ax, folder=folder)
+
           continue
+
         for x, y in adj:
-          if self.X[x, y] == 0 and (x, y) not in visited:
-            q.append((x, y, curr_len + 1))
-          if self.X[x, y] == 4:
-            result = dead_ends, curr_len + 1
-    return result
+          if (x, y) not in visited:
+            if self.X[x, y] == 0:
+              q.append((x, y, curr_len + 1))
+            elif self.X[x, y] == 4:
+              visited.add((x, y))
+              path_len = curr_len + 1
+
+    reachable = len(visited) / self.X.size
+    return dead_ends, path_len, reachable

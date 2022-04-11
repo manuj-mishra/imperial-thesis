@@ -18,9 +18,9 @@ root = "."
 """
 
 
-def make_files(final_state, name, rstring, clear=True):
-  frame_folder = name[:3] + "_frames"
-  dirname = f"{root}/out/{rstring}"
+def make_files(final_state, fname, rname, clear=False):
+  frame_folder = fname[:3] + "_frames"
+  dirname = f"{root}/out/{rname}"
 
   dirs = ["gifs", "final_frames", "np_arrays"]
   if os.path.exists(dirname):
@@ -33,12 +33,12 @@ def make_files(final_state, name, rstring, clear=True):
       os.makedirs(f"{dirname}/{dir}")
 
   frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/temp/{frame_folder}/*.png"))]
-  frames[0].save(f"{dirname}/gifs/{name}.gif", format="GIF", append_images=frames[1:],
+  frames[0].save(f"{dirname}/gifs/{fname}.gif", format="GIF", append_images=frames[1:],
                  save_all=True, duration=50)
   frame_last = frames[-1]
-  frame_last.save(f"{dirname}/final_frames/{name}.png")
+  frame_last.save(f"{dirname}/final_frames/{fname}.png")
 
-  fname = f"{dirname}/np_arrays/{name}.npy"
+  fname = f"{dirname}/np_arrays/{fname}.npy"
   with open(fname, 'wb') as f:
     np.save(f, final_state)
 

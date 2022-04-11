@@ -37,15 +37,21 @@ class Rulestring:
     self.rstring ^= mask
 
   def evaluate(self, n_iters):
-    path_lengths = []
-    num_dead_ends = []
+    path_lens = []
+    dead_ends = []
+    reachables = []
     for _ in range(n_iters):
       ca = MazeCA(self.b, self.s)
       success = ca.run()
       if not success:
-        return 0, 0
-      dead_ends, path_length = ca.dead_ends_and_path_length()
-      num_dead_ends.append(dead_ends)
-      path_lengths.append(path_length)
+        continue
+      dead_end, path_len, reachable = ca.metrics()
+      dead_ends.append(dead_end)
+      path_lens.append(path_len)
+      reachables.append(reachable)
 
-    return sum(num_dead_ends) / n_iters, sum(path_lengths) / n_iters
+    n_success = len(dead_ends)
+    if n_success < 0.8 * n_iters:
+      return 0, 0, 0
+
+    return sum(dead_ends) / n_success, sum(path_lens) / n_success, sum(reachables) / n_success
