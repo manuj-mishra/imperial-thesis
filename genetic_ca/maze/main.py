@@ -1,11 +1,13 @@
 import csv
 import time
-from maze.population import Population
-import matplotlib.pyplot as plt
-from maze.maze_ca import MazeCA
-from maze.media import make_files, clear_temp_folders
 
-EPOCH_N = 40
+import matplotlib.pyplot as plt
+import numpy as np
+
+from maze.maze_ca import MazeCA
+from maze.population import Population
+
+EPOCH_N = 80
 
 
 def run_experiment(path_len_bias, pop_size=50, elitism=0.5, mutation=0.05, epoch_n=EPOCH_N):
@@ -26,6 +28,8 @@ def run_experiment(path_len_bias, pop_size=50, elitism=0.5, mutation=0.05, epoch
   print(f"Training Time: {((time.time() - start_time) / epoch_n):.2f} s per epoch")
   save_experiments(pop, elite_scores, mean_paths, mean_deads)
 
+  return np.mean(mean_deads[-10:]), np.mean(mean_paths[-10:])
+
 
 def save_experiments(pop, elite_scores, mean_paths, mean_deads):
   exp_n = f"bias{pop.path_len_bias * 100}_pop{pop.pop_size}_el{pop.elitism * 100}_mut{pop.mutation * 100}"
@@ -36,7 +40,8 @@ def save_experiments(pop, elite_scores, mean_paths, mean_deads):
     rname = ''.join(str(i) for i in rulestring.b) + '_' + ''.join(str(i) for i in rulestring.s)
     rname = f"{exp_n}/{rname}"
 
-    save_experiment(rulestring, rname)
+    ca = MazeCA(rulestring.b, rulestring.s)
+    ca.save_experiment(rname)
 
   dir = f'out/{exp_n}'
   file = open(f'{dir}/elite.csv', 'w+', newline='')
@@ -47,51 +52,46 @@ def save_experiments(pop, elite_scores, mean_paths, mean_deads):
     write.writerow(elite_scores)
 
   epochs = [i for i in range(1, EPOCH_N + 1)]
-  fig = plt.figure()
-  ax = fig.add_subplot(111)
-  ax.set_ylim(bottom=0)
-  plt.plot(epochs, mean_paths, color='green')
-  plt.plot(epochs, mean_deads, color='red')
-  ax.set_aspect(1.0 / ax.get_data_ratio(), adjustable='box')
-  plt.xlabel('Epochs', fontsize=14)
+  fig, ax1 = plt.subplots()
+
+  color = 'tab:red'
+  ax1.set_xlabel('Epoch')
+  ax1.set_ylabel('# of dead ends')
+  ax1.plot(epochs, mean_deads, color=color)
+  ax1.tick_params(axis='y', labelcolor=color)
+
+  color = 'tab:green'
+  ax2 = ax1.twinx()
+  ax2.set_ylabel('Length of solution path')
+  ax2.plot(epochs, mean_paths, color=color)
+  ax2.tick_params(axis='y', labelcolor=color)
+
+  fig.tight_layout()
   plt.savefig(f'{dir}/fitness.png', bbox_inches='tight')
 
 
-def save_experiment(rulestring, rname, attempt=1):
-  if attempt == 0:
-    print(f"Running CA {rname}")
-
-  ca = MazeCA(rulestring.b, rulestring.s)
-  ca.generate(media=True)
-  make_files(final_state=ca.X, fname="generation", rname=rname, clear=True)
-
-  cells, regions, = ca.find_regions(media=True)
-  make_files(final_state=ca.X, fname="regions", rname=rname)
-
-  success = ca.merge_regions(cells, regions, media=True)
-  make_files(final_state=ca.X, fname="merging", rname=rname)
-
-  if success:
-    ends, length, reachable = ca.metrics(media=True)
-    make_files(final_state=ca.X, fname="evaluation", rname=rname)
-    print("Dead ends:", ends)
-    print("Solution length:", length)
-    print("Reachable:", reachable)
-    # M = find_sol_path(M)
-    # save_final_image(M, path=f'./out/{rulestring}/solution.png', ax=init_image())
-  else:
-    print(f"Attempt {attempt}: Region merge failed")
-    if attempt < 3:
-      print("Trying again")
-      save_experiment(rulestring, rname, attempt=attempt + 1)
-
-  clear_temp_folders()
-
-
 if __name__ == "__main__":
-  for pop_size in [20, 50]:
-    for elitism in [0.2, 0.5, 0.8]:
-      for mutation in [0.025, 0.05, 0.1]:
-        run_experiment(0)
-        run_experiment(0.5)
-        run_experiment(1)
+  mean_deads = []
+  mean_paths = []
+  biases = np.linspace(0, 1, num=6)
+  for bias in biases:
+    d, p = run_experiment(bias)
+    mean_deads.append(d)
+    mean_paths.append(p)
+
+  fig, ax1 = plt.subplots()
+
+  color = 'tab:red'
+  ax1.set_xlabel('Path length bias')
+  ax1.set_ylabel('# of dead ends')
+  ax1.plot(biases, mean_deads, color=color)
+  ax1.tick_params(axis='y', labelcolor=color)
+
+  color = 'tab:green'
+  ax2 = ax1.twinx()
+  ax2.set_ylabel('Length of solution path')
+  ax2.plot(biases, mean_paths, color=color)
+  ax2.tick_params(axis='y', labelcolor=color)
+
+  fig.tight_layout()
+  plt.savefig(f'out/bias_tuning.png', bbox_inches='tight')

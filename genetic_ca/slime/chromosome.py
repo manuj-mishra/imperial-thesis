@@ -5,45 +5,51 @@ from slime.slime_ca import SlimeCA
 
 
 class Chromosome:
-  def __init__(self, b_coefs=None, s_coefs=None):
-
-    if b_coefs is None:
-      self.b_coefs = {
-        'n_food_c': random.randint(0, 1),
-        'n_slime_c': random.randint(0, 1),
-        # 'x_food_c': random.randint(0, 1),
-        # 'y_food_c': random.randint(0, 1),
-        # 'x_slime_c': random.randint(0, 1),
-        # 'y_slime_c': random.randint(0, 1),
+  def __init__(self, coefs=None):
+    if coefs is None:
+      self.coefs = {
+        'b_food_n': random.randint(0, 1),
+        'b_food_x': random.randint(0, 1),
+        'b_food_y': random.randint(0, 1),
+        'b_slime_n': random.randint(0, 1),
+        'b_slime_x': random.randint(0, 1),
+        'b_slime_y': random.randint(0, 1),
+        's_food_n': random.randint(0, 1),
+        's_food_x': random.randint(0, 1),
+        's_food_y': random.randint(0, 1),
+        's_slime_n': random.randint(0, 1),
+        's_slime_x': random.randint(0, 1),
+        's_slime_y': random.randint(0, 1),
+        'threshold': random.randint(0, 1)
       }
 
-    if s_coefs is None:
-      self.s_coefs = {
-        'n_food_c': random.randint(0, 1),
-        'n_slime_c': random.randint(0, 1),
-        # 'x_food_c': random.randint(0, 1),
-        # 'y_food_c': random.randint(0, 1),
-        # 'x_slime_c': random.randint(0, 1),
-        # 'y_slime_c': random.randint(0, 1),
-      }
+  def id(self):
+    return hash(tuple(self.coefs.values()))
 
-  def gaussian_mutation(self, sigma):
-    for c_dict in (self.b_coefs, self.s_coefs):
-      for k, v in c_dict.items():
-        v_new = v + np.random.normal(loc=0.0, scale=sigma, size=None)
-        v_new = max(0, v_new)
-        v_new = min(1, v_new)
-        c_dict[k] = v_new
+  # NOT USED
+  def total_gaussian_mutation(self, sigma):
+    for k, v in self.coefs.items():
+      v_new = v + np.random.normal(loc=0.0, scale=sigma, size=None)
+      v_new = max(0, v_new)
+      v_new = min(1, v_new)
+      self.coefs[k] = v_new
+
+  def single_non_uniform_mutation(self, curr_epoch, max_epoch):
+    k, v = random.choice(list(self.coefs.items()))
+    r1 = random.random()
+    r2 = random.random()
+    f = r2 * (1 - curr_epoch / max_epoch)
+    if r1 > 0.5:
+      self.coefs[k] = (1 - v) * f
+    else:
+      self.coefs[k] = v * f
 
   def evaluate(self, n_iters):
-    food_reached = []
+    food_eaten = []
     slime_size = []
     for _ in range(n_iters):
       ca = SlimeCA(self)
       ca.run()
-      food_reached.append(ca.food_reached())
+      food_eaten.append(ca.food_reached())
       slime_size.append(ca.slime_size())
-    return sum(food_reached) / n_iters, sum(slime_size) / n_iters
-
-  def __str__(self):
-    return str(self.b_coefs.values()) + "_" + str(self.s_coefs.values())
+    return sum(food_eaten) / n_iters, sum(slime_size) / n_iters

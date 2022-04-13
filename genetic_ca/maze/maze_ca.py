@@ -1,16 +1,22 @@
 import random
 from collections import defaultdict, deque
+
 import numpy as np
 from scipy.signal import convolve2d
-from media import save_image, init_image
+
+from util.media import save_image, init_image, make_files, clear_temp_folders
 from util.grid import near
 from util.maze import intmap, bfs
+
+GRID_SIZE = 32
+GEN_ITERS = 30
+INITIAL_DENSITY = 0.75
 
 
 class MazeCA:
   def __init__(self, B, S):
-    self.nx, self.ny = 32, 32
-    self.X = np.zeros((self.ny, self.nx))
+    self.nx, self.ny = GRID_SIZE, GRID_SIZE
+    self.X = np.random.random((self.ny, self.nx)) > INITIAL_DENSITY
     self.B = B
     self.S = S
 
@@ -25,19 +31,14 @@ class MazeCA:
     n = convolve2d(self.X, K, mode='same', boundary='wrap') - self.X
     return np.isin(n, self.B) | (self.X & np.isin(n, self.S))
 
-  def generate(self, n_iter=30, media=False):
+  def generate(self, media=False):
     folder, ax = None, None
     if media:
       folder = "temp/gen_frames"
       ax = init_image()
-
-    # Maze size
-    nx, ny = 32, 32
-    self.X = np.random.random((ny, nx)) > 0.75
-
     frames_per_image = 1
 
-    for i in range(n_iter):
+    for i in range(GEN_ITERS):
       self.X = self._step()
       if not i % frames_per_image and media:
         # print('{}/{}'.format(i, n_iter))
@@ -46,15 +47,16 @@ class MazeCA:
 
     self.X = intmap(self.X)
     if media:
-      save_image(self.X, n_iter, ax, folder=folder)
+      save_image(self.X, GEN_ITERS, ax, folder=folder)
 
   def find_regions(self, media=False):
     # cells = {(x,y):region}
     # regions = {region:set((x1, y1), ... , (xn, yn))}
-    folder, ax = None, None
+    folder, ax, M_copy = None, None, None
     if media:
       folder = "temp/reg_frames"
       ax = init_image()
+      M_copy = self.X.copy()
 
     cells = dict()
     regions = defaultdict(set)
@@ -67,10 +69,11 @@ class MazeCA:
 
     start = (self.nx - 1, 0)
     r1 = bfs(start, self.X, self.nx)
-    M_copy = self.X.copy()
     regnum = 1
+    if media:
+      for cell in r1:
+        M_copy[cell[0], cell[1]] = 3
     for cell in r1:
-      M_copy[cell[0], cell[1]] = 3
       cells[cell] = regnum
       regions[regnum].add(cell)
     spaces.difference_update(r1)
@@ -83,17 +86,20 @@ class MazeCA:
     while spaces:
       regnum += 1
       start = spaces.pop()
-      for cell in reg:
-        M_copy[cell[0], cell[1]] = 2
       if media:
+        for cell in reg:
+          M_copy[cell[0], cell[1]] = 2
         save_image(M_copy, regnum, ax, folder=folder)
       reg = bfs(start, self.X, self.nx)
+      if media:
+        for cell in reg:
+          M_copy[cell[0], cell[1]] = 3
       for cell in reg:
-        M_copy[cell[0], cell[1]] = 3
         cells[cell] = regnum
         regions[regnum].add(cell)
       spaces.difference_update(reg)
       n_iter += 1
+
     return cells, regions
 
   def merge_regions(self, cells, regions, media=False):
@@ -102,7 +108,7 @@ class MazeCA:
       folder = "temp/mer_frames"
       ax = init_image()
     curr = regions[1]
-    for i in range(3000):
+    for i in range(GRID_SIZE ** 2):
       fringe = set().union(*(near(c[0], c[1], self.nx) for c in curr)) - curr
       if (0, self.ny - 1) in fringe:
         if media:
@@ -130,8 +136,7 @@ class MazeCA:
       self.X[cx, cy] = 0
       new_regs = [cells[around] for around in near(cx, cy, self.nx) if around in cells]
       curr = curr.union(*(regions[r] for r in new_regs))
-    print("MAXED OUT MERGE")
-    return False
+    raise Exception("Maximum merge limit reached")
 
   def metrics(self, media=False):
     folder, ax, M_copy = None, None, None
@@ -173,3 +178,31 @@ class MazeCA:
 
     reachable = len(visited) / self.X.size
     return dead_ends, path_len, reachable
+
+  def save_experiment(self, rname, attempt=1):
+    if attempt == 0:
+      print(f"Running CA {rname}")
+
+    self.generate(media=True)
+    make_files(final_state=self.X, fname="generation", rname=rname, clear=True)
+
+    cells, regions, = self.find_regions(media=True)
+    make_files(final_state=self.X, fname="regions", rname=rname)
+
+    success = self.merge_regions(cells, regions, media=True)
+    make_files(final_state=self.X, fname="merging", rname=rname)
+
+    if success:
+      ends, length, reachable = self.metrics(media=True)
+      make_files(final_state=self.X, fname="evaluation", rname=rname)
+      print("Dead ends:", ends)
+      print("Solution length:", length)
+      print("Reachable:", reachable)
+      # M = find_sol_path(M)
+      # save_final_image(M, path=f'./out/{rulestring}/solution.png', ax=init_image())
+    else:
+      print(f"Attempt {attempt}: Region merge failed")
+      if attempt < 3:
+        print("Trying again")
+        self.save_experiment(rname, attempt=attempt + 1)
+    clear_temp_folders()

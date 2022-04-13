@@ -1,8 +1,8 @@
 import random
 
-import numpy as np
-
 from maze.maze_ca import MazeCA
+
+SUCCESS_RATE = 0.8
 
 
 class Rulestring:
@@ -40,18 +40,18 @@ class Rulestring:
     path_lens = []
     dead_ends = []
     reachables = []
+    n_success = 0
     for _ in range(n_iters):
       ca = MazeCA(self.b, self.s)
       success = ca.run()
-      if not success:
-        continue
-      dead_end, path_len, reachable = ca.metrics()
-      dead_ends.append(dead_end)
-      path_lens.append(path_len)
-      reachables.append(reachable)
+      if success:
+        dead_end, path_len, reachable = ca.metrics()
+        dead_ends.append(dead_end)
+        path_lens.append(path_len)
+        reachables.append(reachable)
+        n_success += 1
 
-    n_success = len(dead_ends)
-    if n_success < 0.8 * n_iters:
+    if n_success < SUCCESS_RATE * n_iters:
       return 0, 0, 0
 
     return sum(dead_ends) / n_success, sum(path_lens) / n_success, sum(reachables) / n_success

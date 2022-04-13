@@ -1,4 +1,4 @@
-#TODO: Eventually move this all to maze.py
+# TODO: Eventually move this all to maze.py
 
 # def find_sol_path(M):
 #   size = M.shape[0]

@@ -1,7 +1,11 @@
 import math
 import random
-from maze.rulestring import Rulestring
+
 import numpy as np
+
+from maze.rulestring import Rulestring
+
+EVAL_ITER = 5
 
 class Population:
   def __init__(self, pop_size, path_len_bias, elitism, mutation):
@@ -21,7 +25,7 @@ class Population:
     self.crossover()
 
     # Mutate
-    self.mutate(0)
+    self.mutate(self.elite_n // 5)
 
     return mean_dead_ends, mean_path_lens
 
@@ -44,15 +48,15 @@ class Population:
       children.append(child)
     self.inds = np.append(self.inds, np.array(children))
 
-  def mutate(self, elite_n):
-    for rstring in self.inds[elite_n:]:
+  def mutate(self, non_mutate_n):
+    for rstring in self.inds[non_mutate_n:]:
       rstring.mutate(self.mutation)
 
   def evaluate(self):
     dead_ends = []
     path_lens = []
     for r in self.inds:
-      dead_end, path_len, _ = r.evaluate(n_iters=5)
+      dead_end, path_len, reachable = r.evaluate(n_iters=EVAL_ITER)
       dead_ends.append(dead_end)
       path_lens.append(path_len)
 
