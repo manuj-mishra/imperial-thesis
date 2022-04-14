@@ -7,13 +7,20 @@ SUCCESS_RATE = 0.8
 
 class Rulestring:
   def __init__(self, rstring=None):
-
     if rstring is None:
       rstring = random.randint(0, 2 ** 16 - 1)
 
+    self.rstring = rstring
     self.b = self._ones(rstring >> 8)
     self.s = self._ones(rstring)
+
+  def get_rstring(self):
+    return format(self.rstring, 'b').zfill(16)
+
+  def set_rstring(self, rstring):
     self.rstring = rstring
+    self.b = self._ones(rstring >> 8)
+    self.s = self._ones(rstring)
 
   def _ones(self, rstring):
     ixs = []
@@ -23,9 +30,6 @@ class Rulestring:
       rstring >>= 1
     return sorted(ixs)
 
-  def get_rstring(self):
-    return format(self.rstring, 'b').zfill(16)
-
   def mutate(self, p):
     mask = 0
     for _ in range(16):
@@ -34,7 +38,8 @@ class Rulestring:
       mask <<= 1
 
     mask >>= 1
-    self.rstring ^= mask
+    self.set_rstring(self.rstring ^ mask)
+    return self.rstring
 
   def evaluate(self, n_iters):
     path_lens = []

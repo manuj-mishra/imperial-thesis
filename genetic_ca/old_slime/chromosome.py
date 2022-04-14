@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-from slime.slime_ca import SlimeCA
+from old_slime.slime_ca import SlimeCA
 
 
 class Chromosome:

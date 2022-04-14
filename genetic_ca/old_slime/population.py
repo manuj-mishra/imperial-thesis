@@ -1,5 +1,5 @@
 import math
-from slime.chromosome import Chromosome
+from old_slime.chromosome import Chromosome
 import numpy as np
 
 EVAL_ITER = 5

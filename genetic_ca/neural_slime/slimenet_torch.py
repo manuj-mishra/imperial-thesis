@@ -28,11 +28,14 @@ def train(inputs, model, loss_fn, optimizer):
     for batch, (state, solution) in enumerate(inputs):
         # X, y = X.to(device), y.to(device)
         n_steps = random.randint(1, 64)
-        loss = torch.tensor(0).float()
-        print(loss.type())
+        # loss = torch.tensor(0).float()
+        # print(loss.type())
         for _ in range(n_steps):
             curr_loss = loss_fn(state[1], solution)
-            loss += curr_loss
+            optimizer.zero_grad()
+            curr_loss.backward()
+            optimizer.step()
+            # loss += curr_loss
             perc_vectors = []
             for i in range(20):
                 for j in range(20):
@@ -46,9 +49,8 @@ def train(inputs, model, loss_fn, optimizer):
             state[0] = snapshot
 
         curr_loss = loss_fn(state[1], solution)
-        loss += curr_loss
         optimizer.zero_grad()
-        loss.backward()
+        curr_loss.backward()
         optimizer.step()
         print(f"{batch} / {len(inputs)} loss: {curr_loss.item():>7f}")
 

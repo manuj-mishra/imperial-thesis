@@ -4,8 +4,8 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from slime.population import Population
-from slime.slime_ca import SlimeCA
+from old_slime.population import Population
+from old_slime.slime_ca import SlimeCA
 
 EPOCH_N = 20
 
