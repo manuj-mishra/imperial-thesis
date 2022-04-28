@@ -39,3 +39,6 @@ class Chromosome:
       sizes.append(size)
 
     return np.mean(foods), np.mean(sizes)
+
+  def id(self):
+    return hash((tuple(self.b), tuple(self.s)))

@@ -7,7 +7,6 @@ from maze.rulestring import Rulestring
 
 EVAL_ITER = 5
 
-
 class Population:
   def __init__(self, pop_size, path_len_bias, elitism, mutation, novelty):
     self.inds = np.array([Rulestring() for _ in range(pop_size)])

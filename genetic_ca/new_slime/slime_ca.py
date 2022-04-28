@@ -14,10 +14,14 @@ INITIAL_DENSITY = 0.75
 
 
 class SlimeCA:
-  def __init__(self, C):
+  def __init__(self, b, s, n_food=3):
     self.nx, self.ny = GRID_SIZE, GRID_SIZE
-    self.X = np.random.random((self.ny, self.nx)) > INITIAL_DENSITY
-    self.C = C
+    self.X = np.zeros((self.ny, self.nx))
+    self.b = b
+    self.s = s
+
+    self.n_food = n_food
+    self.food_locs = []
 
   def _step(self):
     K = np.ones((3, 3))
@@ -27,91 +31,61 @@ class SlimeCA:
 
     n_food = convolve2d(food_mask, K, mode='same', boundary='wrap') - food_mask
     n_slime = convolve2d(slime_mask, K, mode='same', boundary='wrap') - slime_mask
-
-    b =
-    return (~self.X & np.isin(n, self.B)) | (self.X & np.isin(n, self.S))
+    n_food = n_food.astype(int)
+    n_slime = n_slime.astype(int)
+    birth = (np.take(self.b, n_food) >> n_slime) & 1
+    survival = (np.take(self.s, n_food) >> n_slime) & 1
+    return (~slime_mask & birth) | (slime_mask & survival)
 
   def run(self, media=False):
     folder, ax = None, None
     if media:
       folder = "temp/gen_frames"
       ax = init_image()
-    frames_per_image = 2
+
+    self.X[self.nx // 2 - 1: self.nx // 2 + 1, self.ny // 2 - 1: self.ny // 2 + 1] = 1
+    centre = np.array([[self.nx // 2 - 1, self.nx // 2 - 1, self.nx // 2, self.nx // 2],
+                       [self.ny // 2 - 1, self.ny // 2, self.ny // 2 - 1, self.ny // 2]])
+    centre_ixs = np.ravel_multi_index(centre, self.X.shape)
+
+    possible_food_ixs = [i for i in np.arange(self.X.size) if i not in centre_ixs]
+    food_ixs = np.random.choice(possible_food_ixs, replace=False, size=self.n_food)
+    self.food_locs = np.unravel_index(food_ixs, self.X.shape)
+    self.X[self.food_locs] = 2
+
+    frames_per_image = 1
 
     for i in range(GEN_ITERS):
-      self.X = self._step()
+      self._step()
       if not i % frames_per_image and media:
-        # print('{}/{}'.format(i, n_iter))
         save_image(self.X, i, ax, folder=folder)
 
     if media:
       save_image(self.X, GEN_ITERS, ax, folder=folder)
 
-  def metrics(self, media=False):
-    folder, ax, M_copy = None, None, None
-    if media:
-      folder = "temp/eva_frames"
-      ax = init_image()
-      M_copy = self.X.copy()
+    return self.X
 
-    q = deque([(self.nx - 1, 0, 0)])
-    visited = set()
-    dead_ends = 0
-    path_len = None
+  def metrics(self):
+    size_ratio = np.sum(self.X == 1) / self.X.size
+    return size_ratio, self.food_ratio()
 
-    while q:
-      curr_x, curr_y, curr_len = q.popleft()
-      if (curr_x, curr_y) not in visited:
-        visited.add((curr_x, curr_y))
+  def food_ratio(self):
+    count = 0
+    total = 0
+    fxs, fys = self.food_locs
+    for i in range(self.n_food):
+      for x, y in near(fxs[i], fys[i], self.nx):
+        count += self.X[x, y] == 1
+        total += 1
+    return count / total
 
-        if media:
-          M_copy[curr_x, curr_y] = 2
-
-        adj = near(curr_x, curr_y, self.nx)
-        if all(self.X[x, y] == 1 or (x, y) in visited for x, y in adj):
-          dead_ends += 1
-
-          if media:
-            M_copy[curr_x, curr_y] = 3
-            save_image(M_copy, dead_ends, ax, folder=folder)
-
-          continue
-
-        for x, y in adj:
-          if (x, y) not in visited:
-            if self.X[x, y] == 0:
-              q.append((x, y, curr_len + 1))
-            elif self.X[x, y] == 4:
-              visited.add((x, y))
-              path_len = curr_len + 1
-
-    reachable = len(visited) / self.X.size
-    return dead_ends, path_len, reachable
-
-  def save_experiment(self, rname, attempt=1):
-    if attempt == 0:
-      print(f"Running CA {rname}")
-
-    self.generate(media=True)
-    make_files(final_state=self.X, fname="generation", rname=rname, clear=True)
-
-    cells, regions, = self.find_regions(media=True)
-    make_files(final_state=self.X, fname="regions", rname=rname)
-
-    success = self.merge_regions(cells, regions, media=True)
-    make_files(final_state=self.X, fname="merging", rname=rname)
-
-    if success:
-      ends, length, reachable = self.metrics(media=True)
-      make_files(final_state=self.X, fname="evaluation", rname=rname)
-      print("Dead ends:", ends)
-      print("Solution length:", length)
-      print("Reachable:", reachable)
-      # M = find_sol_path(M)
-      # save_final_image(M, path=f'./out/{rulestring}/solution.png', ax=init_image())
-    else:
-      print(f"Attempt {attempt}: Region merge failed")
-      if attempt < 3:
-        print("Trying again")
-        self.save_experiment(rname, attempt=attempt + 1)
+  def save_experiment(self, rname):
+    X = self.run(media=True)
+    make_files(final_state=X, fname="generation", rname=rname, clear=True)
+    size, food = self.metrics()
+    print("SIZE", size)
+    print("FOOD", food)
     clear_temp_folders()
+
+
+
