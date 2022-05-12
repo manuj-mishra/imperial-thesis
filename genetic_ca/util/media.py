@@ -9,6 +9,19 @@ from matplotlib.colors import ListedColormap
 
 root = "."
 
+def make_files_clustered(final_state, fname, rname):
+  frame_folder = fname[:3] + "_frames"
+  dirname = f"{root}/out/{rname}"
+  if not os.path.exists(dirname):
+    os.makedirs(dirname)
+  frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/temp/{frame_folder}/*.png"))]
+  frames[0].save(f"{dirname}/{fname}.gif", format="GIF", append_images=frames[1:],
+                 save_all=True, duration=50)
+  frame_last = frames[-1]
+  frame_last.save(f"{dirname}/{fname}.png")
+  fname = f"{dirname}/{fname}.npy"
+  with open(fname, 'wb') as f:
+    np.save(f, final_state)
 
 def make_files(final_state, fname, rname, clear=False):
   frame_folder = fname[:3] + "_frames"
@@ -33,6 +46,8 @@ def make_files(final_state, fname, rname, clear=False):
   fname = f"{dirname}/np_arrays/{fname}.npy"
   with open(fname, 'wb') as f:
     np.save(f, final_state)
+
+
 
 
 def init_image(width=500, height=500, dpi=10):

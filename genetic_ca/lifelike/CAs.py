@@ -10,6 +10,7 @@ class CA:
     self.X = X
     self.B = B
     self.S = S
+    self.K = np.ones((3, 3))
 
   @classmethod
   def random(cls, B, S):
@@ -22,10 +23,9 @@ class CA:
     return cls(X, B, S)
 
   def step(self, steps=1):
-    K = np.ones((3, 3))
     cache = self.X.copy()
     for _ in range(steps):
-      n = convolve2d(self.X, K, mode='same', boundary='wrap') - self.X
+      n = convolve2d(self.X, self.K, mode='same', boundary='wrap') - self.X
       res = (~self.X & np.isin(n, self.B)) | (self.X & np.isin(n, self.S))
       if (cache == res).all():
         self.X = res
