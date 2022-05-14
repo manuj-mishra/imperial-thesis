@@ -23,6 +23,17 @@ def make_files_clustered(final_state, fname, rname):
   with open(fname, 'wb') as f:
     np.save(f, final_state)
 
+
+def create_conv_gif(rname):
+  frame_folder = "conv_frames"
+  dirname = f"{root}/out/{rname}"
+  if not os.path.exists(dirname):
+    os.makedirs(dirname)
+
+  frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/temp/{frame_folder}/*.png"))]
+  frames[0].save(f"{dirname}/convergence.gif", format="GIF", append_images=frames[1:],
+                 save_all=True, duration=50)
+
 def make_files(final_state, fname, rname, clear=False):
   frame_folder = fname[:3] + "_frames"
   dirname = f"{root}/out/{rname}"
