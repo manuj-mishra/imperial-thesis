@@ -39,7 +39,7 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
   ax.set_ylabel("Kill")
   ax.set_xlim([-0.01, 0.1])
   ax.set_ylim([-0.01, 0.1])
-  plt.savefig(f'temp/conv_frames/0.png', bbox_inches='tight')
+  plt.savefig(f'./temp/conv_frames/0.png', bbox_inches='tight')
   plt.cla()
 
   for epoch in range(1, epoch_n + 1):
@@ -55,7 +55,7 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
     ax.set_ylabel("Kill")
     ax.set_xlim([-0.01, 0.1])
     ax.set_ylim([-0.01, 0.1])
-    plt.savefig(f'temp/conv_frames/{epoch}.png', bbox_inches='tight')
+    plt.savefig(f'./temp/conv_frames/{epoch}.png', bbox_inches='tight')
     plt.cla()
 
   plt.close(fig)
