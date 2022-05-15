@@ -5,7 +5,6 @@ from matplotlib import pyplot as plt
 
 from gray_scott_simple.CAs import CA
 from gray_scott_simple.Population import Population
-from alive_progress import alive_bar
 from util.media import create_conv_gif
 
 # Repetition variables
@@ -58,7 +57,6 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
     ax.set_ylim([-0.01, 0.1])
     plt.savefig(f'temp/conv_frames/{epoch}.png', bbox_inches='tight')
     plt.cla()
-    yield
 
   plt.close(fig)
 
@@ -128,6 +126,5 @@ if __name__ == "__main__":
   # create_conv_gif(rname=rname)
   # accuracy_experiment(true_f=0.038, =0.099)
   np.set_printoptions(precision=3, suppress=True)
-  with alive_bar(ACCURACY_EPOCH_N, force_tty=True) as bar:
-    for _ in test_single_ES(true_f=0.038, true_k=0.099):
-      bar()
+  test_single_ES(true_f=0.038, true_k=0.099)
+
