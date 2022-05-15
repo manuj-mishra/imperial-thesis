@@ -1,0 +1,11 @@
+\begin{definition}[Cellular Automaton]
+
+A cellular automaton (CA) is an $n$-dimensional finite grid of computational units called cells. Each cell $v$ is characterised by:
+\begin{itemize}
+  \item A discrete state variable $\sigma_i(t) \in \Sigma$, where $i$ indicates the index of the cell in the lattice, $t$ indicates the current time step, and $\Sigma$ denotes the finite set of all state variables.
+  \item A finite local neighbourhood set $\mathcal{N}(v)$ with cardinality $N$.
+  \item A transition function $\phi:\Sigma^N \to \Sigma$ which takes the neighbour states as input.
+\end{itemize}
+
+
+A cellular automaton (CA) is an $n$-dimensional finite grid of computational units called cells. Each cell $v$ is characterised by a discrete state variable $\sigma_i(t) \in \Sigma$, where $i$ indicates the index of the cell in the lattice, $t$ indicates the current time step, and $\Sigma$ denotes the finite set of all state variables. Each cell also has a finite local neighbourhood set $\mathcal{N}(v)$ with cardinality $N$. At each time step, the state of every cell is simultaneously updated according to a transition function; $\phi:\Sigma^N \to \Sigma$ which takes the neighbour states as input. This function is typically shared across all cells in the CA.\\
