@@ -1,4 +1,5 @@
 import numpy as np
+from matplotlib import pyplot as plt
 from scipy.signal import convolve2d
 
 from util.media import init_image, save_image, clear_temp_folders, make_files_clustered
@@ -64,10 +65,10 @@ class CA:
     return self.B / (self.A + self.B)
 
   def run(self, rname, fname="", media=False):
-    folder, ax = None, None
+    folder, fig, ax = None, None, None
     if media:
       folder = "temp/gen_frames"
-      ax = init_image()
+      fig, ax = init_image()
     frames_per_image = 100
 
     for i in range(RUN_ITERS):
@@ -80,6 +81,7 @@ class CA:
     if media:
       make_files_clustered(final_state=self.state(), fname=f"gen_{fname}", rname=rname)
       clear_temp_folders()
+      plt.close(fig)
     return self.state()
 
 

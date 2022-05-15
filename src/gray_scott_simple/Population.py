@@ -39,7 +39,7 @@ class Population:
     self.inds = self.inds[:self.n_parents]
 
   def evaluate(self, loss):
-    return 1 - np.mean(np.sort(loss)[:self.n_parents])
+    return np.mean(np.sort(loss)[:self.n_parents])
 
   def loss(self):
     true = MimicCA.empty(self.true_f, self.true_k)

@@ -1,17 +1,16 @@
 import csv
 import os
-import time
 import numpy as np
 from matplotlib import pyplot as plt
 
 from gray_scott_simple.CAs import CA
 from gray_scott_simple.Population import Population
 from alive_progress import alive_bar
-
-# Repetition variables
 from util.media import create_conv_gif
 
-ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
+# Repetition variables
+
+ACCURACY_EPOCH_N = 3  # Epochs for accuracy experiment
 CONV_MAX_EPOCH_N = 20  # Epochs for convergence experiment
 
 # Training variables
@@ -29,33 +28,39 @@ def accuracy_experiment(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDR
 
 def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):
   pop = Population(n_parents, n_children, true_f, true_k)
-  fitnesses = [pop.evaluate(pop.loss())]
+  losses = [pop.evaluate(pop.loss())]
   top_f = [pop.inds[0].state[0]]
   top_k = [pop.inds[0].state[1]]
   top_df = [pop.inds[0].control[0]]
   top_dk = [pop.inds[0].control[1]]
 
   fig, ax = plt.subplots()
-  ax.plot([i.state[0] for i in pop.inds], [i.state[1] for i in pop.inds])
+  ax.scatter([i.state[0] for i in pop.inds], [i.state[1] for i in pop.inds])
   ax.set_xlabel("Feed")
   ax.set_ylabel("Kill")
+  ax.set_xlim([-0.01, 0.1])
+  ax.set_ylim([-0.01, 0.1])
   plt.savefig(f'temp/conv_frames/0.png', bbox_inches='tight')
+  plt.cla()
 
   for epoch in range(1, epoch_n + 1):
-    fitness = pop.iterate()
-    fitnesses.append(fitness)
+    loss = pop.iterate()
+    losses.append(loss)
     top_f.append(pop.inds[0].state[0])
     top_k.append(pop.inds[0].state[1])
     top_df.append(pop.inds[0].control[0])
     top_dk.append(pop.inds[0].control[1])
 
-    fig, ax = plt.subplots()
     ax.scatter([i.state[0] for i in pop.inds], [i.state[1] for i in pop.inds])
     ax.set_xlabel("Feed")
     ax.set_ylabel("Kill")
+    ax.set_xlim([-0.01, 0.1])
+    ax.set_ylim([-0.01, 0.1])
     plt.savefig(f'temp/conv_frames/{epoch}.png', bbox_inches='tight')
-
+    plt.cla()
     yield
+
+  plt.close(fig)
 
   rname = f"{true_f:.3f}_{true_k:.3f} (pop {n_parents + n_children}, ep {epoch_n})"
   dir = f"out/{rname}"
@@ -82,6 +87,7 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
   ax2.tick_params(axis='y', labelcolor=color)
   fig.tight_layout()
   plt.savefig(f'{dir}/params.png', bbox_inches='tight')
+  plt.close(fig)
 
   fig, ax1 = plt.subplots()
   color = 'tab:green'
@@ -96,12 +102,14 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
   ax2.tick_params(axis='y', labelcolor=color)
   fig.tight_layout()
   plt.savefig(f'{dir}/derivs.png', bbox_inches='tight')
+  plt.close(fig)
 
   fig, ax = plt.subplots()
-  ax.plot(epochs, fitnesses, color='tab:blue')
+  ax.plot(epochs, losses, color='tab:blue')
   ax.set_yscale('log')
-  ax.set_ylabel("Fitness")
-  plt.savefig(f'{dir}/fitness.png', bbox_inches='tight')
+  ax.set_ylabel("Loss")
+  plt.savefig(f'{dir}/loss.png', bbox_inches='tight')
+  plt.close(fig)
 
   create_conv_gif(rname=rname)
 
@@ -112,7 +120,7 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
   found.run(fname="pred", rname=rname, media=True)
 
 
-  return np.mean(fitnesses[-1 * (ACCURACY_EPOCH_N // 10):])
+  return np.mean(losses[-1 * (ACCURACY_EPOCH_N // 10):])
 
 
 if __name__ == "__main__":

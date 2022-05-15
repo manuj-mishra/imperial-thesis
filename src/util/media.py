@@ -32,7 +32,7 @@ def create_conv_gif(rname):
 
   frames = [Image.open(image) for image in sorted(glob.glob(f"{root}/temp/{frame_folder}/*.png"))]
   frames[0].save(f"{dirname}/convergence.gif", format="GIF", append_images=frames[1:],
-                 save_all=True, duration=50)
+                 save_all=True, duration=200)
 
 def make_files(final_state, fname, rname, clear=False):
   frame_folder = fname[:3] + "_frames"
@@ -64,7 +64,7 @@ def make_files(final_state, fname, rname, clear=False):
 def init_image(width=500, height=500, dpi=10):
   fig = plt.figure(figsize=(width / dpi, height / dpi), dpi=dpi)
   ax = fig.add_subplot(111)
-  return ax
+  return fig, ax
 
 
 def save_image(M, i, ax, folder, cmap=ListedColormap(["w", "k", "y", "g", "r"]), dpi=10):
