@@ -9,12 +9,12 @@ from util.media import create_conv_gif
 
 # Repetition variables
 
-ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
+ACCURACY_EPOCH_N = 15  # Epochs for accuracy experiment
 CONV_MAX_EPOCH_N = 20  # Epochs for convergence experiment
 
 # Training variables
-N_PARENTS = 5 
-N_CHILDREN = 20
+N_PARENTS = 4
+N_CHILDREN = 16
 
 
 def accuracy_experiment(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):

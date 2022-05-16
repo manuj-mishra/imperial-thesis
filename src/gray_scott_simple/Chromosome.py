@@ -2,8 +2,8 @@ import numpy as np
 
 from gray_scott_simple.CAs import CA
 
-NUM_STEPS = 5
-STEP_SIZE = 1000
+NUM_STEPS = 20
+STEP_SIZE = 250
 
 class Chromosome:
   def __init__(self, state, control):
@@ -34,7 +34,7 @@ class Chromosome:
         if np.isnan(np.min(pred.state())):
           break
 
-        losses.append(np.mean(np.abs(pred.state() - true.state())))
+        losses.append(np.mean(np.abs(pred.state() - true.state())/true.state()))
         if not true_active and not pred_active:
           break
     return np.mean(losses) if losses else 1
