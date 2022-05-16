@@ -13,8 +13,8 @@ ACCURACY_EPOCH_N = 15  # Epochs for accuracy experiment
 CONV_MAX_EPOCH_N = 20  # Epochs for convergence experiment
 
 # Training variables
-N_PARENTS = 4
-N_CHILDREN = 16
+N_PARENTS = 20
+N_CHILDREN = 80
 
 
 def accuracy_experiment(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):

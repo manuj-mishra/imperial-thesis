@@ -2,8 +2,8 @@ import numpy as np
 
 from gray_scott_simple.CAs import CA
 
-NUM_STEPS = 20
-STEP_SIZE = 250
+NUM_STEPS = 10
+STEP_SIZE = 500
 
 class Chromosome:
   def __init__(self, state, control):
