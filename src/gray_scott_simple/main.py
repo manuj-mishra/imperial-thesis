@@ -9,12 +9,12 @@ from util.media import create_conv_gif
 
 # Repetition variables
 
-ACCURACY_EPOCH_N = 3  # Epochs for accuracy experiment
+ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
 CONV_MAX_EPOCH_N = 20  # Epochs for convergence experiment
 
 # Training variables
-N_PARENTS = 4
-N_CHILDREN = 16
+N_PARENTS = 5 
+N_CHILDREN = 20
 
 
 def accuracy_experiment(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):
@@ -39,7 +39,7 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
   ax.set_ylabel("Kill")
   ax.set_xlim([-0.01, 0.1])
   ax.set_ylim([-0.01, 0.1])
-  plt.savefig(f'./temp/conv_frames/0.png', bbox_inches='tight')
+  plt.savefig(f'gray_scott_simple/temp/conv_frames/0.png', bbox_inches='tight')
   plt.cla()
 
   for epoch in range(1, epoch_n + 1):
@@ -55,13 +55,13 @@ def test_single_ES(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, e
     ax.set_ylabel("Kill")
     ax.set_xlim([-0.01, 0.1])
     ax.set_ylim([-0.01, 0.1])
-    plt.savefig(f'./temp/conv_frames/{epoch}.png', bbox_inches='tight')
+    plt.savefig(f'gray_scott_simple/temp/conv_frames/{epoch}.png', bbox_inches='tight')
     plt.cla()
 
   plt.close(fig)
 
-  rname = f"{true_f:.3f}_{true_k:.3f} (pop {n_parents + n_children}, ep {epoch_n})"
-  dir = f"out/{rname}"
+  rname = f"{true_f:.3f}_{true_k:.3f}_(pop_{n_parents + n_children},_ep_{epoch_n})"
+  dir = f"gray_scott_simple/out/{rname}"
   os.makedirs(dir, exist_ok=True)
   file = open(f'{dir}/elite.csv', 'w+', newline='')
   with file:

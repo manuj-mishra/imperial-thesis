@@ -7,7 +7,7 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from matplotlib.colors import ListedColormap
 
-root = "."
+root = "gray_scott_simple"
 
 def make_files_clustered(final_state, fname, rname):
   frame_folder = fname[:3] + "_frames"
@@ -70,14 +70,14 @@ def init_image(width=500, height=500, dpi=10):
 def save_image(M, i, ax, folder, cmap=ListedColormap(["w", "k", "y", "g", "r"]), dpi=10):
   im = ax.imshow(M, cmap=cmap, interpolation='nearest')
   plt.axis('off')
-  plt.savefig('./{:s}/_img{:04d}.png'.format(folder, i), dpi=dpi)
+  plt.savefig('{:s}/{:s}/_img{:04d}.png'.format(root, folder, i), dpi=dpi)
   plt.cla()
 
 
 def save_final_image(M, path, ax, cmap=ListedColormap(["w", "k", "y", "g", "r"]), dpi=10):
   im = ax.imshow(M, cmap=cmap, interpolation='nearest')
   plt.axis('off')
-  plt.savefig(f'./{path}', dpi=dpi)
+  plt.savefig(f'{root}/{path}', dpi=dpi)
   plt.cla()
 
 
