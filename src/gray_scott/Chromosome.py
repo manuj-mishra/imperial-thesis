@@ -1,37 +1,43 @@
-import random
-
 import numpy as np
 
 from gray_scott.CAs import CA
 
+NUM_STEPS = 10
+STEP_SIZE = 500
+
 class Chromosome:
-  def __init__(self, f, k, df, dk):
-    self.f = f
-    self.k = k
-    self.df = df
-    self.dk = dk
+  def __init__(self, state, control):
+    self.state = state
+    self.control = control
 
   @classmethod
-  def near_threshold(cls):
+  def near_threshold(cls, control):
     f = np.random.uniform(low=0.0, high=0.0625)
     k = -f + 0.5 * np.sqrt(f)
-    df = np.random.uniform(low=0.0, high=0.0625)
-    dk = np.random.uniform(low=0.0, high=0.0625)
-    return cls(f, k, df, dk)
+    return cls(state=np.array([f, k]), control=control)
 
-  def mutate(self):
-    self.f += np.random.normal(scale=self.df)
-    self.k += np.random.normal(scale=self.dk)
+  @classmethod
+  def random(cls, control):
+    f = np.random.uniform(low=0.0, high=0.0625)
+    k = np.random.uniform(low=0.0, high=0.0625)
+    return cls(state=np.array([f, k]), control=control)
 
-  def loss(self, n_iters, n_steps, max_step, true):
+  def ga_mutate(self):
+      self.state += np.random.normal(scale=self.control)
+
+  def loss(self, true):
     losses = []
-    for _ in range(n_iters):
-      pred = CA.patch(self.f, self.k)
-      for _ in range(n_steps):
-          step_size = random.randint(1, max_step)
-          true_active = true.step_from(pred.A, pred.B, step_size)
-          pred_active = pred.step(step_size)
-          losses.append(np.linalg.norm(pred.state() - true.state()))
-          if not true_active and not pred_active:
-            break
-    return np.mean(losses)
+    pred = CA.patch(self.state[0], self.state[1])
+    for _ in range(NUM_STEPS):
+        true_active = true.step_from(pred.A, pred.B, STEP_SIZE)
+        pred_active = pred.step(STEP_SIZE)
+        if np.isnan(np.min(true.state())):
+          break
+
+        if np.isnan(np.min(pred.state())):
+          break
+
+        losses.append(np.mean(np.abs(pred.state() - true.state())/true.state()))
+        if not true_active and not pred_active:
+          break
+    return np.mean(losses) if losses else 1

@@ -5,7 +5,7 @@ from scipy.signal import convolve2d
 from util.media import init_image, save_image, clear_temp_folders, make_files_clustered
 
 GRID_SIZE = 97
-RUN_ITERS = 10000
+RUN_ITERS = 5000
 dt = 1.0  # Time delta
 dA = 1.0
 dB = 0.5
@@ -29,6 +29,14 @@ class CA:
       (seed_size, seed_size))
     return cls(f, k, A, B)
 
+  @classmethod
+  def splatter(cls, f, k, num_seeds = 5):
+    A = np.ones((GRID_SIZE, GRID_SIZE))
+    B = np.zeros((GRID_SIZE, GRID_SIZE))
+    indices = np.random.choice(np.arange(B.size), replace=False, size=num_seeds)
+    B[np.unravel_index(indices, B.shape)] = 1
+    return cls(f, k, A, B)
+
   def step(self, steps=1):
     for _ in range(steps):
       A_new = self.A + (
@@ -42,13 +50,16 @@ class CA:
           - (self.k * self.B)
       ) * dt
 
-      if np.allclose(self.A, A_new) and np.allclose(self.B, B_new):
-        return True
+      if np.all(self.A == A_new) and np.all(self.B == B_new):
+        return False
 
       self.A = np.copy(A_new)
       self.B = np.copy(B_new)
 
-    return False
+      if np.isnan(np.min(A_new)) or np.isnan(np.min(B_new)):
+        return False
+
+    return True
 
   def state(self):
     return self.B / (self.A + self.B)
@@ -61,14 +72,10 @@ class CA:
     frames_per_image = 100
 
     for i in range(RUN_ITERS):
-      has_converged = self.step()
-
-      if has_converged:
-        if media:
-          save_image(self.state(), i, ax, cmap='Spectral', folder=folder)
-        break
+      self.step()
 
       if not i % frames_per_image and media:
+        print(f"{i}/{RUN_ITERS}")
         save_image(self.state(), i, ax, cmap='Spectral', folder=folder)
 
     if media:
@@ -92,8 +99,8 @@ class MimicCA(CA):
 
 if __name__ == "__main__":
   # ca = CA.patch(f=0.055, k=0.117) # Slow growing circle
-  # ca = CA.patch(f=0.17398293947208127, k=0.34699284376436873)
-  ca = CA.patch(f=0.045, k=0.099)
+  ca = CA.patch(f=0.038, k=0.099)
+  # ca = CA.patch(f=0.045, k=0.099)
   ca.run(rname='tets', media=True)
 
 

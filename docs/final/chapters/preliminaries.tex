@@ -144,9 +144,35 @@ The Wolfram code, a number between 0 and 255 obtained by converting the binary r
 % In the context of morphogenesis, we are interested in rules that form stable class 2 patterns from random initial conditions.
 % We are also interested in rules that are resistant to noise.
 % This is analogous to the behaviour of biological cells which grow into stable configurations and are robust to perturbation and damage during growth.
-
+\raggedbottom
+\pagebreak
 \section{Evolutionary Algorithms}
 
-Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A population of candidate solutions is initialized and modified through repeated selection, mutation, and reproduction. EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.\\
+Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A population of candidate solutions is initialized and modified through repeated selection, mutation, and recombination. We define an EA formally in Algorithm~\ref{alg:ea}.\\
+
+\begin{algorithm}
+  \caption{Schematic Evolutionary Algorithm}\label{alg:ea}
+  \begin{algorithmic}
+  \Require $S$ - the set of possible chromosome values
+  \Ensure $s^* \in S$
+  \State $t \gets 0$
+  \State $M_0 \gets \mu$ random individuals from $S$
+  \While{stopping condition is false}
+    \State \Call{Evaluate}{$M_t$}
+    \State $P_t \gets$ \Call{SelectParents}{$M_t$}    \Comment{Parents}
+    \State $\Lambda_t \gets$ \Call{Recombine}{$P_t$}  \Comment{Children}
+    \State $Pmod_t \gets$ \Call{Mutate}{$P_t$}
+    \State $\Lambda mod_t \gets$ \Call{Mutate}{$\Lambda_t$}
+    \State $M_t+1 \gets$ \Call{SelectPopulation}{$Pmod_t$, $\Lambda mod_t$}
+    \State $t \gets t+1$
+  \EndWhile
+  \State $s^* \gets$ \Call{FindBestCandidate}{$P_t$}
+  \end{algorithmic}
+\end{algorithm}
+
+The initial selection phase ($\Call{SelectParents}$) uses a objective function, also known as a fitness function, to compare and select the top candidates. Recombination produces a set of children that have similar properties to some subset of the parents. This exploits the cumulative progress of the evolutionary process embedded in the parent candidates. Mutation explores new areas of the search space by perturbing properties of the parents and children. The latter selection phase ($\Call{SelectPopulation}$) produces a new population from the modified parents and children. Population-wide selection criteria can be enforced in this phase. For example, certain parents can be eliminated if they have survived for too many generations or, symmetrically, children can be granted immunity for a particular number of generations.\\
+
+EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.\\
 
 Typically, an EA acts on a population of "chromosomes" which are indirect encodings of candidate solutions. The structure of the chromosome is called the "genotype" and the structure of the corresponding solution is called the "phenotype". In this thesis, the genotype will usually be a set of parameters that characterise the transition function for a particular class of CA. The corresponding phenotype is the cellular automaton with that transition function.\\
+
