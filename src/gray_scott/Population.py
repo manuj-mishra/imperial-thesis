@@ -7,7 +7,7 @@ from gray_scott.Chromosome import Chromosome
 
 
 class Population:
-    def __init__(self, n_parents, n_children, true_f, true_k):
+    def __init__(self, n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation):
         self.n_parents = n_parents
         self.n_children = n_children
         self.pop_size = n_parents + n_children
@@ -15,9 +15,51 @@ class Population:
         self.local_learning_rate = np.float_power(2, -0.25)
         self.true_f = true_f
         self.true_k = true_k
-        self.inds = np.array([Chromosome.random(control=np.array([0.001, 0.001])) for _ in range(self.pop_size)])
+        self.algorithm = algorithm
+        self.recombination = recombination
+        self.selection = selection
+        self.real = MimicCA.empty(self.true_f, self.true_k)
+        if initialisation == "THRESHOLD":
+            self.inds = np.array([Chromosome.threshold(control=np.array([0.001, 0.001])) for _ in range(self.pop_size)])
+        elif initialisation == "RANDOM":
+            self.inds = np.array([Chromosome.random(control=np.array([0.001, 0.001])) for _ in range(self.pop_size)])
+        else:
+            raise Exception("Invalid argument for initialisation type")
 
     def iterate(self):
+        # Crossover
+        if self.algorithm == "ES":
+            children = self.esx()
+        elif self.algorithm == "GA":
+            children = self.blx()
+        else:
+            raise Exception("Invalid argument for algorithm type")
+
+        # Recombination
+        if self.recombination == "PLUS":
+            self.inds = np.append(self.inds, children)
+        elif self.recombination == "COMMA":
+            self.inds = children
+        else:
+            raise Exception("Invalid argument for recombination method")
+
+        # Mutation (nothing for ES)
+        if self.algorithm == "GA":
+            for ind in self.inds:
+                ind.state += np.random.normal(scale=ind.control)
+
+        # Selection
+        loss = self.loss()
+        if self.selection == "LINEAR":
+            self.linear_rank_update(loss)
+        elif self.selection == "ROULETTE":
+            self.roulette_update(loss)
+        else:
+            raise Exception("Invalid argument for selection method")
+        return self.evaluate(loss)
+
+    def esx(self):
+        # Evolutionary strategy crossover
         children = []
         centroid_state = np.mean(np.array([c.state for c in self.inds]), axis=0)
         centroid_control = np.mean(np.array([c.control for c in self.inds]), axis=0)
@@ -28,13 +70,10 @@ class Population:
             new_control = np.exp(global_step_size) * np.multiply(centroid_control, np.exp(local_step_size))
             new_state = centroid_state + np.multiply(new_control, mutation)
             children.append(Chromosome(new_state, new_control))
-        self.inds = np.append(self.inds, children)
-        loss = self.loss()
-        self.update(loss)
-        return self.evaluate(loss)
+        return np.array(children)
 
-    def ca_crossover(self, alpha=0.1):
-        # BLX-alpha crossover
+    def blx(self, alpha=0.1):
+        # Blended alpha crossover
         children = []
         for _ in range(self.n_children):
             parents = np.random.choice(self.inds, 2, replace=False)
@@ -54,15 +93,19 @@ class Population:
                                                     high=max(adk, bdk) + alpha * deltK)])
             )
             children.append(child)
-        self.inds = np.append(self.inds, np.array(children))
+        return np.array(children)
 
-    def update(self, loss):
+    def linear_rank_update(self, loss):
         self.inds = self.inds[loss.argsort()]
         self.inds = self.inds[:self.n_parents]
+
+    def roulette_update(self, loss):
+        fitness = 1 - loss
+        self.inds = np.random.choice(self.inds, size=self.n_parents,
+                                     p=None if fitness.sum() == 0 else fitness / fitness.sum())
 
     def evaluate(self, loss):
         return np.mean(np.sort(loss)[:self.n_parents])
 
     def loss(self):
-        true = MimicCA.empty(self.true_f, self.true_k)
-        return np.array([r.loss(true) for r in self.inds])
+        return np.array([r.loss(self.real) for r in self.inds])

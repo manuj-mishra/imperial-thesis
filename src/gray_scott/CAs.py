@@ -4,8 +4,8 @@ from scipy.signal import convolve2d
 
 from util.media import init_image, save_image, clear_temp_folders, make_files_clustered
 
-GRID_SIZE = 97
-RUN_ITERS = 5000
+GRID_SIZE = 257
+RUN_ITERS = 10000
 dt = 1.0  # Time delta
 dA = 1.0
 dB = 0.5
@@ -30,11 +30,19 @@ class CA:
     return cls(f, k, A, B)
 
   @classmethod
-  def splatter(cls, f, k, num_seeds = 5):
+  def splatter(cls, f, k, num_seeds=5):
+    # Seed Size 3x3
     A = np.ones((GRID_SIZE, GRID_SIZE))
     B = np.zeros((GRID_SIZE, GRID_SIZE))
     indices = np.random.choice(np.arange(B.size), replace=False, size=num_seeds)
-    B[np.unravel_index(indices, B.shape)] = 1
+    coords = np.unravel_index(indices, B.shape)
+    cx, cy = coords
+    up = np.maximum(cy - 1, 0)
+    down = np.minimum(cy + 1, GRID_SIZE - 1)
+    left = np.maximum(cx - 1, 0)
+    right = np.minimum(cx + 1, GRID_SIZE - 1)
+    splat_coords = (np.concatenate((left, cx, right)), np.concatenate((up, cy, down)))
+    B[splat_coords] = 1
     return cls(f, k, A, B)
 
   def step(self, steps=1):
@@ -98,9 +106,7 @@ class MimicCA(CA):
     return self.step(steps)
 
 if __name__ == "__main__":
-  # ca = CA.patch(f=0.055, k=0.117) # Slow growing circle
-  ca = CA.patch(f=0.038, k=0.099)
-  # ca = CA.patch(f=0.045, k=0.099)
-  ca.run(rname='tets', media=True)
+  ca = CA.splatter(f=0.038, k=0.099)
+  ca.run(rname='test', media=True)
 
 
