@@ -47,6 +47,7 @@ class Population:
         if self.algorithm == "GA":
             for ind in self.inds:
                 ind.state += np.random.normal(scale=ind.control)
+                ind.state = ind.state.clip(min=0)
 
         # Selection
         loss = self.loss()

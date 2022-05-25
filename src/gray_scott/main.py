@@ -10,20 +10,19 @@ from util.media import create_conv_gif
 root = '.'
 
 # Repetition variables
-ACCURACY_EPOCH_N = 15  # Epochs for accuracy experiment
-CONV_MAX_EPOCH_N = 20  # Epochs for convergence experiment
+ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
 
 # Training variables
-N_PARENTS = 3
+N_PARENTS = 5
 N_CHILDREN = N_PARENTS * 4
 
 
-def accuracy_experiment(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):
-    pop = Population(n_parents, n_children, true_f, true_k)
-    for i in range(epoch_n - 1):
-        print(i, pop.iterate())
-    print(epoch_n, pop.iterate())
-    return pop.iterate()
+# def accuracy_experiment(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):
+#     pop = Population(n_parents, n_children, true_f, true_k)
+#     for i in range(epoch_n - 1):
+#         print(i, pop.iterate())
+#     print(epoch_n, pop.iterate())
+#     return pop.iterate()
 
 
 def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, initialisation, seed,
@@ -36,10 +35,6 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
     top_dk = [pop.inds[0].control[1]]
 
     fig, ax = plt.subplots()
-    ax.set_xlabel("Feed")
-    ax.set_ylabel("Kill")
-    ax.set_xlim([-0.01, 0.1])
-    ax.set_ylim([-0.01, 0.1])
 
     for epoch in range(1, epoch_n + 1):
         print(epoch)
@@ -51,10 +46,10 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
         top_dk.append(pop.inds[0].control[1])
 
         ax.scatter([i.state[0] for i in pop.inds], [i.state[1] for i in pop.inds])
-        # ax.set_xlabel("Feed")
-        # ax.set_ylabel("Kill")
-        # ax.set_xlim([-0.01, 0.1])
-        # ax.set_ylim([-0.01, 0.1])
+        ax.set_xlabel("Feed")
+        ax.set_ylabel("Kill")
+        ax.set_xlim([-0.01, 0.1])
+        ax.set_ylim([-0.01, 0.1])
         plt.savefig(f'{root}/temp/conv_frames/{epoch}.png', bbox_inches='tight')
         plt.cla()
 
