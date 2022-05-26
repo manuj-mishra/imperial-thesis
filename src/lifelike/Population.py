@@ -1,15 +1,11 @@
 import math
 import random
 import numpy as np
-from scipy.signal import convolve2d
 
 from lifelike.CAs import MimicCA
 from lifelike.Rulestring import Rulestring
 from lifelike.constants import CHROMOSOME_LEN
 
-EVAL_ITERS = 10     # Number of CAs simulated per rulestring
-EVAL_STEPS = 10     # Number of steps evaluated per CA
-MAX_STEP_SIZE = 5   # Max size of a single CA step
 
 class Population:
   def __init__(self, pop_size, elitism, mutation, trueB, trueS, init_method='binary'):
