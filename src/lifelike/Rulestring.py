@@ -6,6 +6,9 @@ from lifelike.CAs import CA
 from lifelike.constants import CHROMOSOME_LEN
 from util import binary
 
+EVAL_ITERS = 10     # Number of CAs simulated per rulestring
+EVAL_STEPS = 10     # Number of steps evaluated per CA
+MAX_STEP_SIZE = 5   # Max size of a single CA step
 
 class Rulestring:
   def __init__(self, rstring, b, s):
@@ -51,12 +54,12 @@ class Rulestring:
     self.set_rstring(self.rstring ^ mask)
     return self.rstring
 
-  def loss(self, n_iters, n_steps, max_step, true):
+  def loss(self, true):
     losses = []
-    for _ in range(n_iters):
+    for _ in range(EVAL_ITERS):
       pred = CA.random(self.b, self.s)
-      for _ in range(n_steps):
-          step_size = random.randint(1, max_step)
+      for _ in range(EVAL_STEPS):
+          step_size = random.randint(1, MAX_STEP_SIZE)
           true_active = true.step_from(pred.X, step_size)
           pred_active = pred.step(step_size)
           losses.append(np.mean(pred.X ^ true.X))
