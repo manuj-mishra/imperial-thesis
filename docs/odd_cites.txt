@@ -1,0 +1,5 @@
+
+Gray-Scott Model Citation:
+P. Gray and S.K. Scott, Autocatalytic reactions in the isothermal, continuous stirred tank reactor: isolas and other forms of multistability, Chemical Engineering Science 38 (1983)
+
+“Reaction-Diffusion by the Gray-Scott Model: Pearson’s Parametrization” © 1996-2020 Robert P. Munafo https://mrob.com/pub/comp/xmorphia/index.html

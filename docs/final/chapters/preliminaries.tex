@@ -1,4 +1,4 @@
-\chapter{Preliminaries}
+\chapter{Preliminaries} \label{preliminaries}
 
 \section{Cellular Automata}
 
@@ -21,7 +21,7 @@ Due to the breadth of systems studied in CA literature, the constraints of this 
   \item The system need not be deterministic. Probabalistic cellular automata (PCA) have stochastic transition functions which describe a probability distribution of possible outcomes for any given input. PCA are able to model random dynamical systems in the real world from stock markets\cite{bartolozzi2004stochastic} to infectious diseases\cite{mikler2005modeling}.
   \item The state space $\Sigma$ need not be finite. In this thesis we will explore multiple possible state variable representations including bit arrays and continuous vectors.
 \end{itemize}
-For the purpose of this thesis, we will assume the original definition of CA unless otherwise stated. 
+For the purpose of this thesis, we will assume the original definition of CA unless otherwise stated.
 
 \subsection{Neighbourhood Functions}
 We consider a "neighbourhood function" for each cell $c_i \mapsto \mathcal{N}(c_i)$. This makes it easier to discuss neighbourhood sets of cells in the CA, each of which are typically homogenous.\\
@@ -73,6 +73,7 @@ A Life-like CA is inner-totalistic if the output of the transition function depe
 \[
   \sigma_i(t+1) = \sigma_j(t+1) \iff \sum_{\mathclap{c_p \in \mathcal{N}(c_i)}}\sigma_p(t) = \sum_{\mathclap{c_q \in \mathcal{N}(c_j)}}\sigma_q(t)
 \]
+\label{def:inner-totalistic}
 \end{definition}
 
 \begin{definition}[Outer-totalistic]
@@ -80,6 +81,7 @@ A Life-like CA is outer-totalistic if the output of the transition function depe
 \[
   \sigma_i(t+1) = \sigma_j(t+1) \iff \sum_{\mathclap{c_p \in \mathcal{N}(c_i)}}\sigma_p(t) = \sum_{\mathclap{c_q \in \mathcal{N}(c_j)}}\sigma_q(t) \quad \textnormal{and} \quad \sigma_i(t) = \sigma_j(t) 
 \]
+\label{def:outer-totalistic}
 \end{definition}
 
 As an example of the subtle difference here, consider the configurations shown in Figure~\ref{fig:two-moores}. An inner-totalistic CA would yield identical configurations in the next time step since both input configurations have 3 active cells in the neighbourhood set. However, an outer-totalistic CA would treat both configurations separately as one has an live centre cell and the other has a dead centre cell. This discrepancy corresponds to a great difference in the size of search spaces. There are $2^{10}=1024$ inner-totalistic CA but $2^{18} = 262144$ outer-totalistic CA. A B/S rulestring represents the transition function of an outer-totalistic CA in a form called birth-survival notation.\\
@@ -108,6 +110,7 @@ Let $N_b$ and $N_s$ be sets of integers. We say an outer-totalistic CA has rules
     0 & \text{otherwise}
   \end{cases}
 \]
+\label{def:bs-notation}
 \end{definition}
 
 Using this notation, we can represent the Game of Life as B3/S23. In this thesis, when we refer to Life-like CA, we implicitly assume the outer-totalistic variety.

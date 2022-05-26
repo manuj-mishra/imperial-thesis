@@ -1,0 +1,2 @@
+- Mention that stochastic CA overcome the implicit assumption of an internal clock
+
