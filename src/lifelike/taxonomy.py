@@ -1,11 +1,12 @@
 import csv
+import random
 
 import numpy as np
 
-from lifelike.CAs import CA
+from lifelike.CAs import CA, GRID_SIZE
 from util import binary
 
-NUM_ITERS = 1000
+NUM_ITERS = 100
 NUM_EXPS = 100
 
 if __name__ == "__main__":
@@ -17,7 +18,8 @@ if __name__ == "__main__":
         "period_mean": [],
         "period_std": []
     }
-    for rstring in range(2**18):
+    seeds = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for _ in range(NUM_EXPS)]
+    for rstring in range((2**18) + 1):
         if not rstring % 2**10:
             with open("taxonomy.csv", "w") as outfile:
                 writer = csv.writer(outfile)
@@ -30,7 +32,7 @@ if __name__ == "__main__":
             b = binary.ones(rstring >> 9)
             s = binary.ones(rstring)
             history = dict()
-            ca = CA.random(b, s)
+            ca = CA(seeds[exp], b, s)
             for counter in range(NUM_ITERS):
                 key = ca.X.data.tobytes()
                 if key in history:
