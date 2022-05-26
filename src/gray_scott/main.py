@@ -7,7 +7,7 @@ from gray_scott.CAs import CA
 from gray_scott.Population import Population
 from util.media import create_conv_gif
 
-root = '.'
+root = 'gray_scott'
 
 # Repetition variables
 ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
@@ -135,5 +135,5 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
 
 if __name__ == "__main__":
     np.set_printoptions(precision=3, suppress=True)
-    test_single_EA(true_f=0.038, true_k=0.099, rname="single_test", algorithm="GA", recombination="PLUS",
+    test_single_EA(true_f=0.038, true_k=0.099, rname="GA_30EP_25POP", algorithm="GA", recombination="PLUS",
                    selection="LINEAR", initialisation="RANDOM", seed="SPLATTER")
