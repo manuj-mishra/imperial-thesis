@@ -2,7 +2,7 @@
 
 \section{Cellular Automata}
 
-A cellular automaton (CA) is a computational model that performs multiple parallel computations, each depending only on local interactions, to produce complex global behaviour. We define a CA formally as follows.
+A cellular automaton (CA) is a computational model that performs multiple parallel computations, each depending on local interactions, to produce complex global behaviour. We define a CA formally as follows.
 
 \begin{definition}[Cellular automaton]
 A cellular automaton is an $n$-dimensional finite grid of computational units called cells. Each cell $c_i$ is characterised by:
@@ -17,8 +17,8 @@ At each time step, the state of each cell is simultaneously updated according to
 
 Due to the breadth of systems studied in CA literature, the constraints of this definition are often altered to produce interesting arrangements. For example:
 \begin{itemize}
-  \item The structure need not be a square grid. CA have been studied on hexagonal grids[CITE], aperiodic tessellations such as as the Penrose tiling[CITE], and even randomly generated structures like the Voronoi partition[CITE].
-  \item The system need not be deterministic. Probabalistic cellular automata (PCA)[CITE] have stochastic transition functions which describe a probability distribution of possible outcomes for any given input. PCA are able to model random dynamical systems in the real world from stock markets[CITE] to infectious diseases[CITE].
+  \item The structure need not be a square grid. CA have been studied on hexagonal grids\cite{encinas2007modelling}, aperiodic tessellations such as as the Penrose tiling\cite{goucher2012gliders}, and even randomly generated structures like the Voronoi partition\cite{shi2000development}.
+  \item The system need not be deterministic. Probabalistic cellular automata (PCA) have stochastic transition functions which describe a probability distribution of possible outcomes for any given input. PCA are able to model random dynamical systems in the real world from stock markets\cite{bartolozzi2004stochastic} to infectious diseases\cite{mikler2005modeling}.
   \item The state space $\Sigma$ need not be finite. In this thesis we will explore multiple possible state variable representations including bit arrays and continuous vectors.
 \end{itemize}
 For the purpose of this thesis, we will assume the original definition of CA unless otherwise stated. 
