@@ -8,7 +8,7 @@ from lifelike.constants import CHROMOSOME_LEN
 
 
 class Population:
-  def __init__(self, pop_size, elitism, mutation, trueB, trueS, init_method='binary'):
+  def __init__(self, pop_size, elitism, mutation, trueB, trueS, ics, init_method, hyperparams):
     if init_method == 'binary':
       self.inds = np.array([Rulestring.random_binary() for _ in range(pop_size)])
     elif init_method == 'decimal':
@@ -22,11 +22,15 @@ class Population:
     self.child_n = pop_size - self.elite_n
     self.trueB = trueB
     self.trueS = trueS
+    self.ics = ics
+    self.hyperparams = hyperparams
+    self.visited = set(self.inds)
 
   def iterate(self):
     self.crossover()
     self.mutate()
     loss = self.loss()
+    self.visited.update(self.inds)
     self.update(loss)
     return self.evaluate(loss)
 
@@ -50,13 +54,12 @@ class Population:
     self.inds = np.append(self.inds, np.array(children))
 
   def mutate(self):
-    non_mutate_n = self.elite_n // 5
-    for ind in self.inds[non_mutate_n:]:
+    for ind in self.inds[self.elite_n:]:
       ind.mutate(self.mutation)
 
   def loss(self):
     true = MimicCA.empty(self.trueB, self.trueS)
-    return np.array([r.loss(EVAL_ITERS, EVAL_STEPS, MAX_STEP_SIZE, true) for r in self.inds])
+    return np.array([r.loss(true, self.ics, self.hyperparams) for r in self.inds])
 
   def goal_found(self):
     return set(self.trueB) == set(self.inds[0].b) and set(self.trueS) == set(self.inds[0].s)

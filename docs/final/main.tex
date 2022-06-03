@@ -18,6 +18,7 @@
 \usepackage{graphicx}
 \usepackage{fixltx2e}
 \usepackage{subfig}
+\usepackage{amsthm, thmtools}
 \usepackage[numbers]{natbib}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
@@ -26,7 +27,8 @@
 \newcommand{\R}{\mathbb{R}}
 \newtheorem{definition}{Definition}[chapter]
 
-\title{Evolutionary Algorithms for the Discovery of Cellular Automata Transition Functions}
+% \title{Evolutionary Algorithms for the Discovery of Cellular Automata Transition Functions}
+\title{Reverse Engineering Cellular Automata}
 \author{Manuj Mishra}
 
 \begin{document}
@@ -37,22 +39,24 @@
 \end{abstract}
 
 \renewcommand{\abstractname}{Acknowledgements}
+\renewcommand{\listtheoremname}{List of Definitions}
 \begin{abstract}
 [Acknowledgements here]
 \end{abstract}
 
 \tableofcontents
 \listoffigures
-\listoftables
+\listoftheorems[ignoreall,show={definition}]
+\begingroup
+\let\clearpage\relax
 \listofalgorithms
-
+\endgroup
 
 \input{chapters/introduction}
 \input{chapters/preliminaries}
 \input{chapters/related_works}
 \input{chapters/software}
-\input{chapters/theory}
-\input{chapters/practical}
+\input{chapters/method}
 \input{chapters/evaluation}
 \input{chapters/conclusion}
 \input{chapters/ethics}

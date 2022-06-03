@@ -1,18 +1,20 @@
 \chapter{Introduction}
 
-\section{Overview}
+\section{Motivation}
 
-Evolutionary algorithms (EAs) have long been held as effective tools for black-box optimisation problems. Grounded in the principles of Darwinian evolution, EAs traverse over a search space by performing selection, mutation, and crossover on a population of candidate solutions. Increasingly strong solutions are discovered as the fitness of the population grows.\\
+Predicting effects is easier than predicting causes. This is the statement of the Inverse Problem. In science, we find it easier to estimate observations from a parameterised model of the world than to deduce parameters from observations. This is a result of the causal opacity of time which eliminates information through the unforgiving forces of selection and entropy. Given knowledge of dinosaur evolution, we may have strong hope of predicting where fossils of certain species lie but to build a rigorous taxomony based on fossils alone is insurmountably harder. A physical model may allow us to predict the subatomic particles ejected when two protons collide at high speed but building physical theories based on these collisions is significantly more difficult, especially when there are multiple equally valid explanations. Regardless, the pursuit of the Inverse Problem is critical to advancing scientific theory around a system's behaviour. Observations can only validate or falsify but prediction paves the way for novel scientific models.\\
 
-Cellular automata (CAs) are discrete models of computation in which multiple "cells" are simultaneously updated at regular time steps such that the state of any cell depends exclusively on the state of the cells in a local neighbourhood around it in the previous time step. CAs are powerful computational engines due to their inherently parallel structure. However, they are more commonly utilised as an abstract representation to study nonlinear dynamics and the emergence of complexity.\\
+In this thesis, we tackle the inverse problem for cellular automata (CAs). These are simple yet powerful models of computation in which multiple "cells" on a discrete lattice are simultaneously updated at regular time steps. The state of each cell depends exclusively on the state of the cells in a local neighbourhood around it in the previous time step. This localised interaction makes CAs a useful abstract representation of physical and biological systems in the real world from gas molecule interactions[CITE] to human land behaviour[CITE]. Much like these systems, CAs can exhibit chaos, nonlinear dynamics, and the emergence of complexity. As well as simulatory models, CAs are powerful computational engines due to their inherently parallel structure. This makes their study a useful endeavour in the field of distributed computation too.\\
 
-Top-down investigations into CA behaviour are vast and varied. Mathematical analyses seek to taxonomize CA properties and prove general results about long-term behaviour from intrisic properties. In the natural and social sciences, CAs are designed to model physical, biological, or human behaviour. Both of these endeavours seek to analyse the behaviour of a CA from its structure, transition function, and possibly initial conditions.\\
-
-In this thesis, we explore a bottom-up approach where we deduce the underlying properties of a CA by observing its behaviour. In particular, we utilise EAs to search the rulespaces of several classes of CA. We tackle multiple optimisation problems from the imitation of particular CA behaviour to generation of desirable long-term states.\\
+Top-down investigations into CA behaviour are vast and varied. Mathematical analyses seek to classify CAs and prove general results about long-term behaviour from intrisic properties. In the natural and social sciences, CAs are designed to model real world systems. Both of these endeavours seek to analyse the behaviour of a CA from its structure, transition function, and possibly initial conditions. In this thesis, we explore a bottom-up approach where we deduce the underlying properties of a CA by observing its behaviour. In particular, we utilise evolutionary algorithms to search across several classes of CA. Evolutionary algorithms (EAs) have long been held as effective tools for black-box optimisation problems. Grounded in the principles of Darwinian evolution, EAs traverse over a search space by performing selection, mutation, and crossover on a population of candidate solutions. Increasingly strong solutions are discovered as the fitness of the population grows. Using EAs, we tackle multiple optimisation problems from the imitation of particular CA behaviour to generation of desirable long-term states.\\
 
 \section{Objectives}
-
-We aim to develop a system to discover cellular automata that are highly likely to exhibit a desired behaviour. 
+We develop a system to discover cellular automata that are highly likely to exhibit a desired behaviour. Key aims include:
+\begin{enumerate}
+    \item \textbf{Learning Life-Like CA}\\
+    Deduce the underlying transition rule behind cellular automata that exhibit chaotic and complex behaviour similar to that of Conway's Game of Life (see Subsection~\ref{sub:life}).
+    \item 
+\end{enumerate}
 
 \section{Contributions}
 The key contributions of this project are as follows:
@@ -21,6 +23,5 @@ The key contributions of this project are as follows:
     \item \textbf{Cellular Automaton Simulator}\\ A system that can efficiently simulate discrete and continuous cellular automata. This allows a broad range of fitness functions to be implemented in the EA toolkit. This can also render snapshots of the CA directly during simulation which allows animations to be efficiently generated afterwards.
     \item \textbf{Procedural Maze Generator}\\ A CA-based maze generation program that uses the EA toolkit to produce difficult mazes with characteristics optimised to user preference.
     
-\section{Technical Challenges}
-
 \end{enumerate}
+\section{Technical Challenges}
