@@ -4,9 +4,7 @@ This chapter summarises recent work on the analysis and learning of cellular aut
 
 % In each section we synthesise broad discoveries in each area and express key concepts using notation introduced in Chapter~\ref{preliminaries}. Note that this may not necessarily align with notation used by the original authors, but is included to allow easier consideration of concepts developed over decades. 
 
-\section{Binary Outer-Totalistic CA}
-
-\subsection{Exploration}
+\section{Exploration}
 
 Early attempts to categorise 2D cellular automata by Packard and Wolfram\cite{packard1985two} extend Wolfram's original 4 categories. They classify rules based on information content and rate of information transmission measured using Shannon entropy and Lyapunov exponents respectively. However, these metrics do not translate to clear global decision boundaries between Wolfram's classes. As proven by Yaku\cite{yaku1973constructibility}, many questions about global properties of 2D CA are formally undecidable which makes the construction of definitions based on long-term outcomes difficult.
 
@@ -33,7 +31,7 @@ This work provides a strong theoretical foundation to guide our search of life-l
 \label{fig:eppstein-map}
 \end{figure}
 
-\subsection{Learning}
+\section{Learning}
 
 A seminal work by Meyer et al.\cite{meyer1989learning} looks at learning 2D CA neighbourhood functions using genetic algorithms. Later works by Mitchell et al. \cite{mitchell1996evolving} explore the effectiveness of genetic algorithms in learning entire transition functions but only in the domain of elementary cellular automata. Around the same time, Koza et al. make leaps by applying genetic programming to a broad variety of tasks including the CA majority classification problem \cite{andre1996discovery}. Incremental improvements have been made to since then with Breukelaar and B{\"a}ck notably delivering experimental evidence that the CA inverse design problem using evolutionary computation is more tractable in higher dimensions\cite{breukelaar2005using}. We delve briefly into some of these papers to compare their aims, methods, and outcomes.
 
@@ -95,10 +93,51 @@ A GKL density classifier is an elementary CA on periodic boundary conditions wit
 where $Mo(.)$ returns the mode of its arguments.
 \end{definition}
 
-A seminal series of work by Mitchell, Crutchfield, and Das\cite{mitchell1996evolving} tackled this issue by automating the process of CA transition function design through evolutionary computation. These works made effective use of genetic algorithms operating on fixed length bitstrings. Rules with radius $r = 3$ were considered leading to chromosomes of length $2^{2r+1}=128$. The size of the rulespace was therefore $2^{128}$ which eliminates the possibility of any exhaustive search. The size of the CA itself was $N=149$, chosen to be odd so that the solution to the majority problem is well defined. Upon initialisation, 100 chromosomes are chosen from a distribution that is uniform over chromosome density. This can be viewed as picking the binary representations of 100 samples from the $Binomial(64, [TO CALCULATE])$[PROOF] distribution. This is markedly distinct from the usual unbiased distribution which assigns each bit in the chromosome to 0 or 1 with probability 0.5, equivalent to picking 100 samples from the $Uniform(0, 128)$ distribution. The choice of binomial initialisiation has been shown to considerably improve performance[CITE].At each generation, 100 new initial conditions (ICs) were created and fitness was defined as the percentage of correctly classified ICs. This stochastic fitness function was effective at reducing overfitting. A $(\mu+\lambda)$ selection method was employed with $\mu=20$ and $\lambda=80$ and mutation was performed with a two-point crossover. Although not as accurate as GKL, the discovered solution still achieves a 76.9\% accuracy. However, the evolved solutions were not very sophisticated, mostly falling into the category of "block-expanding algorithms"[FIGURE].\\
+A seminal series of work by Mitchell, Crutchfield, and Das\cite{mitchell1996evolving} tackled this issue by automating the process of CA transition function design through evolutionary computation. These works made effective use of genetic algorithms operating on fixed length bitstrings. Rules with radius $r = 3$ were considered leading to chromosomes of length $2^{2r+1}=128$. The size of the rulespace was therefore $2^{128}$ which eliminates the possibility of any exhaustive search. The size of the CA itself was $N=149$, chosen to be odd so that the solution to the majority problem is well defined. Upon initialisation, 100 chromosomes are chosen from a distribution that is uniform over chromosome density. This can be viewed as picking the binary representations of 100 samples from a binomial distribution. This is markedly distinct from the usual unbiased distribution which assigns each bit in the chromosome to 0 or 1 with probability 0.5, equivalent to picking 100 samples from the $Uniform(0, 128)$ distribution. The choice of binomial initialisiation has been shown to considerably improve performance[CITE].At each generation, 100 new initial conditions (ICs) were created and fitness was defined as the percentage of correctly classified ICs. This stochastic fitness function was effective at reducing overfitting. A $(\mu+\lambda)$ selection method was employed with $\mu=20$ and $\lambda=80$ and mutation was performed with a two-point crossover. Although not as accurate as GKL, the best discovered solution still achieves a 76.9\% accuracy. However, the evolved solutions were not very sophisticated. Most fell into the category of "block-expanding algorithms" or simple "particle-based algorithms". In the former case, white and black boundaries meet to form a vertical line whereas, in the latter, they form a checkerboard region to propogate signals about ambiguous regions across the automaton.\\
 
-A later work by Andre et al.\cite{andre1996discovery} uses genetic programming to achieve superior results qualitatively and quantitatively. The obtained solution uses various internal representations of density[FIGURE] to transfer and collate information across the automaton. It attains an accuracy of $\sim$82.3\%. Recently, it was proven that a perfect density classification rule for an infinite CA in any dimension, stochastic or determistic, is impossible\cite{buvsic2012density}. However, evolutionary computation still surprises in its ability to find approximations of ever-increasing performance. 
+\begin{figure}[!h]
+\centering
+            \subfloat[Block-Based]{\includegraphics[height=.3\textwidth]{images/block-expand.png}}\hfill
+            \subfloat[Particle-Based]{\includegraphics[height=.3\textwidth]{images/particle-based.png}}\hfill
+            \subfloat[Koza Algorithm]{\includegraphics[height=.3\textwidth]{images/koza.png}}\hfill
+            \caption{Space-time behaviour of discovered transition functions on randomly initialised elementary CA of size N=149. (a) and (b) by Mitchell et al.\cite{mitchell1996evolving} and (c) by Andre et al.\cite{andre1996discovery}}
+\label{fig:1d-transitions}
+\end{figure}
+
+A later work by Andre, Bennett, and Koza\cite{andre1996discovery} uses genetic programming to achieve superior results qualitatively and quantitatively. The obtained solution uses various internal representations of density to transfer and collate information across the automaton. It attains an accuracy of $\sim$82.3\%. However, with its numerous latent representations of density, it is more difficult to intuitively understand how the Koza algorithm works and what patterns it is capable of producing than it is to understand how the particle-based algorithm works. Recently, it was proven that a perfect density classification rule for an infinite CA in any dimension, stochastic or determistic, is impossible\cite{buvsic2012density}. However, evolutionary computation still surprises in its ability to find approximations of ever-increasing performance. 
 
 \subsubsection{Learning 2D Transition Functions}
 
-\section{Continuous Reaction-Diffusion CA}
+Few attempts have been made to extend evolutionary algorithms to multidimensional cellular automata. A key series of work by Breukelaar and B{\"a}ch\cite{breukelaar2004evolving} shows that genetic algorithms can effectively solve information transfer problems on 2D CA such as the majority problem, AND problem, and XOR problem. The AND and XOR problems (which we collectively call the logical problems) aim to set the state of every cell to the result of the respective logical operation on the initial state of the top left and bottom right cells. These logical operators are picked because the result cannot be calculated from a single operator alone. In other cases, like the OR operator, we can deduce that the result will be true from a single operand being true. For the majority problem, tests showed that results with a fitness of up to 70\% could be evolved using a von Neumann neighbourhood. For the logical problems, a von Neumann neighbourhood could elicit results with over 90\% accurary and a Moore neighbourhood allowed a transition function with perfect accuracy to be evolved. Notably, it was shown that crossover did little to aid the evolution process in the logical problems and frequently even hindered progress.\\
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=.8\textwidth]{images/XOR-ca.png}
+\caption{Iterations of XOR CA for 4 possible input states}
+\label{fig:nca}
+\end{figure}
+
+They also show promise at small scale morphogenesis. Morphogenesis is the problem of evolving a rule that, given an initial condition, produces a particular goal state within a certain number of steps. In this work, the goal bitmaps were 5x5 square patterns. Using only mutation (not crossover), the algorithm was able to find a rule to produce every goal bitmap from a seed state of a single live cell in the centre of the CA within 5000 generations. This is very promising and indicates that the value of genetic algorithms in producing CA rules not only encode information transfer mechanisms but latent representations of data itself.\\
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=.5\textwidth]{images/bitmap-goals.png}
+\caption{Goal bitmaps for morphogenesis experiment\cite{breukelaar2004evolving}}
+\label{fig:nca}
+\end{figure}
+
+More recent work has looked at using neural networks and deep learning techniques to learn transition functions for morphogenesis. Specifically, in \textit{Growing Neural Cellular Automata, (Mordvintsev et al., 2020)}\cite{mordvintsev2020growing}, a CA is designed with a transition function that is itself a forward pass of a trainable convolutional neural network. In this form, the CA is trained to converge to complex yet stable image patterns from a single seed. Later works build upon these techniques to learn full dynamical systems such as the Boids algorithm\cite{grattarola2021learning}. However, even for small neural networks, the potential rulespace is enormous with thousands of possbile parameters. Ultimately, this makes a deep learning derived solution powerful yet intractable. Although CAs with neural network transition functions are much more expressive and powerful due to the granularity with which behaviour can be tuned, they arguably defeat the purpose of encoding rich behaviour in a compressed chromosome such as a bitstring.\\
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{images/nca.png}
+\caption{Single training step for a neural cellular automaton\cite{mordvintsev2020growing}}
+\label{fig:nca}
+\end{figure}
+
+
+% \section{Morphogenesis}
+
+% \section{Continuous Reaction-Diffusion CA}
+
+Currently, no attempts have been made to use evolutionary computation to learn full rule dynamics of life-like cellular automata.
