@@ -3,7 +3,6 @@ from random import random
 
 import numpy as np
 
-from lifelike.CAs import GRID_SIZE
 from lifelike.Population import Population
 from lifelike.constants import CHROMOSOME_LEN
 

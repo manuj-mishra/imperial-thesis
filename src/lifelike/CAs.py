@@ -14,7 +14,7 @@ class CA:
 
   @classmethod
   def random(cls, B, S):
-    X = np.random.random((GRID_SIZE, GRID_SIZE)) > random.random()
+    X = np.random.random((GRID_SIZE, GRID_SIZE)) < random.random()
     return cls(X, B, S)
 
   @classmethod
