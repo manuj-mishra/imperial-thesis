@@ -1,8 +1,10 @@
 import random
 
 import numpy as np
+from scipy.signal import convolve2d
+from scipy import stats
 
-from lifelike.CAs import CA
+from lifelike.CAs import CA, GRID_SIZE
 from lifelike.constants import CHROMOSOME_LEN
 from util import binary
 
@@ -63,7 +65,16 @@ class Rulestring:
           step_size = random.randint(1, hyperparams["max_step"])
           true_active = true.step_from(pred.X, step_size)
           pred_active = pred.step(step_size)
-          losses.append(np.mean(pred.X ^ true.X))
+          # losses.append(np.mean(pred.X ^ true.X))
+          losses.append(self.three_res_loss(pred.X, true.X))
           if not true_active and not pred_active:
             break
     return np.mean(losses)
+
+  def three_res_loss(self, a, b):
+    kmid = np.ones((GRID_SIZE // 2, GRID_SIZE // 2))
+    high = np.mean(a ^ b)
+    mid = np.mean(convolve2d(a, kmid, mode='valid') ^ convolve2d(b, kmid, mode='valid'))
+    low = (a.sum() < a.size) ^ (b.sum() < b. size)
+    return (low + mid + high) / 3
+
