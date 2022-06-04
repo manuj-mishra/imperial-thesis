@@ -10,7 +10,7 @@ def efficacy(max_step, pop_size):
   elitism = 0.2
   mutation = 1 / CHROMOSOME_LEN
   epoch_n = 30
-  num_rules = 5
+  num_rules = 100 
   hyperparams = {
     "max_step": max_step,
     "eval_step": 10
@@ -27,7 +27,7 @@ def efficacy(max_step, pop_size):
     rules.append(int(binarrstr, 2))
     trueB = np.where(binarr[:CHROMOSOME_LEN // 2] == 1)[0]
     trueS = np.where(binarr[CHROMOSOME_LEN // 2:] == 1)[0]
-    with open('ics.npy', 'rb') as icfile:
+    with open('lifelike/ics.npy', 'rb') as icfile:
       ics = np.load(icfile)
     pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, 'binary', hyperparams)
     counter = 0
