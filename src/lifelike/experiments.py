@@ -6,16 +6,17 @@ import numpy as np
 from lifelike.Population import Population
 from lifelike.constants import CHROMOSOME_LEN
 
-def efficacy(max_step, pop_size):
+if __name__ == "__main__":
+  pop_size = 10
   elitism = 0.2
   mutation = 1 / CHROMOSOME_LEN
-  epoch_n = 30
+  epoch_n = 300
   num_rules = 100 
   hyperparams = {
-    "max_step": max_step,
+    # "max_step": max_step,
     "eval_step": 10
   }
-  exp_name = f"stepsize{max_step}_pop{pop_size}"
+  exp_name = f"epoch{epoch_n}_pop{pop_size}"
   print(f"Running {exp_name}")
   rules = []
   conv_epochs = []
@@ -43,12 +44,3 @@ def efficacy(max_step, pop_size):
     wr.writerow(rules)
     wr.writerow(conv_epochs)
     wr.writerow(num_visited)
-
-if __name__ == "__main__":
-  # ic_densities = np.linspace(0.0, 1.0, num=100)
-  # ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > density for density in ic_densities]
-  # with open('ics.npy', 'wb') as f:
-  #   np.save(f, np.array(ics))
-  for max_step in (1, 10, 100):
-    for pop_size in (10, 100):
-      efficacy(max_step, pop_size)
