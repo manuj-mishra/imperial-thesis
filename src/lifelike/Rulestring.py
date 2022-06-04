@@ -60,7 +60,7 @@ class Rulestring:
       # pred = CA.random(self.b, self.s)
       pred = CA(ic, self.b, self.s)
       for step in range(hyperparams["eval_step"]):
-          step_size = random.randint(1, 10 * (step + 1))
+          step_size = random.randint(1, hyperparams["max_step"])
           true_active = true.step_from(pred.X, step_size)
           pred_active = pred.step(step_size)
           losses.append(np.mean(pred.X ^ true.X))
