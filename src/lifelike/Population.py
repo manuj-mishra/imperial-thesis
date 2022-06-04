@@ -18,13 +18,13 @@ class Population:
     self.trueS = trueS
     self.ics = ics
     self.hyperparams = hyperparams
-    self.visited = set(self.inds)
     if init_method == 'binary':
       self.inds = np.array([Rulestring.random_binary() for _ in range(self.elite_n)])
     elif init_method == 'decimal':
       self.inds = np.array([Rulestring.random_decimal() for _ in range(self.elite_n)])
     else:
       raise Exception("Unsupported init_method for Population")
+    self.visited = set(self.inds)
 
   def iterate(self):
     self.crossover()
