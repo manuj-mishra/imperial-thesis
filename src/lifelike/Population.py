@@ -45,14 +45,16 @@ class Population:
 
   def crossover(self):
     children = []
-    for _ in range(self.child_n):
+    for _ in range(self.child_n // 2):
       cpoint = random.randint(1, CHROMOSOME_LEN - 1)
       parents = np.random.choice(self.inds, 2, replace=False)
-      a, b = parents[0], parents[1]
-      left = a.get_rstring()[:cpoint]
-      right = b.get_rstring()[cpoint:]
-      child = Rulestring.from_rstring(int(left + right, 2))
-      children.append(child)
+      a, b = parents[0].get_rstring(), parents[1].get_rstring()
+      left_a, right_a = a[:cpoint], a[cpoint:]
+      left_b, right_b = b[:cpoint], b[cpoint:]
+      child1 = Rulestring.from_rstring(int(left_a + right_b, 2))
+      child2 = Rulestring.from_rstring(int(left_b + right_a, 2))
+      children.append(child1)
+      children.append(child2)
     self.inds = np.append(self.inds, np.array(children))
 
   def mutate(self):
