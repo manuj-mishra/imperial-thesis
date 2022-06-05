@@ -72,7 +72,8 @@ class Rulestring:
     return np.mean(losses)
 
   def three_res_loss(self, a, b):
-    kmid = np.ones((GRID_SIZE // 2, GRID_SIZE // 2))
+    ksize = GRID_SIZE // 2
+    kmid = np.ones((ksize, ksize)) / (ksize**2)
     high = np.mean(a ^ b)
     mid = np.mean(convolve2d(a, kmid, mode='valid') ^ convolve2d(b, kmid, mode='valid'))
     low = (a.sum() < a.size) ^ (b.sum() < b. size)
