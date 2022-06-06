@@ -75,7 +75,7 @@ class Rulestring:
     ksize = GRID_SIZE // 2
     kmid = np.ones((ksize, ksize)) / (ksize**2)
     high = np.mean(a ^ b)
-    mid = np.mean(convolve2d(a, kmid, mode='valid') ^ convolve2d(b, kmid, mode='valid'))
+    mid = np.mean(convolve2d(a, kmid, mode='valid').astype('bool') ^ convolve2d(b, kmid, mode='valid').astype('bool'))
     low = (a.sum() < a.size) ^ (b.sum() < b. size)
     return (low + mid + high) / 3
 
