@@ -22,15 +22,15 @@ if __name__ == "__main__":
   rules = []
   conv_epochs = []
   num_visited = []
-  for rule_num in range(num_rules):
-    print(f"Rule {rule_num}/{num_rules}")
-    binarr = np.random.binomial(1, np.random.uniform(low = 1/18, high=17/18), size=CHROMOSOME_LEN)
-    binarrstr = ''.join(binarr.astype(str))
+  with open('lifelike/ics.npy', 'rb') as icfile:
+    ics = np.load(icfile)
+  with open('lifelike/goals.npy', 'rb') as goalfile:
+    goals = np.load(goalfile)
+  for goalarr in goals:
+    binarrstr = ''.join(goalarr.astype(str))
     rules.append(int(binarrstr, 2))
-    trueB = np.where(binarr[:CHROMOSOME_LEN // 2] == 1)[0]
-    trueS = np.where(binarr[CHROMOSOME_LEN // 2:] == 1)[0]
-    with open('lifelike/ics.npy', 'rb') as icfile:
-      ics = np.load(icfile)
+    trueB = np.where(goalarr[:CHROMOSOME_LEN // 2] == 1)[0]
+    trueS = np.where(goalarr[CHROMOSOME_LEN // 2:] == 1)[0]
     pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, 'binary', hyperparams)
     counter = 0
     for _ in range(epoch_n):
