@@ -17,7 +17,7 @@ if __name__ == "__main__":
           "max_step": max_step,
           "eval_step": 10
         }
-        exp_name = f"epoch{epoch_n}_pop{pop_size}"
+        exp_name = f"stepsize{max_step}_pop{pop_size}"
         print(f"Running {exp_name}")
         rules = []
         conv_epochs = []
