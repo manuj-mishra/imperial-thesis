@@ -27,6 +27,7 @@ class Population:
     self.visited = set(self.inds)
     loss = self.loss()
     self.update(loss)
+    self.best_fitness = 1 - loss
 
   def iterate(self):
     self.crossover()
@@ -39,6 +40,7 @@ class Population:
   def update(self, loss):
     self.inds = self.inds[loss.argsort()]
     self.inds = self.inds[:self.elite_n]
+    self.best_fitness = 1 - min(loss)
 
   def evaluate(self, loss):
     return 1 - np.mean(np.sort(loss)[:self.elite_n])
