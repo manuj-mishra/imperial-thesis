@@ -31,8 +31,7 @@ if __name__ == "__main__":
       with open('lifelike/goals.npy', 'rb') as goalfile:
         goals = np.load(goalfile)
       for goalarr in goals:
-        binarrstr = ''.join(goalarr.astype(str))
-        rules.append(int(binarrstr, 2))
+        rules.append(goalarr)
         trueB = binary.ones(goalarr >> (CHROMOSOME_LEN // 2))
         smask = ((1 << ((CHROMOSOME_LEN // 2) + 1)) - 1)
         trueS = binary.ones(goalarr & smask)
