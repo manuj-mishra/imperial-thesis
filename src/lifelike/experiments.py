@@ -6,6 +6,7 @@ import pandas as pd
 
 from lifelike.Population import Population
 from lifelike.constants import CHROMOSOME_LEN
+from util import binary
 
 if __name__ == "__main__":
   for eval_step in (1, 5, 10):
@@ -32,8 +33,9 @@ if __name__ == "__main__":
       for goalarr in goals:
         binarrstr = ''.join(goalarr.astype(str))
         rules.append(int(binarrstr, 2))
-        trueB = np.where(goalarr[:CHROMOSOME_LEN // 2] == 1)[0]
-        trueS = np.where(goalarr[CHROMOSOME_LEN // 2:] == 1)[0]
+        trueB = binary.ones(goalarr >> (CHROMOSOME_LEN // 2))
+        smask = ((1 << ((CHROMOSOME_LEN // 2) + 1)) - 1)
+        trueS = binary.ones(goalarr & smask)
         pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, 'binary', hyperparams)
         counter = 0
         for _ in range(epoch_n):
