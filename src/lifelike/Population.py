@@ -27,7 +27,7 @@ class Population:
     self.visited = set(self.inds)
     loss = self.loss()
     self.update(loss)
-    self.best_fitness = 1 - loss
+    self.best_fitness = 1 - min(loss)
 
   def iterate(self):
     self.crossover()
