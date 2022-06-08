@@ -14,12 +14,11 @@ if __name__ == "__main__":
       elitism = 0.2
       mutation = 1 / CHROMOSOME_LEN
       epoch_n = 30
-      num_rules = 100
       hyperparams = {
         "max_step": int(round(max_step)),
         "eval_step": eval_step
       }
-      exp_name = f"exp_maxstep{max_step}_evalstep{eval_step}_pop{pop_size}_singleres"
+      exp_name = f"exp_maxstep{max_step}_evalstep{eval_step}_multires"
       print(f"Running {exp_name}")
       rules = []
       conv_epochs = []
@@ -44,7 +43,7 @@ if __name__ == "__main__":
           counter += 1
         conv_epochs.append(counter)
         num_visited.append(len(pop.visited))
-        best_rules.append(pop.inds[0])
+        best_rules.append(pop.inds[0].rstring)
         best_fitnesses.append(pop.best_fitness)
 
       df = pd.DataFrame({"rstring": rules,

@@ -65,8 +65,8 @@ class Rulestring:
           step_size = random.randint(1, hyperparams["max_step"])
           true_active = true.step_from(pred.X, step_size)
           pred_active = pred.step(step_size)
-          losses.append(np.mean(pred.X ^ true.X))
-          # losses.append(self.three_res_loss(pred.X, true.X))
+          # losses.append(np.mean(pred.X ^ true.X))
+          losses.append(self.three_res_loss(pred.X, true.X))
           if not true_active and not pred_active:
             break
     return np.mean(losses)
