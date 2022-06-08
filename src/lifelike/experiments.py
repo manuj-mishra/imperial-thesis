@@ -33,8 +33,7 @@ if __name__ == "__main__":
       for goalarr in goals:
         rules.append(goalarr)
         trueB = binary.ones(goalarr >> (CHROMOSOME_LEN // 2))
-        smask = ((1 << ((CHROMOSOME_LEN // 2) + 1)) - 1)
-        trueS = binary.ones(goalarr & smask)
+        trueS = binary.ones(goalarr)
         pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, 'binary', hyperparams)
         counter = 0
         for _ in range(epoch_n):

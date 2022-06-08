@@ -21,9 +21,7 @@ class Rulestring:
   @classmethod
   def from_rstring(cls, rstring):
     b = binary.ones(rstring >> (CHROMOSOME_LEN // 2))
-    # smask is 0x0000FFFF for 64 bit chromosome
-    smask = ((1 << ((CHROMOSOME_LEN // 2) + 1)) - 1)
-    s = binary.ones(rstring & smask)
+    s = binary.ones(rstring)
     return cls(rstring, b, s)
 
   @classmethod
