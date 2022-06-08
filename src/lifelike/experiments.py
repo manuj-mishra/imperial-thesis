@@ -16,7 +16,7 @@ if __name__ == "__main__":
       epoch_n = 30
       num_rules = 100
       hyperparams = {
-        "max_step": max_step,
+        "max_step": int(round(max_step)),
         "eval_step": eval_step
       }
       exp_name = f"exp_maxstep{max_step}_evalstep{eval_step}_pop{pop_size}_singleres"
