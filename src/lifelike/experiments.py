@@ -25,7 +25,6 @@ if __name__ == "__main__":
       conv_epochs = []
       num_visited = []
       best_rules = []
-      best_fitnesses = []
       with open('lifelike/ics.npy', 'rb') as icfile:
         ics = np.load(icfile)
       with open('lifelike/goals.npy', 'rb') as goalfile:
@@ -44,11 +43,9 @@ if __name__ == "__main__":
         conv_epochs.append(counter)
         num_visited.append(len(pop.visited))
         best_rules.append(pop.inds[0].rstring)
-        best_fitnesses.append(pop.best_fitness)
 
       df = pd.DataFrame({"rstring": rules,
                          "convtime": conv_epochs,
                          "visited": num_visited,
-                         "bestfit": best_fitnesses,
                          "bestrule": best_rules})
       df.to_csv(f"./{exp_name}.csv")
