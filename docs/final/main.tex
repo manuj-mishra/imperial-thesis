@@ -19,6 +19,8 @@
 \usepackage{fixltx2e}
 \usepackage{subfig}
 \usepackage{amsthm, thmtools}
+\usepackage{xfrac}
+\usepackage{multicol}
 \usepackage[numbers]{natbib}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
@@ -26,9 +28,10 @@
 % Shorthand commands
 \newcommand{\R}{\mathbb{R}}
 \newtheorem{definition}{Definition}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
 
 % \title{Evolutionary Algorithms for the Discovery of Cellular Automata Transition Functions}
-\title{Reverse Engineering Cellular Automata}
+\title{Reverse Engineering Life}
 \author{Manuj Mishra}
 
 \begin{document}
@@ -40,13 +43,15 @@
 
 \renewcommand{\abstractname}{Acknowledgements}
 \renewcommand{\listtheoremname}{List of Definitions}
+\renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
+\newcommand{\round}[1]{\ensuremath{\lfloor#1\rceil}}
 \begin{abstract}
 [Acknowledgements here]
 \end{abstract}
 
 \tableofcontents
 \listoffigures
-\listoftheorems[ignoreall,show={definition}]
+\listoftheorems[ignoreall, show={definition}]
 \begingroup
 \let\clearpage\relax
 \listofalgorithms
@@ -55,7 +60,6 @@
 \input{chapters/introduction}
 \input{chapters/preliminaries}
 \input{chapters/related_works}
-\input{chapters/software}
 \input{chapters/method}
 \input{chapters/evaluation}
 \input{chapters/conclusion}

@@ -23,10 +23,7 @@ Due to the breadth of systems studied in CA literature, the constraints of this 
 \end{itemize}
 For the purpose of this thesis, we will assume the original definition of CA unless otherwise stated.
 
-\subsection{Neighbourhood Functions}
-We consider a "neighbourhood function" for each cell $c_i \mapsto \mathcal{N}(c_i)$. This makes it easier to discuss neighbourhood sets of cells in the CA, each of which are typically homogenous.\\
-
-There are many possible neighbourhood functions for any given CA geometry. When defining the neighbourhood function, we select a distance metric $d:\mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}$ to measure the proximity of two cells and we set a threshold $T$ under which we consider two cells to be within each other's neighbourhood.
+We consider a "neighbourhood function" for each cell $c_i \mapsto \mathcal{N}(c_i)$. This makes it easier to discuss neighbourhood sets of cells in the CA, each of which are typically homogenous. There are many possible neighbourhood functions for any given CA geometry. When defining the neighbourhood function, we select a distance metric $d:\mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}$ to measure the proximity of two cells and we set a threshold $T$ under which we consider two cells to be within each other's neighbourhood.
 \[c_i \in \mathcal{N}(c_j) \iff d(c_i, c_j) \leq T\]
 
 There are two neighbourhoods that are frequently used on Euclidean lattices. The \textit{von Neumann neighbourhood} contains all cells within a Manhattan distance of 1. For a 2D square lattice, this contains the cell itself and the 4 cells in the cardinal directions. For a 3D cubic lattice, it contains the central cell and a 6-cell octahedron around it. The \textit{Moore neighbourhood} contains all cells at a Chebyshev distance of 1. For a 2D square lattice, this is the central cell with the 8 neighbouring cells in a square around it. In the 3D case, it is a cube.
@@ -41,16 +38,16 @@ There are two neighbourhoods that are frequently used on Euclidean lattices. The
 In a finite grid CA, border cells must be given special consideration since they do not have the same number of neighbours as interior cells and therefore cannot share the same neighbourhood function. One option is to define a case-wise neighbourhood function with different behaviour for border cells. Another option is to freeze the state of border cells. In the field of partial differential equations, this is known as setting "fixed boundary conditions".  The problem can also be circumvented entirely by relaxing the finite grid assumption and allowing cells to "wrap around" the grid. This is known as setting "periodic boundary conditions" and can be imagined visually as running the CA on an infinite periodic tiling or, alternatively, on a torus.\\
 
 
-\subsection{Conway's Game of Life} \label{sub:life}
-A popular example of a CA is the Game of Life (henceforth "Life") formulated by John Conway in 1970 \cite{gardner1970fantastic}. It consists of a 2D grid of cells, each with a boolean state variable signifying that the cell is either "alive" or "dead". The transition rule takes as input the cell's own state $\sigma_i(t)$ and the number of living individuals in the cell's Moore neighbourhood (excluding itself), denoted $n$. This is as follows:
+\subsection{Life-Like CA} \label{sub:life}
+The most popular example of a CA is the Game of Life (henceforth "Life") formulated by John Conway in 1970 \cite{gardner1970fantastic}. It consists of a 2D grid of cells, each with a boolean state variable signifying that the cell is either "alive" or "dead". The transition rule takes as input the cell's own state $\sigma_i(t)$ and the number of living individuals in the cell's Moore neighbourhood (excluding itself), denoted $n_i(t)$. This is as follows:
 
 \begin{equation}
-  \phi(\sigma_i(t), n) = 
+  \phi(\sigma_i(t), n_i(t)) = 
 \begin{cases}
-  0 & \sigma_i(t) = 1 \text{ and } n < 2 \text{  (Death by "exposure")}\\
-  0 & \sigma_i(t) = 1 \text{ and } n > 3 \text{  (Death by "overcrowding")}\\
-  1 & \sigma_i(t) = 1 \text{ and } n \in \{2,3\} \text{  (Survival)}\\
-  1 & \sigma_i(t) = 0 \text{ and } n = 3 \text{  (Resurrection)}\\
+  0 & \sigma_i(t) = 1 \text{ and } n_i(t) < 2 \text{  (Death by "exposure")}\\
+  0 & \sigma_i(t) = 1 \text{ and } n_i(t) > 3 \text{  (Death by "overcrowding")}\\
+  1 & \sigma_i(t) = 1 \text{ and } n_i(t) \in \{2,3\} \text{  (Survival)}\\
+  1 & \sigma_i(t) = 0 \text{ and } n_i(t) = 3 \text{  (Resurrection)}\\
   0 & \text{otherwise}
 \end{cases}
 \end{equation}
@@ -103,10 +100,10 @@ As an example of the subtle difference here, consider the configurations shown i
 \begin{definition}[Birth-survival notation]
 Let $N_b$ and $N_s$ be sets of integers. We say an outer-totalistic CA has rulestring \textnormal{B$N_b$/S$N_s$} if it has transition function:
 \[
-  \phi(\sigma_i(t), n) = 
+  \phi(\sigma_i(t), n_i(t)) = 
   \begin{cases}
-    1 & \sigma_i(t) = 0 \text{ and } n \in N_b \text{  (Birth)}\\
-    1 & \sigma_i(t) = 1 \text{ and } n \in N_s \text{  (Survival)}\\
+    1 & \sigma_i(t) = 0 \text{ and } n_i(t) \in N_b \text{  (Birth)}\\
+    1 & \sigma_i(t) = 1 \text{ and } n_i(t) \in N_s \text{  (Survival)}\\
     0 & \text{otherwise}
   \end{cases}
 \]
@@ -115,40 +112,59 @@ Let $N_b$ and $N_s$ be sets of integers. We say an outer-totalistic CA has rules
 
 Using this notation, we can represent the Game of Life as B3/S23. In this thesis, when we refer to Life-like CA, we implicitly assume the outer-totalistic variety.
 
-
-\subsection{Wolfram's Classification}
-
-The choices of lattice geometry, neighbourhood function, state variable, and transition rule define the behaviour of a CA. Fixing the former three factors, Wolfram \cite{wolfram1986theory} classified CAs based on transition rules as follows:
-\begin{enumerate}
-  \item Class 1 (Null) : Rules that lead to a trivial, uniform state
-  \item Class 2 (Fixed-point / Periodic) : Rules that lead to stable or periodic patterns
-  \item Class 3 (Chaotic) : Rules that lead to chaotic patterns
-  \item Class 4 (Complex) : Rules that lead to complex, long-lived impermanent patterns
-\end{enumerate}
-
-\textbf{Elementary cellular automata} are defined on the simplest nontrivial lattice, a finite one-dimensional chain. The neighbourhood of each cell contains the cell itself and the two cells adjacent to it on either side. The state variable is a boolean which means there are $2^3 = 8$ possible neighbourhood state configurations. A transition rule maps each of these neighbourhood states to a resultant state and can therefore be represented as an 8-digit binary rule table $(t_7t_6t_5t_4t_3t_2t_1t_0)$ where configuration $(000)$ maps to $t_0$, $(001)$ maps to $t_1$, ..., and $(111)$ maps to $(t_7)$. Consequently, there are $2^8=256$ possible transition functions for elementary CA.\\
+\subsection{Elementary CA} 
+Elementary CA are defined on the simplest nontrivial lattice, a finite one-dimensional chain. The neighbourhood of each cell contains the cell itself and the two cells adjacent to it on either side. The state variable is a boolean which means there are $2^3 = 8$ possible neighbourhood state configurations. A transition rule maps each of these neighbourhood states to a resultant state and can therefore be represented as an 8-digit binary rule table $(t_7t_6t_5t_4t_3t_2t_1t_0)$ where configuration $(000)$ maps to $t_0$, $(001)$ maps to $t_1$, ..., and $(111)$ maps to $(t_7)$. Consequently, there are $2^8=256$ possible transition functions for elementary CA.\\
 
 The Wolfram code, a number between 0 and 255 obtained by converting the binary rule table to decimal, is the standard naming convention for these rules. Rule 110 is particularly notable as it can exhibit class 4 behaviour \cite{wolfram2002} and is Turing complete \cite{cook2004universality}. Figure \ref{fig:rule-110} shows an example progression of a Rule 110 system. Each row of pixels represents the state of the automaton at one snapshot in time with the topmost row representing the randomized initial state. It shows the emergence, interaction, and subsequent dissipation of multiple long-lived impermanent patterns.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.9\textwidth]{images/rule-110.png}
+\includegraphics[width=0.7\textwidth]{images/rule-110.png}
 \caption{Rule 110 progression with random initialisation \cite{wolfram2002}}
 \label{fig:rule-110}
 \end{figure}
 
 % \subsection{Morphogenesis}
-% Morphogenesis is the process by which a system develops into a particular shape or pattern. 
-% Biologically, this is seen in most multicellular organisms which can robustly develop specialised organs and intricate skin patterns without any centralised decision-making.
-% Through simple rules encoded in the genome and homeostatic feedback loops enforced through chemical signalling, a tissue knows exactly how to grow and when to stop.\\
-
 % Emulating this behaviour \textit{in silico} can provide great insight into the way self-organising and self-repairing biological systems function.
 % Cellular automata are a promising model of computation for artificial life simulation because, much like biological agents, their behaviour follows logically from combining information in their surroundings and internal programming.
 % In the context of morphogenesis, we are interested in rules that form stable class 2 patterns from random initial conditions.
 % We are also interested in rules that are resistant to noise.
 % This is analogous to the behaviour of biological cells which grow into stable configurations and are robust to perturbation and damage during growth.
-\raggedbottom
-\pagebreak
+
+\section{Turing Patterns}
+Morphogenesis is the process by which a system develops into a particular shape or pattern.  Biologically, this is seen in most multicellular organisms which can robustly develop specialised organs and intricate skin patterns without any centralised decision-making. Through simple rules encoded in the genome and homeostatic feedback loops enforced through chemical signalling, a tissue knows exactly how to grow and when to stop.\\
+
+In \textit{The Chemical Basis for Morphogenesis (Turing, 1952)\cite{turing1990chemical}}, Alan Turing proposes that spatially periodic phenomena in the natural world like the stripes on a zebra or the skin patterns on pufferfish can arise autonomously from random or uniform initial conditions through the interaction for two diffusible substances. These patterns are known as Turing patterns and Turing's model forms the basis of major theories in developmental biology. Such patterns are visible at all scales from the fold patterns of mammalian brains\cite{cartwright2002labyrinthine} to the distribution of matter in the Milky Way\cite{smolin1996galactic}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.6\textwidth]{images/turing-shell.png}
+\caption{Complex patterns on sea shells(left) can be replicated using Turing patterns (right) \cite{meinhardt2009algorithmic}}
+\label{fig:seashells}
+\end{figure}
+
+\subsection{Gray-Scott Model}
+
+Turing patterns arise out of two component reaction-diffusion systems. One specific example is the Gray-Scott model\cite{gray1983autocatalytic} in which one component, $U$, is consumed while the other, $V$ is produced in a chemical reaction. In this thesis, we consider a simple reaction scheme called cubic autocatalysis where the following reaction occurs with a certain probability
+\begin{equation}\label{eq:gs-main}
+  U + 2V \rightarrow V
+\end{equation}
+To compensate for $U$ being consumed The system replenished $U$ and removes $V$ by rates controlled with feed and kill factors $f$ and $k$ respectively. The substances diffuse over the grid at rates $D_u$ and $D_v$. The system is characterised by two equations
+\begin{align}
+  \label{eq:gs-u} \dot{u} &= -uv^2 + f(1-u) + D_u \nabla^2 u\\
+  \label{eq:gs-v} \dot{v} &= uv^2 - (f+k)v + D_v \nabla^2 v
+\end{align}
+$u$ and $v$ represent the densities of each component in a given cell. $\dot{u}$ and $\dot{v}$ represent the change in these densities. Each density has three sources of change described by the three terms on the right hand side of each equation. The first term describes the reaction \ref{eq:gs-main} where 1 $U$ molecule reacts with 2 $V$ molecules which is why the term is a product of $u^1$ and $v^2$. The second term represents external inputs and outputs. In \ref{eq:gs-u}, the feed rate is multiplied by $1-u$ so that replenishment depends on current density. In \ref{eq:gs-v}, $v$ is multiplied by $-(F-k)$ so that $V$ is removed faster than $U$ is added. Finally, the third term describes the change in each density due to diffusion using the 2D Laplacian to get the difference between a cell's current state and the average of the neighbourhood cell states.\\
+
+For most values of feed and kill rate, the Gray-Scott model attains one of two quiescent states, either completely dominated by $U$ or completely dominated $V$. However, there are certain feed and kill rates which elicit complex stable patterns. Many of these bear a strong resemblance to Turing patterns observed in nature.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{images/turing-patterns.png}
+\caption{Turing patterns arising out of Grey-Scott model simulations\cite{sims}}
+\label{fig:gs-turing-patterns}
+\end{figure}
+
 \section{Evolutionary Algorithms}
 
 Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A population of candidate solutions is initialized and modified through repeated selection, mutation, and recombination. We define an EA formally in Algorithm~\ref{alg:ea}.\\
@@ -173,7 +189,7 @@ Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms 
   \end{algorithmic}
 \end{algorithm}
 
-The initial selection phase ($\Call{SelectParents}$) uses a objective function, also known as a fitness function, to compare and select the top candidates. Recombination produces a set of children that have similar properties to some subset of the parents. This exploits the cumulative progress of the evolutionary process embedded in the parent candidates. Mutation explores new areas of the search space by perturbing properties of the parents and children. The latter selection phase ($\Call{SelectPopulation}$) produces a new population from the modified parents and children. Population-wide selection criteria can be enforced in this phase. For example, certain parents can be eliminated if they have survived for too many generations or, symmetrically, children can be granted immunity for a particular number of generations.\\
+The initial selection phase ($\Call{SelectParents}$) uses a objective function, also known as a fitness function, to compare and select the top candidates. We seek to maximise fitness. Alternatively, selection may be based on minimising a loss function. Recombination produces a set of children that have similar properties to some subset of the parents. This exploits the cumulative progress of the evolutionary process embedded in the parent candidates. Mutation explores new areas of the search space by perturbing properties of the parents and children. The latter selection phase ($\Call{SelectPopulation}$) produces a new population from the modified parents and children. Population-wide selection criteria can be enforced in this phase. For example, certain parents can be eliminated if they have survived for too many generations or, symmetrically, children can be granted immunity for a particular number of generations.\\
 
 EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.\\
 
