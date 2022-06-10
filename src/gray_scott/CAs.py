@@ -4,11 +4,11 @@ from scipy.signal import convolve2d
 
 from util.media import init_image, save_image, clear_temp_folders, make_files_clustered
 
-GRID_SIZE = 257
-RUN_ITERS = 10000
+GRID_SIZE = 101
+RUN_ITERS = 5000
 dt = 1.0  # Time delta
 dA = 1.0
-dB = 0.5
+dB = dA/2
 lapl = np.array([[0.05, 0.2, 0.05], [0.2, -1.0, 0.2], [0.05, 0.2, 0.05]])
 eps = 0.00001
 
@@ -55,7 +55,7 @@ class CA:
       B_new = self.B + (
           dB * convolve2d(self.B, lapl, mode='same', boundary='fill', fillvalue=0)
           + (self.A * self.B * self.B)
-          - (self.k * self.B)
+          - ((self.f + self.k) * self.B)
       ) * dt
 
       if np.all(self.A == A_new) and np.all(self.B == B_new):
@@ -106,7 +106,7 @@ class MimicCA(CA):
     return self.step(steps)
 
 if __name__ == "__main__":
-  ca = CA.splatter(f=0.038, k=0.099)
+  ca = CA.splatter(f=0.03, k=0.06)
   ca.run(rname='test', media=True)
 
 

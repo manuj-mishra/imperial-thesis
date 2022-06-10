@@ -16,19 +16,10 @@ ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
 N_PARENTS = 5
 N_CHILDREN = N_PARENTS * 4
 
-
-# def accuracy_experiment(true_f, true_k, n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):
-#     pop = Population(n_parents, n_children, true_f, true_k)
-#     for i in range(epoch_n - 1):
-#         print(i, pop.iterate())
-#     print(epoch_n, pop.iterate())
-#     return pop.iterate()
-
-
 def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, initialisation, seed,
                    n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):
     pop = Population(n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation)
-    losses = [pop.evaluate(pop.loss())]
+    # losses = [pop.evaluate(pop.loss())]
     top_f = [pop.inds[0].state[0]]
     top_k = [pop.inds[0].state[1]]
     top_df = [pop.inds[0].control[0]]
@@ -39,17 +30,18 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
     for epoch in range(1, epoch_n + 1):
         print(epoch)
         loss = pop.iterate()
-        losses.append(loss)
+        # losses.append(loss)
         top_f.append(pop.inds[0].state[0])
         top_k.append(pop.inds[0].state[1])
         top_df.append(pop.inds[0].control[0])
         top_dk.append(pop.inds[0].control[1])
 
-        ax.scatter([i.state[0] for i in pop.inds], [i.state[1] for i in pop.inds])
-        ax.set_xlabel("Feed")
-        ax.set_ylabel("Kill")
-        ax.set_xlim([-0.01, 0.1])
-        ax.set_ylim([-0.01, 0.1])
+        ax.scatter([i.state[1] for i in pop.inds], [i.state[0] for i in pop.inds], c='b')
+        ax.scatter(true_k, true_f, c='r')
+        ax.set_xlabel("Kill")
+        ax.set_ylabel("Feed")
+        ax.set_xlim([-0.01, 0.08])
+        ax.set_ylim([-0.01, 0.30])
         plt.savefig(f'{root}/temp/conv_frames/{epoch}.png', bbox_inches='tight')
         plt.cla()
 
@@ -108,12 +100,12 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
     plt.savefig(f'{dir}/derivs.png', bbox_inches='tight')
     plt.close(fig)
 
-    fig, ax = plt.subplots()
-    ax.plot(epochs, losses, color='tab:blue')
-    ax.set_yscale('log')
-    ax.set_ylabel("Loss")
-    plt.savefig(f'{dir}/loss.png', bbox_inches='tight')
-    plt.close(fig)
+    # fig, ax = plt.subplots()
+    # ax.plot(epochs, losses, color='tab:blue')
+    # ax.set_yscale('log')
+    # ax.set_ylabel("Loss")
+    # plt.savefig(f'{dir}/loss.png', bbox_inches='tight')
+    # plt.close(fig)
 
     create_conv_gif(rname=rname)
 
@@ -130,10 +122,10 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
     found = new_CA(f=top_f[-1], k=top_k[-1])
     found.run(fname="pred", rname=rname, media=True)
 
-    return np.mean(losses[-1 * (ACCURACY_EPOCH_N // 10):])
+    # return np.mean(losses[-1 * (ACCURACY_EPOCH_N // 10):])
 
 
 if __name__ == "__main__":
-    np.set_printoptions(precision=3, suppress=True)
-    test_single_EA(true_f=0.038, true_k=0.099, rname="GA_30EP_25POP", algorithm="GA", recombination="PLUS",
+    # np.set_printoptions(precision=3, suppress=True)
+    test_single_EA(true_f=0.03, true_k=0.06, rname="GA_30EP_25POP", algorithm="GA", recombination="PLUS",
                    selection="LINEAR", initialisation="RANDOM", seed="SPLATTER")
