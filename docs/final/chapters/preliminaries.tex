@@ -4,7 +4,7 @@
 
 A cellular automaton (CA) is a computational model that performs multiple parallel computations, each depending on local interactions, to produce complex global behaviour. We define a CA formally as follows.
 
-\begin{definition}[Cellular automaton]
+\begin{definition}[Cellular Automaton]
 A cellular automaton is an $n$-dimensional finite grid of computational units called cells. Each cell $c_i$ is characterised by:
 \begin{itemize}
   \item A discrete state variable $\sigma_i(t) \in \Sigma$, where $i$ indicates the index of the cell in the lattice, $t$ indicates the current time step, and $\Sigma$ denotes the finite set of all state variables.
@@ -18,7 +18,7 @@ At each time step, the state of each cell is simultaneously updated according to
 Due to the breadth of systems studied in CA literature, the constraints of this definition are often altered to produce interesting arrangements. For example:
 \begin{itemize}
   \item The structure need not be a square grid. CA have been studied on hexagonal grids\cite{encinas2007modelling}, aperiodic tessellations such as as the Penrose tiling\cite{goucher2012gliders}, and even randomly generated structures like the Voronoi partition\cite{shi2000development}.
-  \item The system need not be deterministic. Probabalistic cellular automata (PCA) have stochastic transition functions which describe a probability distribution of possible outcomes for any given input. PCA are able to model random dynamical systems in the real world from stock markets\cite{bartolozzi2004stochastic} to infectious diseases\cite{mikler2005modeling}.
+  \item The system need not be deterministic. Probabilistic cellular automata (PCA) have stochastic transition functions which describe a probability distribution of possible outcomes for any given input. PCA are able to model random dynamical systems in the real world from stock markets\cite{bartolozzi2004stochastic} to infectious diseases\cite{mikler2005modeling}.
   \item The state space $\Sigma$ need not be finite. In this thesis we will explore multiple possible state variable representations including bit arrays and continuous vectors.
 \end{itemize}
 For the purpose of this thesis, we will assume the original definition of CA unless otherwise stated.
@@ -65,7 +65,7 @@ Patterns found within Life include still lifes like the \textit{block} which are
 
 A CA is considered "Life-like" if it exists on a 2D lattice, has binary state, uses the Moore neighbourhood function. Life-like cellular automata exist in two varieties: inner-totalistic and outer-totalistic.
 
-\begin{definition}[Inner-totalistic]
+\begin{definition}[Inner-Totalistic]
 A Life-like CA is inner-totalistic if the output of the transition function depends only on the number of living cells in a cell's neighbourhood (including the cell itself).
 \[
   \sigma_i(t+1) = \sigma_j(t+1) \iff \sum_{\mathclap{c_p \in \mathcal{N}(c_i)}}\sigma_p(t) = \sum_{\mathclap{c_q \in \mathcal{N}(c_j)}}\sigma_q(t)
@@ -73,7 +73,7 @@ A Life-like CA is inner-totalistic if the output of the transition function depe
 \label{def:inner-totalistic}
 \end{definition}
 
-\begin{definition}[Outer-totalistic]
+\begin{definition}[Outer-Totalistic]
 A Life-like CA is outer-totalistic if the output of the transition function depends on both the number of living cells in a cell's neighbourhood and the state of the cell itself.
 \[
   \sigma_i(t+1) = \sigma_j(t+1) \iff \sum_{\mathclap{c_p \in \mathcal{N}(c_i)}}\sigma_p(t) = \sum_{\mathclap{c_q \in \mathcal{N}(c_j)}}\sigma_q(t) \quad \textnormal{and} \quad \sigma_i(t) = \sigma_j(t) 
@@ -97,7 +97,7 @@ As an example of the subtle difference here, consider the configurations shown i
   \label{fig:two-moores}
 \end{figure}
 
-\begin{definition}[Birth-survival notation]
+\begin{definition}[Birth-Survival notation]
 Let $N_b$ and $N_s$ be sets of integers. We say an outer-totalistic CA has rulestring \textnormal{B$N_b$/S$N_s$} if it has transition function:
 \[
   \phi(\sigma_i(t), n_i(t)) = 
@@ -150,10 +150,12 @@ Turing patterns arise out of two component reaction-diffusion systems. One speci
   U + 2V \rightarrow V
 \end{equation}
 To compensate for $U$ being consumed The system replenished $U$ and removes $V$ by rates controlled with feed and kill factors $f$ and $k$ respectively. The substances diffuse over the grid at rates $D_u$ and $D_v$. The system is characterised by two equations
-\begin{align}
-  \label{eq:gs-u} \dot{u} &= -uv^2 + f(1-u) + D_u \nabla^2 u\\
-  \label{eq:gs-v} \dot{v} &= uv^2 - (f+k)v + D_v \nabla^2 v
+\begin{definition}[Reaction-Diffusion System] \label{def:reaction-diffusion}
+\begin{align} 
+  \label{eq:gs-u} \pdv{u}{t} &= -uv^2 + f(1-u) + D_u \nabla^2 u\\
+  \label{eq:gs-v} \pdv{v}{t} &= uv^2 - (f+k)v + D_v \nabla^2 v
 \end{align}
+\end{definition}
 $u$ and $v$ represent the densities of each component in a given cell. $\dot{u}$ and $\dot{v}$ represent the change in these densities. Each density has three sources of change described by the three terms on the right hand side of each equation. The first term describes the reaction \ref{eq:gs-main} where 1 $U$ molecule reacts with 2 $V$ molecules which is why the term is a product of $u^1$ and $v^2$. The second term represents external inputs and outputs. In \ref{eq:gs-u}, the feed rate is multiplied by $1-u$ so that replenishment depends on current density. In \ref{eq:gs-v}, $v$ is multiplied by $-(F-k)$ so that $V$ is removed faster than $U$ is added. Finally, the third term describes the change in each density due to diffusion using the 2D Laplacian to get the difference between a cell's current state and the average of the neighbourhood cell states.\\
 
 For most values of feed and kill rate, the Gray-Scott model attains one of two quiescent states, either completely dominated by $U$ or completely dominated $V$. However, there are certain feed and kill rates which elicit complex stable patterns. Many of these bear a strong resemblance to Turing patterns observed in nature.
@@ -165,33 +167,33 @@ For most values of feed and kill rate, the Gray-Scott model attains one of two q
 \label{fig:gs-turing-patterns}
 \end{figure}
 
-\section{Evolutionary Algorithms}
+% \section{Evolutionary Algorithms}
 
-Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A population of candidate solutions is initialized and modified through repeated selection, mutation, and recombination. We define an EA formally in Algorithm~\ref{alg:ea}.\\
+% Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A population of candidate solutions is initialized and modified through repeated selection, mutation, and recombination. We define an EA formally in Algorithm~\ref{alg:ea}.\\
 
-\begin{algorithm}
-  \caption{Schematic Evolutionary Algorithm}\label{alg:ea}
-  \begin{algorithmic}
-  \Require $S$ - the set of possible chromosome values
-  \Ensure $s^* \in S$
-  \State $t \gets 0$
-  \State $M_0 \gets \mu$ random individuals from $S$
-  \While{stopping condition is false}
-    \State \Call{Evaluate}{$M_t$}
-    \State $P_t \gets$ \Call{SelectParents}{$M_t$}    \Comment{Parents}
-    \State $\Lambda_t \gets$ \Call{Recombine}{$P_t$}  \Comment{Children}
-    \State $Pmod_t \gets$ \Call{Mutate}{$P_t$}
-    \State $\Lambda mod_t \gets$ \Call{Mutate}{$\Lambda_t$}
-    \State $M_t+1 \gets$ \Call{SelectPopulation}{$Pmod_t$, $\Lambda mod_t$}
-    \State $t \gets t+1$
-  \EndWhile
-  \State $s^* \gets$ \Call{FindBestCandidate}{$P_t$}
-  \end{algorithmic}
-\end{algorithm}
+% \begin{algorithm}
+%   \caption{Schematic Evolutionary Algorithm}\label{alg:ea}
+%   \begin{algorithmic}
+%   \Require $S$ - the set of possible chromosome values
+%   \Ensure $s^* \in S$
+%   \State $t \gets 0$
+%   \State $M_0 \gets \mu$ random individuals from $S$
+%   \While{stopping condition is false}
+%     \State \Call{Evaluate}{$M_t$}
+%     \State $P_t \gets$ \Call{SelectParents}{$M_t$}    \Comment{Parents}
+%     \State $\Lambda_t \gets$ \Call{Recombine}{$P_t$}  \Comment{Children}
+%     \State $Pmod_t \gets$ \Call{Mutate}{$P_t$}
+%     \State $\Lambda mod_t \gets$ \Call{Mutate}{$\Lambda_t$}
+%     \State $M_t+1 \gets$ \Call{SelectPopulation}{$Pmod_t$, $\Lambda mod_t$}
+%     \State $t \gets t+1$
+%   \EndWhile
+%   \State $s^* \gets$ \Call{FindBestCandidate}{$P_t$}
+%   \end{algorithmic}
+% \end{algorithm}
 
-The initial selection phase ($\Call{SelectParents}$) uses a objective function, also known as a fitness function, to compare and select the top candidates. We seek to maximise fitness. Alternatively, selection may be based on minimising a loss function. Recombination produces a set of children that have similar properties to some subset of the parents. This exploits the cumulative progress of the evolutionary process embedded in the parent candidates. Mutation explores new areas of the search space by perturbing properties of the parents and children. The latter selection phase ($\Call{SelectPopulation}$) produces a new population from the modified parents and children. Population-wide selection criteria can be enforced in this phase. For example, certain parents can be eliminated if they have survived for too many generations or, symmetrically, children can be granted immunity for a particular number of generations.\\
+% The initial selection phase ($\Call{SelectParents}$) uses a objective function, also known as a fitness function, to compare and select the top candidates. We seek to maximise fitness. Alternatively, selection may be based on minimising a loss function. Recombination produces a set of children that have similar properties to some subset of the parents. This exploits the cumulative progress of the evolutionary process embedded in the parent candidates. Mutation explores new areas of the search space by perturbing properties of the parents and children. The latter selection phase ($\Call{SelectPopulation}$) produces a new population from the modified parents and children. Population-wide selection criteria can be enforced in this phase. For example, certain parents can be eliminated if they have survived for too many generations or, symmetrically, children can be granted immunity for a particular number of generations.\\
 
-EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.\\
+% EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.\\
 
-Typically, an EA acts on a population of "chromosomes" which are indirect encodings of candidate solutions. The structure of the chromosome is called the "genotype" and the structure of the corresponding solution is called the "phenotype". In this thesis, the genotype will usually be a set of parameters that characterise the transition function for a particular class of CA. The corresponding phenotype is the cellular automaton with that transition function.\\
+% Typically, an EA acts on a population of "chromosomes" which are indirect encodings of candidate solutions. The structure of the chromosome is called the "genotype" and the structure of the corresponding solution is called the "phenotype". In this thesis, the genotype will usually be a set of parameters that characterise the transition function for a particular class of CA. The corresponding phenotype is the cellular automaton with that transition function.\\
 

@@ -1,0 +1,147 @@
+\chapter{Part II: Gray-Scott Systems} \label{gray-scott}
+
+To learn Gray-Scott models, we extend our evolutionary algorithm toolkit further to include more diverse methods such as evolutionary strategies and particle swarm optimization.
+
+\section{Learning Process}
+
+\subsection{Simulator} \label{subsec:simulator}
+
+In this setting, we run a discretized simulation of a continuous system so there are more subtleties to consider. We use two NumPy arrays of floats to store the density of $u$ and $v$ across the CA. To simulate the change in these densities, we use a pair of finite-difference equations that approximate the continuous partial differential equations in Def~\ref{def:reaction-diffusion}.
+\begin{definition}[Gray-Scott Model]\label{def:gs}
+\begin{align*}
+  \dot{u} &= -uv^2 + f(1-u) + D_u \Delta u\\
+  \dot{v} &= uv^2 - (f+k)v + D_v \Delta v
+\end{align*}
+\end{definition}
+Each equation has 3 terms. From left to right, these are the reaction term, the external term and the diffusion term. Calculating the first two terms is simple enough as we are given the feed and kill rates.  However, the third term includes the Laplacian of each density which is computationally intensive to calculate. Instead, we convolve over the density matrices of $u$ and $v$ to obtain matrices whose entries are approximations of $\Delta u(x,y)$ and $\Delta v(x,y)$ respectively. Different kernels have been used for this convolution in the literature. One example used by in Compeau's Biological Modelling book\cite{compeau} is
+\[
+  K= \begin{bmatrix}
+    0.05 & 0.2 & 0.05\\
+    0.2 & -1 & 0.2\\
+    0.05 & 0.2 & 0.05
+  \end{bmatrix}
+\]
+Another popular choice is the nine-point stencil\cite{rosser1975nine}.
+\[
+  \Delta^{(9)}_h = \begin{bmatrix}
+    0.25 & 0.5 & 0.25\\
+    0.5 & -3 & 0.5\\
+    0.25 & 0.5 & 0.25
+  \end{bmatrix}
+\]
+Testing on a few examples revealed that both kernels capture complex behaviour similarly well. However, the choice of kernel is not arbitrary and these two choices are well principled. We briefly outline the reasoning behind the nine-point stencil. Consider first a 3-point stencil approximation for the Laplacian in one dimension.
+\[
+  \pdv{u}{x^2} \approx \Delta^{(3)}u(x) = \frac{u(x-h) -2u(x) + u(x+h)}{h^2}
+\]
+By combining two of these we get a two dimensional 5-point stencil.
+\begin{align*}
+  \Delta u(x, y) &= \pdv{u}{x^2} + \pdv{u}{y^2}\\
+                     &\approx \frac{u(x-h, y) -2u(x, y) + u(x+h, y)}{h^2} + \frac{u(x, y-h) -2u(x, y) + u(x, y+h)}{h^2}\\
+                     &= \frac{u(x-h, y)+ u(x+h, y) -4u(x, y) + u(x, y-h) + u(x, y+h)}{h^2}\\
+                     &= \frac{1}{h^2} \begin{bmatrix}
+                                0 & 1 & 0\\
+                                1 & -4 & 1\\
+                                0 & 1 & 0
+                     \end{bmatrix} u(x, y) = \Delta^{(5)}_h u
+\end{align*}
+Finally, we obtain a softer discretization by combining two 5-point stencils into a 9-point stencil. Consider $\nabla^2_h u$ with $h = 1$, the side length of a cell in our lattice. Then, the stencil aligns perfectly with our cellular automaton. Now consider another stencil rotated by $45^\circ$ with $h=\sqrt{2}$. By combining these two stencils, we get
+\[
+  \begin{bmatrix}
+    0 & 1 & 0\\
+    1 & -4 & 1\\
+    0 & 1 & 0
+  \end{bmatrix}
+  + \frac{1}{(\sqrt{2})^2}
+  \begin{bmatrix}
+    1 & 0 & 1\\
+    0 & -4 & 0\\
+    1 & 0 & 1
+  \end{bmatrix}
+  = 
+  \begin{bmatrix}
+    0.5 & 1 & 0.5\\
+    1 & -6 & 1\\
+    0.5 & 1 & 0.5
+  \end{bmatrix}
+  = \frac{1}{2}
+  \begin{bmatrix}
+    0.25 & 0.5 & 0.25\\
+    0.5 & -3 & 0.5\\
+    0.25 & 0.5 & 0.25
+  \end{bmatrix}
+  = \frac{1}{2} \Delta^{(9)}_h 
+\]
+The constant factor is consumed by the diffusion constant. We can now convolve $\Delta^{(9)}_h$ over the density matrices of $u$ and $v$ to approximate $\Delta u$ and $\Delta v$ and therefore calculate $\dot{u_n}$ and $\dot{v_n}$. We iterate using forward Euler integration as follows
+\begin{align*}
+    u_{n+1} &= u_n + \dot{u}(u_n, v_n)\ \delta t\\
+    v_{n+1} &= v_n + \dot{v}(u_n, v_n)\ \delta t
+\end{align*}
+There are a number of constants that affect the behaviour of simulation. These include the diffusion constants, time delta, initial densities, feed rate, and kill rate. We pick a diffusion constant ratio of $D_u = 2D_v$ as this ratio has been shown, in the literature, to elicit complex behaviour[CITE]. The temporal resolution can be adjusted using the time delta $\delta t$. Through spot checks, we find values in the range $0.5$ to $1.0$ produce interesting behaviour in a reasonable number of epochs (i.e. under 10000). The remaining constants are parameters of the simulation passed in by the calling Chromosome class. As before, we convolve with wrap boundaries to ensure periodic boundary conditions and we cache states during simulation to reduce computation time. When visualising state, we set the colour of a cell based on the ratio of densities of $u$ and $v$ inside it.\\
+
+The simulator allows for two different initialisation settings. Both have a background state populated entirely of reactant ($u=1$, $v = 0$) and apply perturbations of ($u=\frac{1}{2}$, $v = \frac{1}{4}$). The \textit{patch} setting, in the style of Pearson\cite{pearson1993complex}, creates a square perturbation with $\pm1\%$ Gaussian noise. The \textit{splatter} setting produces $n$ perturbation "seeds" of size $3\times3$. The patch setting tends to unfold in a reproducible manner as the only source of randomness in the small Gaussian noise. The splatter setting is much more unpredictable as the final outcome is dependent on the initial seed locations and way in which they collide.
+\begin{figure}[!h]
+\centering
+            \subfloat[$t = 0$]{\includegraphics[width=.3\textwidth]{images/patch/1.png}}\hfill
+            \subfloat[$t = 1000$]{\includegraphics[width=.3\textwidth]{images/patch/2.png}}\hfill
+            \subfloat[$t = 2000$]{\includegraphics[width=.3\textwidth]{images/patch/3.png}}\hfill
+            \subfloat[$t = 3000$]{\includegraphics[width=.3\textwidth]{images/patch/4.png}}\hfill
+            \subfloat[$t = 4000$]{\includegraphics[width=.3\textwidth]{images/patch/5.png}}\hfill
+            \subfloat[$t = 5000$]{\includegraphics[width=.3\textwidth]{images/patch/6.png}}\hfill
+            \caption{Gray-Scott simulation under \textit{patch} initialisation ($f = 0.03$, $k = 0.06$)}
+\label{fig:patch}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+            \subfloat[$t = 0$]{\includegraphics[width=.3\textwidth]{images/splatter/1.png}}\hfill
+            \subfloat[$t = 200$]{\includegraphics[width=.3\textwidth]{images/splatter/2.png}}\hfill
+            \subfloat[$t = 500$]{\includegraphics[width=.3\textwidth]{images/splatter/3.png}}\hfill
+            \subfloat[$t = 1000$]{\includegraphics[width=.3\textwidth]{images/splatter/4.png}}\hfill
+            \subfloat[$t = 2000$]{\includegraphics[width=.3\textwidth]{images/splatter/5.png}}\hfill
+            \subfloat[$t = 5000$]{\includegraphics[width=.3\textwidth]{images/splatter/6.png}}\hfill
+            \caption{Gray-Scott simulation under \textit{splatter} initialisation ($f = 0.03$, $k = 0.06$)}
+\label{fig:splatter}
+\end{figure}
+
+\subsection{Chromosome}
+The chromosome is made up of two vectors, \textit{state} and \textit{control}. The state vector contains the parameters of model, feed and kill rate, as two real numbers, $f$ and $k$. The control vector encodes the volatility of these parameters as real numbers $df$ and $dk$. The toolkit allows the user to initialise chromosomes in one of two ways. The first choice is to sample a random uniform distribution with $0.0 \leq f \leq 0.30$ and $0.0 \leq k \leq 0.08$. The boundaries are based on the nontrivial region depicted in Munafo's phase diagram in Figure~\ref{fig:xmorphia}. The second choice is to sample pairs close to the saddle-node bifurcation threshold $f = f(4+k)^2$ depicted as the solid line in Figure~\ref{fig:pearsons-threshold}. Values of $f$ is picked uniformly between the roots of the bifurcation parabola, $0.0$ and $0.25$. $k$ is the positive solution of this parabola $k = \frac{1}{2}\sqrt{f} - f$ perturbed by $\pm 10\%$ Gaussian noise and truncated at $k = 0$.\\
+
+\subsection{Fitness and Selection}
+Once the population of chromosomes has been initialised, we consider an objective function. As before, we simulate a true CA based on the goal parameters maintain a surrogate cellular automata which  We explore these in turn.
+Recombination also comes in two flavours, \textit{plus} and \textit{comma}. The two algorithms implemented are an evolutionary strategy and a genetic algorithm.
+
+\subsection{Evolutionary Strategy}
+Evolutionary strategies (ES) are black-box optimization algorithms suited to continuous domains. They sample new candidates from a multivariate normal distribution whose parameters are changed over generations to converge around an optimum. 
+
+\subsection{Genetic Algorithm}
+The genetic algorithm performs crossover, recombination, mutation, and selection. The crossover method used is a combination of uniform crossover and blended crossover (BLX-$\alpha$). Uniform crossover is used on the state property of each chromosome. For two parents $x$ and $y$, a property of a child $c$ is defined by a value sampled uniformly from the interval between the corresponding property in the parents.
+\begin{align*}
+  c_f &\sim \mathit{Uniform}(\min(x_f, y_f),\ \max(x_f, y_f))\\
+  c_k &\sim \mathit{Uniform}(\min(x_k, y_k),\ \max(x_k, y_k))
+\end{align*}
+However, the control property is different due to the BLX-$\alpha$ algorithm which combines exploration and exploitation. A traditional crossover algorithm seeks to exploit generational knowledge to create novel candidate solutions by deriving a child state interior to the boundaries defined by the parents' states. For example, consider a single-point crossover on a binary string. If both parents have a 1 in the $i^{th}$ position bit, it is impossible for the child to have a 0 in the $i^{th}$ bit. In this sense, BLX-$\alpha$ is not pure crossover as it explores areas of the search outside the parent-defined borders.
+
+\begin{definition}[Blended Crossover (BLX-$\alpha$)]
+We define the blended crossover of real numbers $x_i$, $y_i \in [a_i, b_i]$ with $x_i < y_i$ and parameter $\alpha \in \mathbb{R^+}$ as a sample\\
+\[
+  BLX(x_i, y_i, \alpha) \sim \mathit{Uniform}(x_i - \alpha(y_i - x_i),\  y_i + \alpha(y_i - x_i))
+\]
+\end{definition}
+The hyperparameter $\alpha$ defines how much exploration the operator undertakes as a fraction of the difference between the parent states. In the special case $\alpha = 0$ this is another uniform crossover and when $\alpha$ is maximised, this approaches a uniform mutation operator where the value of a child gene is a uniform sample across the predefined gene boundaries $a_i$ and $b_i$.
+
+\begin{figure}[!h]
+\centering
+    \includegraphics[width=.5\textwidth]{images/blx.png}
+    \caption{Blended Crossover \cite{abido2006multiobjective}}
+\label{fig:blx-alpha}
+\end{figure}
+
+To ensure exploration is occurring for state properties too, shrink mutation is applied. This is where Gaussian noise is added to $f$ and $k$. The variance of this noise is dictated by the control property 
+
+
+
+
+
+\section{Software Engineering Design}
+
+\section{Evaluation}

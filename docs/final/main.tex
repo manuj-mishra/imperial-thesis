@@ -21,6 +21,7 @@
 \usepackage{amsthm, thmtools}
 \usepackage{xfrac}
 \usepackage{multicol}
+\usepackage{derivative}
 \usepackage[numbers]{natbib}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
@@ -35,6 +36,10 @@
 \author{Manuj Mishra}
 
 \begin{document}
+\renewcommand{\listtheoremname}{List of Definitions}
+\renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
+\newcommand{\round}[1]{\ensuremath{\lfloor#1\rceil}}
+
 \input{title/title.tex}
 
 \begin{abstract}
@@ -42,11 +47,9 @@
 \end{abstract}
 
 \renewcommand{\abstractname}{Acknowledgements}
-\renewcommand{\listtheoremname}{List of Definitions}
-\renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
-\newcommand{\round}[1]{\ensuremath{\lfloor#1\rceil}}
+
 \begin{abstract}
-[Acknowledgements here]
+\input{pages/acknowledgements}
 \end{abstract}
 
 \tableofcontents
@@ -60,8 +63,8 @@
 \input{chapters/introduction}
 \input{chapters/preliminaries}
 \input{chapters/related_works}
-\input{chapters/method}
-\input{chapters/evaluation}
+\input{chapters/lifelike}
+\input{chapters/gray-scott}
 \input{chapters/conclusion}
 \input{chapters/ethics}
 
