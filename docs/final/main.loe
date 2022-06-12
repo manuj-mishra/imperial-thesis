@@ -1,15 +1,15 @@
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~2.1\else \numberline {2.1}Definition\fi \thmtformatoptarg {Cellular Automaton}}{7}{definition.2.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.2\else \numberline {2.2}Definition\fi \thmtformatoptarg {Inner-Totalistic}}{8}{definition.2.2}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.3\else \numberline {2.3}Definition\fi \thmtformatoptarg {Outer-Totalistic}}{9}{definition.2.3}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.4\else \numberline {2.4}Definition\fi \thmtformatoptarg {Birth-Survival notation}}{9}{definition.2.4}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.5\else \numberline {2.5}Definition\fi \thmtformatoptarg {Reaction-Diffusion System}}{11}{definition.2.5}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.1\else \numberline {2.1}Definition\fi \thmtformatoptarg {Cellular Automaton}}{8}{definition.2.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.2\else \numberline {2.2}Definition\fi \thmtformatoptarg {Inner-Totalistic}}{9}{definition.2.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.3\else \numberline {2.3}Definition\fi \thmtformatoptarg {Outer-Totalistic}}{10}{definition.2.3}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.4\else \numberline {2.4}Definition\fi \thmtformatoptarg {Birth-Survival notation}}{10}{definition.2.4}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.5\else \numberline {2.5}Definition\fi \thmtformatoptarg {Reaction-Diffusion System}}{12}{definition.2.5}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~3.1\else \numberline {3.1}Definition\fi \thmtformatoptarg {Majority Problem}}{15}{definition.3.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~3.2\else \numberline {3.2}Definition\fi \thmtformatoptarg {GKL Classifier}}{15}{definition.3.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~3.1\else \numberline {3.1}Definition\fi \thmtformatoptarg {Majority Problem}}{16}{definition.3.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~3.2\else \numberline {3.2}Definition\fi \thmtformatoptarg {GKL Classifier}}{16}{definition.3.2}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~4.1\else \numberline {4.1}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 1}}{26}{definition.4.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~4.2\else \numberline {4.2}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 2}}{27}{definition.4.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~4.1\else \numberline {4.1}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 1}}{27}{definition.4.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~4.2\else \numberline {4.2}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 2}}{28}{definition.4.2}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~5.1\else \numberline {5.1}Definition\fi \thmtformatoptarg {Gray-Scott Model}}{31}{definition.5.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~5.2\else \numberline {5.2}Definition\fi \thmtformatoptarg {Blended Crossover (BLX-$\alpha $)}}{34}{definition.5.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~5.1\else \numberline {5.1}Definition\fi \thmtformatoptarg {Gray-Scott Model}}{32}{definition.5.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~5.2\else \numberline {5.2}Definition\fi \thmtformatoptarg {Blended Crossover (BLX-$\alpha $)}}{35}{definition.5.2}%
