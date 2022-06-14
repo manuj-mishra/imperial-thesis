@@ -47,21 +47,25 @@ class Population:
 
   def crossover(self):
     children = []
-    for _ in range(self.child_n // 2):
+    while len(children) < self.child_n:
       cpoint = random.randint(1, CHROMOSOME_LEN - 1)
       parents = np.random.choice(self.inds, 2, replace=False)
       a, b = parents[0].get_rstring(), parents[1].get_rstring()
       left_a, right_a = a[:cpoint], a[cpoint:]
       left_b, right_b = b[:cpoint], b[cpoint:]
       child1 = Rulestring.from_rstring(int(left_a + right_b, 2))
+      if child1.rstring != 0:
+        children.append(child1)
       child2 = Rulestring.from_rstring(int(left_b + right_a, 2))
-      children.append(child1)
-      children.append(child2)
+      if child2.rstring != 0:
+        children.append(child2)
     self.inds = np.append(self.inds, np.array(children))
 
   def mutate(self):
     for ind in self.inds[self.elite_n//5:]:
       ind.mutate(self.mutation)
+      while ind.rstring == 0:
+        ind.mutate(self.mutation)
 
   def loss(self):
     true = MimicCA.empty(self.trueB, self.trueS)

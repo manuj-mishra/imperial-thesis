@@ -3,7 +3,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 
 if __name__ == "__main__":
-  df = pd.read_csv('report/life-nothing.csv')
+  df = pd.read_csv('../EVALUATION/lifelike/life-nothing.csv')
   g = sns.scatterplot(data=df, x="epoch", y="vals", s = 20, marker='x')
   g.set(xlabel='Epoch', ylabel='Integer value of chromosome')
   plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))

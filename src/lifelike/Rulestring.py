@@ -16,8 +16,8 @@ class Rulestring:
 
   @classmethod
   def from_rstring(cls, rstring):
-    b = binary.ones(rstring >> (CHROMOSOME_LEN // 2))
-    s = binary.ones(rstring)
+    # b= binary.ones(rstring >> (CHROMOSOME_LEN // 2))
+    b, s = binary.ones(rstring)
     return cls(rstring, b, s)
 
   @classmethod
@@ -31,7 +31,7 @@ class Rulestring:
 
   @classmethod
   def random_decimal(cls):
-    rstring = random.randint(0, 2 ** CHROMOSOME_LEN - 1)
+    rstring = random.randint(1, 2 ** CHROMOSOME_LEN - 1)
     return Rulestring.from_rstring(rstring)
 
   def get_rstring(self):
@@ -39,8 +39,8 @@ class Rulestring:
 
   def set_rstring(self, rstring):
     self.rstring = rstring
-    self.b = binary.ones(rstring >> (CHROMOSOME_LEN // 2))
-    self.s = binary.ones(rstring)
+    # self.b = binary.ones(rstring >> (CHROMOSOME_LEN // 2))
+    self.b, self.s = binary.ones(rstring)
 
   def mutate(self, p):
     mask = 0

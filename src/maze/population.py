@@ -9,13 +9,12 @@ from maze.rulestring import Rulestring
 EVAL_ITER = 5
 
 class Population:
-  def __init__(self, pop_size, path_len_bias, elitism, mutation, novelty):
+  def __init__(self, pop_size, path_len_bias, elitism, mutation):
     self.inds = np.array([Rulestring() for _ in range(pop_size)])
     self.pop_size = pop_size
     self.path_len_bias = path_len_bias
     self.elitism = elitism
     self.mutation = mutation
-    self.novelty = novelty
     self.elite_n = math.floor(elitism * pop_size)
     self.child_n = pop_size - self.elite_n
 
@@ -27,7 +26,7 @@ class Population:
     self.crossover()
 
     # Mutate
-    self.mutate(self.elite_n // 5, self.novelty)
+    self.mutate(self.elite_n // 5)
     # best_diversity = 0
     # best_mutation = self.inds.copy()
     # for _ in range(self.novelty):
@@ -62,21 +61,9 @@ class Population:
     self.inds = np.append(self.inds, np.array(children))
 
 
-  def mutate(self, non_mutate_n, diversity_n):
-    if diversity_n == 1:
-      for ind in self.inds[non_mutate_n:]:
-        ind.mutate(self.mutation)
-      return
-
+  def mutate(self, non_mutate_n):
     for ind in self.inds[non_mutate_n:]:
-      original = Rulestring(ind.rstring)
-      diversity_score = 0
-      for _ in range(diversity_n):
-        rstring = original.mutate(self.mutation)
-        d = self.diversity_to(rstring)
-        if d > diversity_score:
-          diversity_score = d
-          ind.rstring = rstring
+      ind.mutate(self.mutation)
 
   def evaluate(self):
     dead_ends = []
@@ -93,11 +80,12 @@ class Population:
     dead_ixs = np.argsort(dead_ends)
     path_ixs = np.argsort(path_lens)
 
-    dead_ranks = np.empty(n)
-    dead_ranks[dead_ixs] = np.linspace(0, 1, num=n)
-    path_ranks = np.empty(n)
-    path_ranks[path_ixs] = np.linspace(0, 1, num=n)
-    scores = ((1 - self.path_len_bias) * dead_ranks) + (self.path_len_bias * path_ranks)
+    # dead_ranks = np.empty(n)
+    # dead_ranks[dead_ixs] = np.linspace(0, 1, num=n)
+    # path_ranks = np.empty(n)
+    # path_ranks[path_ixs] = np.linspace(0, 1, num=n)
+    scores = ((1 - self.path_len_bias) * dead_ixs) + (self.path_len_bias * path_ixs)
+    # scores = ((1 - self.path_len_bias) * dead_ranks) + (self.path_len_bias * path_ranks)
     scores = np.where(path_lens == 0, 0, scores)
     return scores, np.mean(dead_ends[dead_ends != 0]), np.mean(path_lens[path_lens != 0])
 

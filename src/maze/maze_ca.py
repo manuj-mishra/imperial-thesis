@@ -55,7 +55,7 @@ class MazeCA:
     folder, ax, M_copy = None, None, None
     if media:
       folder = "temp/reg_frames"
-      ax = init_image()
+      fig, ax = init_image()
       M_copy = self.X.copy()
 
     cells = dict()
@@ -106,7 +106,7 @@ class MazeCA:
     folder, ax = None, None
     if media:
       folder = "temp/mer_frames"
-      ax = init_image()
+      fig, ax = init_image()
     curr = regions[1]
     for i in range(GRID_SIZE ** 2):
       fringe = set().union(*(near(c[0], c[1], self.nx) for c in curr)) - curr
@@ -142,7 +142,7 @@ class MazeCA:
     folder, ax, M_copy = None, None, None
     if media:
       folder = "temp/eva_frames"
-      ax = init_image()
+      fig, ax = init_image()
       M_copy = self.X.copy()
 
     q = deque([(self.nx - 1, 0, 0)])
