@@ -3,6 +3,7 @@ import random
 
 import numpy as np
 
+from lifelike.constants import CHROMOSOME_LEN
 from maze.rulestring import Rulestring
 
 EVAL_ITER = 5
@@ -48,15 +49,18 @@ class Population:
 
   def crossover(self):
     children = []
-    for _ in range(self.child_n):
-      cpoint = random.randint(1, 15)
+    for _ in range(self.child_n // 2):
+      cpoint = random.randint(1, CHROMOSOME_LEN - 1)
       parents = np.random.choice(self.inds, 2, replace=False)
-      a, b = parents[0], parents[1]
-      left = a.get_rstring()[:cpoint]
-      right = b.get_rstring()[cpoint:]
-      child = Rulestring(int(left + right, 2))
-      children.append(child)
+      a, b = parents[0].get_rstring(), parents[1].get_rstring()
+      left_a, right_a = a[:cpoint], a[cpoint:]
+      left_b, right_b = b[:cpoint], b[cpoint:]
+      child1 = Rulestring(int(left_a + right_b, 2))
+      child2 = Rulestring(int(left_b + right_a, 2))
+      children.append(child1)
+      children.append(child2)
     self.inds = np.append(self.inds, np.array(children))
+
 
   def mutate(self, non_mutate_n, diversity_n):
     if diversity_n == 1:
@@ -72,7 +76,7 @@ class Population:
         d = self.diversity_to(rstring)
         if d > diversity_score:
           diversity_score = d
-          ind.set_rstring(rstring)
+          ind.rstring = rstring
 
   def evaluate(self):
     dead_ends = []

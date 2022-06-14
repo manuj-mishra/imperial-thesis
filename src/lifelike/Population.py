@@ -8,7 +8,9 @@ from lifelike.constants import CHROMOSOME_LEN
 
 
 class Population:
-  def __init__(self, pop_size, elitism, mutation, trueB, trueS, ics, init_method, hyperparams):
+  def __init__(self, pop_size, elitism, mutation, trueB, trueS, ics, init_method = 'binary', hyperparams=None):
+    if hyperparams is None:
+      hyperparams = {"max_step": 5, "eval_step": 10}
     self.pop_size = pop_size
     self.elitism = elitism
     self.mutation = mutation
@@ -24,7 +26,7 @@ class Population:
       self.inds = np.array([Rulestring.random_decimal() for _ in range(pop_size)])
     else:
       raise Exception("Unsupported init_method for Population")
-    self.visited = set(self.inds)
+    self.visited = set()
     loss = self.loss()
     self.update(loss)
 
@@ -58,7 +60,7 @@ class Population:
     self.inds = np.append(self.inds, np.array(children))
 
   def mutate(self):
-    for ind in self.inds[self.elite_n:]:
+    for ind in self.inds[self.elite_n//5:]:
       ind.mutate(self.mutation)
 
   def loss(self):

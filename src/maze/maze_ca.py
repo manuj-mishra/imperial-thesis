@@ -35,7 +35,7 @@ class MazeCA:
     folder, ax = None, None
     if media:
       folder = "temp/gen_frames"
-      ax = init_image()
+      fig, ax = init_image()
     frames_per_image = 1
 
     for i in range(GEN_ITERS):

@@ -2,7 +2,7 @@ import random
 import numpy as np
 from scipy.signal import convolve2d
 
-GRID_SIZE = 13
+GRID_SIZE = 32
 
 
 class CA:
@@ -43,3 +43,6 @@ class MimicCA(CA):
   def step_from(self, X, steps=1):
     self.X = X
     return self.step(steps)
+
+if __name__ == "__main__":
+  ca = CA.random({6, 8}, {2, 3})

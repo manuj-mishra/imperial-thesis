@@ -81,13 +81,17 @@ class Population:
             a, b = parents[0], parents[1]
             af, ak = a.state[0], a.state[1]
             bf, bk = b.state[0], b.state[1]
+
+            leftf, rightf = sorted((af, bf))
+            leftk, rightk = sorted((ak, bk))
+
             adf, adk = a.control[0], a.control[1]
             bdf, bdk = b.control[0], b.control[1]
             deltF = abs(af - bf)
             deltK = abs(ak - bk)
             child = Chromosome(
-                state=np.array([af if random.random() < 0.5 else bf,
-                                ak if random.random() < 0.5 else bk]),
+                state=np.array([np.random.uniform(leftf, rightf),
+                                np.random.uniform(leftk, rightk)]),
                 control=np.array([np.random.uniform(low=max(min(adf, bdf) - alpha * deltF, 0),
                                                     high=max(adf, bdf) + alpha * deltF),
                                   np.random.uniform(low=max(min(adk, bdk) - alpha * deltK, 0),

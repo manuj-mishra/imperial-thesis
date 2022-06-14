@@ -7,7 +7,7 @@ import pandas as pd
 from lifelike.Population import Population
 from lifelike.constants import CHROMOSOME_LEN
 from util import binary
-
+#HYPERPARAMETER TUNING
 if __name__ == "__main__":
   for eval_step in (1, 5, 10):
     for max_step in np.logspace(0, 2, num=5):

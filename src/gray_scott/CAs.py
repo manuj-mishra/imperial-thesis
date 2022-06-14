@@ -5,11 +5,11 @@ from scipy.signal import convolve2d
 from util.media import init_image, save_image, clear_temp_folders, make_files_clustered
 
 GRID_SIZE = 101
-RUN_ITERS = 5000
+RUN_ITERS = 5001
 dt = 1.0  # Time delta
-dA = 1.0
-dB = dA/2
-lapl = np.array([[0.05, 0.2, 0.05], [0.2, -1.0, 0.2], [0.05, 0.2, 0.05]])
+dA = 0.3
+dB = dA / 2
+lapl = np.array([[0.25, 0.5, 0.25], [0.5, -3.0, 0.5], [0.25, 0.5, 0.25]])
 eps = 0.00001
 
 
@@ -24,9 +24,12 @@ class CA:
   def patch(cls, f, k, seed_size=5):
     A = np.ones((GRID_SIZE, GRID_SIZE))
     B = np.zeros((GRID_SIZE, GRID_SIZE))
+    A[int(GRID_SIZE / 2) - int(seed_size / 2):int(GRID_SIZE / 2) + int(seed_size / 2) + 1,
+    int(GRID_SIZE / 2) - int(seed_size / 2):int(GRID_SIZE / 2) + int(seed_size / 2) + 1] \
+      = np.random.normal(loc=0.5, scale=0.01, size=(seed_size, seed_size))
     B[int(GRID_SIZE / 2) - int(seed_size / 2):int(GRID_SIZE / 2) + int(seed_size / 2) + 1,
-    int(GRID_SIZE / 2) - int(seed_size / 2):int(GRID_SIZE / 2) + int(seed_size / 2) + 1] = np.ones(
-      (seed_size, seed_size))
+    int(GRID_SIZE / 2) - int(seed_size / 2):int(GRID_SIZE / 2) + int(seed_size / 2) + 1] \
+      = np.random.normal(loc=0.25, scale=0.01, size=(seed_size, seed_size))
     return cls(f, k, A, B)
 
   @classmethod
@@ -48,12 +51,12 @@ class CA:
   def step(self, steps=1):
     for _ in range(steps):
       A_new = self.A + (
-          dA * convolve2d(self.A, lapl, mode='same', boundary='fill', fillvalue=0)
+          dA * convolve2d(self.A, lapl, mode='same', boundary='wrap', fillvalue=0)
           - (self.A * self.B * self.B)
           + (self.f * (1 - self.A))
       ) * dt
       B_new = self.B + (
-          dB * convolve2d(self.B, lapl, mode='same', boundary='fill', fillvalue=0)
+          dB * convolve2d(self.B, lapl, mode='same', boundary='wrap', fillvalue=0)
           + (self.A * self.B * self.B)
           - ((self.f + self.k) * self.B)
       ) * dt
@@ -88,7 +91,7 @@ class CA:
 
     if media:
       make_files_clustered(final_state=self.state(), fname=f"gen_{fname}", rname=rname)
-      clear_temp_folders()
+      # clear_temp_folders()
       plt.close(fig)
     return self.state()
 
@@ -105,8 +108,7 @@ class MimicCA(CA):
     self.B = B
     return self.step(steps)
 
+
 if __name__ == "__main__":
   ca = CA.splatter(f=0.03, k=0.06)
   ca.run(rname='test', media=True)
-
-

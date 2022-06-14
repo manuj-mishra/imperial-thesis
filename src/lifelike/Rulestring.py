@@ -8,10 +8,6 @@ from lifelike.CAs import CA, GRID_SIZE
 from lifelike.constants import CHROMOSOME_LEN
 from util import binary
 
-# EVAL_ITERS = 10     # Number of CAs simulated per rulestring
-EVAL_STEPS = 10     # Number of steps evaluated per CA
-MAX_STEP_SIZE = 5   # Max size of a single CA step
-
 class Rulestring:
   def __init__(self, rstring, b, s):
     self.rstring = rstring
@@ -65,8 +61,8 @@ class Rulestring:
           step_size = random.randint(1, hyperparams["max_step"])
           true_active = true.step_from(pred.X, step_size)
           pred_active = pred.step(step_size)
-          # losses.append(np.mean(pred.X ^ true.X))
-          losses.append(self.three_res_loss(pred.X, true.X))
+          losses.append(np.mean(pred.X ^ true.X))
+          # losses.append(self.three_res_loss(pred.X, true.X))
           if not true_active and not pred_active:
             break
     return np.mean(losses)
@@ -78,4 +74,4 @@ class Rulestring:
     mid = np.mean(convolve2d(a, kmid, mode='valid').round().astype('bool') ^ convolve2d(b, kmid, mode='valid').round().astype('bool'))
     low = (a.sum() < a.size) ^ (b.sum() < b. size)
     return (low + mid + high) / 3
-
+    # return mid

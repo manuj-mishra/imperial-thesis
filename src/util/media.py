@@ -7,7 +7,7 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from matplotlib.colors import ListedColormap
 
-root = "gray_scott"
+root = "."
 
 def make_files_clustered(final_state, fname, rname):
   frame_folder = fname[:3] + "_frames"

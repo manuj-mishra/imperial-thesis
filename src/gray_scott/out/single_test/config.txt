@@ -1,0 +1,5 @@
+Experiment single_test
+Algorithm GA
+Recombination PLUS
+Selection LINEAR
+InitialisationRANDOMSeed SPLATTER

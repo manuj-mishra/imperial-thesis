@@ -10,17 +10,22 @@ class Rulestring:
     if rstring is None:
       rstring = random.randint(0, 2 ** 16 - 1)
 
-    self.rstring = rstring
+    self._rstring = rstring
     self.b = self._ones(rstring >> 8)
     self.s = self._ones(rstring)
+
+  @property
+  def rstring(self):
+    return self._rstring
 
   def get_rstring(self):
-    return format(self.rstring, 'b').zfill(16)
+    return format(self._rstring, 'b').zfill(16)
 
-  def set_rstring(self, rstring):
-    self.rstring = rstring
+  @rstring.setter
+  def rstring(self, rstring):
     self.b = self._ones(rstring >> 8)
     self.s = self._ones(rstring)
+    self._rstring = rstring
 
   def _ones(self, rstring):
     ixs = []
@@ -38,7 +43,7 @@ class Rulestring:
       mask <<= 1
 
     mask >>= 1
-    self.set_rstring(self.rstring ^ mask)
+    self.rstring = self.rstring ^ mask
     return self.rstring
 
   def evaluate(self, n_iters):

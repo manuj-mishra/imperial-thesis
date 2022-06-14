@@ -31,7 +31,7 @@ def run_experiment(path_len_bias, pop_size=100, elitism=0.5, mutation=0.05, nove
 
 
 def save_experiments(pop, elite_scores, mean_paths, mean_deads):
-  exp_n = f"bias{pop.size_bias * 100}_pop{pop.pop_size}_el{pop.elitism * 100}_mut{pop.mutation * 100}"
+  exp_n = f"pop{pop.pop_size}_el{pop.elitism * 100}_mut{pop.mutation * 100}"
   for rulestring in pop.inds[:(pop.elite_n//5)]:
     rulestring.b.sort()
     rulestring.s.sort()

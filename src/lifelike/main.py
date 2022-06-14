@@ -1,8 +1,13 @@
 import csv
 import os
 import time
+import random
+
 import numpy as np
 from matplotlib import pyplot as plt
+from pandas import DataFrame
+
+from lifelike.CAs import GRID_SIZE
 from lifelike.Population import Population
 from lifelike.constants import CHROMOSOME_LEN
 from alive_progress import alive_bar
@@ -40,13 +45,21 @@ def convergence_experiment(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITI
 
 def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE, mutation=MUTATION_RATE,
                    epoch_n=ACCURACY_EPOCH_N):
-  pop = Population(pop_size, elitism, mutation, trueB, trueS)
+  # with open('ics.npy', 'rb') as icfile:
+  #   ics = np.load(icfile)[:100]
+  ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for i in range(10)]
+  print(len(ics), "ics")
+  pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, init_method='decimal')
   accuracies = [pop.evaluate(pop.loss())]
   unique_inds = [pop.num_unique_inds()]
+  pop_history = {"epoch":[0]*pop.elite_n, "vals": [ind.rstring for ind in pop.inds]}
   for epoch in range(epoch_n):
+    print("epoch", epoch)
     accuracies.append(pop.iterate())
     unique_inds.append(pop.num_unique_inds())
-    yield
+    pop_history["epoch"].extend([epoch + 1] * pop.elite_n)
+    pop_history["vals"].extend([ind.rstring for ind in pop.inds])
+    # yield
 
   name = f"{''.join(str(i) for i in trueB)}_{''.join(str(i) for i in trueS)}"
   dir = f"out/{name}(pop {pop_size}, ep {epoch_n})"
@@ -57,25 +70,31 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
     write.writerow([f"{e.b}_{e.s}" for e in pop.inds])
     write.writerow([e.get_rstring() for e in pop.inds])
 
-  epochs = [i for i in range(0, epoch_n + 1)]
-  fig, ax1 = plt.subplots()
+  history = DataFrame.from_dict(pop_history)
+  history.to_csv(f'{dir}/history.csv')
 
-  color = 'tab:green'
-  ax1.set_xlabel('Epoch')
-  ax1.set_ylabel('Fitness')
-  ax1.plot(epochs, accuracies, color=color)
-  ax1.tick_params(axis='y', labelcolor=color)
+  fit_div = DataFrame.from_dict({"fitness": accuracies, "num_inds": unique_inds})
+  fit_div.to_csv(f'{dir}/fit-div.csv')
 
-  color = 'tab:red'
-  ax2 = ax1.twinx()
-  ax2.set_ylabel('Number of unique individuals')
-  ax2.set_ylim([0, pop_size])
-  ax2.plot(epochs, unique_inds, color=color)
-  ax2.tick_params(axis='y', labelcolor=color)
-
-  fig.tight_layout()
-  plt.savefig(f'{dir}/fitness-diversity.png', bbox_inches='tight')
-  return np.mean(accuracies[-1 * (ACCURACY_EPOCH_N // 10):])
+  # epochs = [i for i in range(0, epoch_n + 1)]
+  # fig, ax1 = plt.subplots()
+  #
+  # color = 'tab:green'
+  # ax1.set_xlabel('Epoch')
+  # ax1.set_ylabel('Fitness')
+  # ax1.plot(epochs, accuracies, color=color)
+  # ax1.tick_params(axis='y', labelcolor=color)
+  #
+  # color = 'tab:red'
+  # ax2 = ax1.twinx()
+  # ax2.set_ylabel('Number of unique individuals')
+  # ax2.set_ylim([0, pop_size])
+  # ax2.plot(epochs, unique_inds, color=color)
+  # ax2.tick_params(axis='y', labelcolor=color)
+  #
+  # fig.tight_layout()
+  # plt.savefig(f'{dir}/fitness-diversity.png', bbox_inches='tight')
+  # return np.mean(accuracies[-1 * (ACCURACY_EPOCH_N // 10):])
 
 
 def test_density_accuracy():
@@ -142,7 +161,8 @@ def test_initial_conds(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_R
 
 
 if __name__ == "__main__":
-  experiments = (CHROMOSOME_LEN + 1) * EXPERIMENT_N
-  with alive_bar(experiments, force_tty=True) as bar:
-    for _ in test_density_accuracy():
-      bar()
+  # experiments = (CHROMOSOME_LEN + 1) * EXPERIMENT_N
+  # with alive_bar(experiments, force_tty=True) as bar:
+  #   for _ in test_density_accuracy():
+  #     bar()
+  test_single_GA({3}, {2, 3})
