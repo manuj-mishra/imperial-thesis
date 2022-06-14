@@ -149,11 +149,11 @@ Turing patterns arise out of two component reaction-diffusion systems. One speci
 \begin{equation}\label{eq:gs-main}
   U + 2V \rightarrow V
 \end{equation}
-To compensate for $U$ being consumed The system replenished $U$ and removes $V$ by rates controlled with feed and kill factors $f$ and $k$ respectively. The substances diffuse over the grid at rates $D_u$ and $D_v$. The system is characterised by two equations
+To compensate for $U$ being consumed The system replenished $U$ and removes $V$ by rates controlled with feed and kill factors $f$ and $k$ respectively. The substances diffuse over the grid at rates $r_u$ and $r_v$. The system is characterised by two equations
 \begin{definition}[Reaction-Diffusion System] \label{def:reaction-diffusion}
 \begin{align} 
-  \label{eq:gs-u} \pdv{u}{t} &= -uv^2 + f(1-u) + D_u \nabla^2 u\\
-  \label{eq:gs-v} \pdv{v}{t} &= uv^2 - (f+k)v + D_v \nabla^2 v
+  \label{eq:gs-u} \pdv{u}{t} &= -uv^2 + f(1-u) + r_u \nabla^2 u\\
+  \label{eq:gs-v} \pdv{v}{t} &= uv^2 - (f+k)v + r_v \nabla^2 v
 \end{align}
 \end{definition}
 $u$ and $v$ represent the densities of each component in a given cell. $\dot{u}$ and $\dot{v}$ represent the change in these densities. Each density has three sources of change described by the three terms on the right hand side of each equation. The first term describes the reaction \ref{eq:gs-main} where 1 $U$ molecule reacts with 2 $V$ molecules which is why the term is a product of $u^1$ and $v^2$. The second term represents external inputs and outputs. In \ref{eq:gs-u}, the feed rate is multiplied by $1-u$ so that replenishment depends on current density. In \ref{eq:gs-v}, $v$ is multiplied by $-(F-k)$ so that $V$ is removed faster than $U$ is added. Finally, the third term describes the change in each density due to diffusion using the 2D Laplacian to get the difference between a cell's current state and the average of the neighbourhood cell states.\\
