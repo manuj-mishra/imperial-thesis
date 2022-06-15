@@ -10,7 +10,6 @@ from pandas import DataFrame
 from lifelike.CAs import GRID_SIZE
 from lifelike.Population import Population
 from lifelike.constants import CHROMOSOME_LEN
-from alive_progress import alive_bar
 
 # Repetition variables
 EXPERIMENT_N = 10  # Experiments per density evaluated

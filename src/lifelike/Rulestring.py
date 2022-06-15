@@ -88,10 +88,6 @@ class Rulestring:
     return (low + mid + high) / 3
     # return mid
 
-  def isvalid(self, negdict):
-    return not pd.isna(negdict[self.rstring])
-    # return not (pd.isna(negdict[self.rstring]) or negdict[self.rstring] < 0.4)
-
 # if __name__ == "__main__":
 #   # r = Rulestring.from_bs({1}, {})
 #   # true = MimicCA.empty({3}, {2, 3})

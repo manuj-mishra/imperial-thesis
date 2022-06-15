@@ -31,9 +31,6 @@ class Population:
     loss = self.loss()
     self.update(loss)
 
-    df = pd.read_csv('./negentropy.csv')
-    self.negdict = dict(zip(df.rstring, -1 * df.negentropy))
-
   def iterate(self):
     self.crossover()
     self.mutate()
@@ -58,18 +55,14 @@ class Population:
       left_a, right_a = a[:cpoint], a[cpoint:]
       left_b, right_b = b[:cpoint], b[cpoint:]
       child1 = Rulestring.from_rstring(int(left_a + right_b, 2))
-      if child1.isvalid(self.negdict):
-        children.append(child1)
+      children.append(child1)
       child2 = Rulestring.from_rstring(int(left_b + right_a, 2))
-      if child1.isvalid(self.negdict):
-        children.append(child2)
+      children.append(child2)
     self.inds = np.append(self.inds, np.array(children))
 
   def mutate(self):
     for ind in self.inds:
       ind.mutate(self.mutation)
-      while not ind.isvalid(self.negdict):
-        ind.mutate(self.mutation)
 
   def loss(self):
     true = MimicCA.empty(self.trueB, self.trueS)
