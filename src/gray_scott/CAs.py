@@ -4,7 +4,7 @@ from scipy.signal import convolve2d
 
 from util.media import init_image, save_image, clear_temp_folders, make_files_clustered
 
-GRID_SIZE = 101
+GRID_SIZE = 51
 RUN_ITERS = 5001
 dt = 1.0  # Time delta
 dA = 0.3

@@ -11,7 +11,7 @@ from lifelike.constants import CHROMOSOME_LEN
 class Population:
   def __init__(self, pop_size, elitism, mutation, trueB, trueS, ics, init_method = 'binary', hyperparams=None):
     if hyperparams is None:
-      hyperparams = {"max_step": 5, "eval_step": 10}
+      hyperparams = {"max_step": 1, "eval_step": 3}
     self.pop_size = pop_size
     self.elitism = elitism
     self.mutation = mutation
@@ -27,7 +27,7 @@ class Population:
       self.inds = np.array([Rulestring.random_decimal() for _ in range(pop_size)])
     else:
       raise Exception("Unsupported init_method for Population")
-    self.visited = set()
+    self.visited = set(self.inds)
     loss = self.loss()
     self.update(loss)
 

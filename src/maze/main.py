@@ -10,28 +10,22 @@ from maze.population import Population
 
 EPOCH_N = 10
 
-def run_experiment(path_len_bias, pop_size=100, elitism=0.5, mutation=0.05, epoch_n=EPOCH_N):
+def run_experiment(path_len_bias, pop_size=20, elitism=0.2, mutation=0.01, epoch_n=EPOCH_N):
   start_time = time.time()
-  # mean_deads = []
-  # mean_paths = []
+  mean_deads = []
+  mean_paths = []
   pop = Population(pop_size, path_len_bias, elitism, mutation)
   for epoch in range(epoch_n - 1):
     print("Epoch:", epoch + 1)
-    pop.iterate()
-    # mean_dead_ends, mean_path_lens = pop.iterate()
-    # mean_deads.append(mean_dead_ends)
-    # mean_paths.append(mean_path_lens)
+    mean_dead_ends, mean_path_lens = pop.iterate()
+    mean_deads.append(mean_dead_ends)
+    mean_paths.append(mean_path_lens)
 
-  # print("Epoch:", epoch_n)
   mean_dead_ends, mean_path_lens, elite_scores = pop.select()
-  train_time = time.time() - start_time
-  return mean_dead_ends, mean_path_lens, train_time
-  # mean_deads.append(mean_dead_ends)
-  # mean_paths.append(mean_path_lens)
-  # print(f"Training Time: {((time.time() - start_time) / epoch_n):.2f} s per epoch")
-  # save_experiments(pop, elite_scores, mean_paths, mean_deads)
-  #
-  # return np.mean(mean_deads[-1 * (EPOCH_N//10):]), np.mean(mean_paths[-1 * (EPOCH_N//10):])
+  mean_deads.append(mean_dead_ends)
+  mean_paths.append(mean_path_lens)
+  save_experiments(pop, elite_scores, mean_paths, mean_deads)
+  return mean_dead_ends, mean_path_lens
 
 
 def save_experiments(pop, elite_scores, mean_paths, mean_deads):
@@ -75,21 +69,37 @@ def save_experiments(pop, elite_scores, mean_paths, mean_deads):
 
 if __name__ == "__main__":
 
-  mean_deads = []
-  mean_paths = []
-  train_times = []
-  ids = []
-  for pop in (20, 50, 100):
-    for el in (0.1, 0.2, 0.5):
-      for mut in (0.01, 0.05, 0.1):
-        for ep in (10, 50, 100):
-          ids.append(f"pop{pop}_el{int(el * 100)}_mut{int(mut * 100)}_ep{int(ep*100)}")
-          mean_dead_ends, mean_path_lens, train_time = run_experiment(0.5, pop_size=pop, elitism=el, mutation=mut, epoch_n=ep)
-          mean_deads.append(mean_dead_ends)
-          mean_paths.append(mean_path_lens)
-          train_times.append(train_time)
-  df = DataFrame.from_dict({"id": ids, "d": mean_deads, "p":mean_paths, "t": train_times})
-  df.to_csv("maze_hyperparam.csv")
+  b = []
+  d = []
+  p = []
+  for bias in np.linspace(0.0, 100.0, num =11):
+    print(bias)
+    md, mp = run_experiment(bias)
+    b.append(bias)
+    d.append(md)
+    p.append(mp)
+
+  df = DataFrame.from_dict({"b": b, "d": d, "p": p})
+  df.to_csv("bias_tuning_hyp.csv")
+
+  # # HYPERPARAM EXPERIMENT:
+  # mean_deads = []
+  # mean_paths = []
+  # train_times = []
+  # ids = []
+  # for pop in (20, 50, 100):
+  #   for el in (0.1, 0.2, 0.5):
+  #     for mut in (0.01, 0.05, 0.1):
+  #       for ep in (10, 50, 100):
+  #         ids.append(f"pop{pop}_el{int(el * 100)}_mut{int(mut * 100)}_ep{int(ep*100)}")
+  #         mean_dead_ends, mean_path_lens, train_time = run_experiment(0.5, pop_size=pop, elitism=el, mutation=mut, epoch_n=ep)
+  #         mean_deads.append(mean_dead_ends)
+  #         mean_paths.append(mean_path_lens)
+  #         train_times.append(train_time)
+  # df = DataFrame.from_dict({"id": ids, "d": mean_deads, "p":mean_paths, "t": train_times})
+  # df.to_csv("maze_hyperparam.csv")
+
+  # # NOVELTY EXPERIMENT
   # N = 3
   # mean_dead = []
   # mean_path = []

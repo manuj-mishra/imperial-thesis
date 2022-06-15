@@ -7,7 +7,7 @@ from gray_scott.CAs import CA
 from gray_scott.Population import Population
 from util.media import create_conv_gif
 
-root = 'gray_scott'
+root = '.'
 
 # Repetition variables
 ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
@@ -40,8 +40,8 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
         ax.scatter(true_k, true_f, c='r')
         ax.set_xlabel("Kill")
         ax.set_ylabel("Feed")
-        ax.set_xlim([-0.01, 0.08])
-        ax.set_ylim([-0.01, 0.30])
+        ax.set_xlim([-0.01, 0.30])
+        ax.set_ylim([-0.01, 0.08])
         plt.savefig(f'{root}/temp/conv_frames/{epoch}.png', bbox_inches='tight')
         plt.cla()
 

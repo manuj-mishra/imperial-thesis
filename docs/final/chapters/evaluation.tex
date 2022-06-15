@@ -72,7 +72,28 @@ We begin by evaluating the effectiveness of the maze generator at maximizing the
 
 \subsection{Hyperparameter Tuning}
 
-We tune a bias parameter $\lambda$ to find which bias maximizes $\lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\\
+We perform a grid search on training hyperparameters across the following ranges
+\begin{center}
+    \begin{tabular}{ l c }
+        \bf Hyperparameter & \bf Values Tried\\
+        Number of Epochs & 10, 50, 100\\
+        Population Size & 20, 50, 100\\
+        Elitism Rate & 0.1, 0.2, 0.5\\
+        Mutation Rate & 0.01, 0.05, 0.1\\
+    \end{tabular}
+\end{center}
+
+\begin{figure}[!h]
+\centering
+            \subfloat[Fitness across both metrics, $d$ against $p$.]{\includegraphics[width=.45\textwidth]{images/maze_hyperparam_notime.png}}\hfill
+            \subfloat[Runtime adjusted fitness. $\frac{d}{t}$ against $\frac{p}{t}$ with log axes.]{\includegraphics[width=.45\textwidth]{images/log_maze_hyperparam.png}}\hfill
+            \caption{Fitness of different hyperparameter configurations across both metrics for maze generation}
+\label{fig:maze-hyperparam}
+\end{figure}
+
+The optimum metrics achieved are ($d=92.75$, $p=72.04$) with configurations (number of epochs = $100$, population size = $100$, elitism rate = $0.1$, mutation rate = $0.01$). Under a time adjusted measure, we try to optimize for the value of the metric achieved relative to the execution time. Here, the optimum value is ($d=84.69$, $p=74.96$) for configurations (number of epochs = $10$, population size = $20$, elitism rate = $0.2$, mutation rate = $0.01$). This is not significantly worse than the optimum value achieved when disregarding execution time.
+
+Using the latter parameter set, we tune a bias $\lambda$ to find the value that maximizes $\lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\\
 
 
 \subsection{Roulette vs Truncation Selection}

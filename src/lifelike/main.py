@@ -6,9 +6,11 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 from pandas import DataFrame
+import seaborn as sns
 
 from lifelike.CAs import GRID_SIZE
 from lifelike.Population import Population
+from lifelike.Rulestring import Rulestring
 from lifelike.constants import CHROMOSOME_LEN
 
 # Repetition variables
@@ -22,42 +24,30 @@ ELITISM_RATE = 0.2
 MUTATION_RATE = 0.05
 
 
-def accuracy_experiment(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE, mutation=MUTATION_RATE,
+def accuracy_experiment(trueB, trueS, ics, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE, mutation=MUTATION_RATE,
                         epoch_n=ACCURACY_EPOCH_N):
-  pop = Population(pop_size, elitism, mutation, trueB, trueS)
+  pop = Population(pop_size, elitism, mutation, trueB, trueS, ics)
   for _ in range(epoch_n - 1):
     pop.iterate()
   return pop.iterate()
-
-
-def convergence_experiment(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE, mutation=MUTATION_RATE,
-                           epoch_n=CONV_MAX_EPOCH_N):
-  pop = Population(pop_size, elitism, mutation, trueB, trueS)
-  counter = 0
-  for _ in range(epoch_n):
-    if pop.goal_found():
-      return counter
-    pop.iterate()
-    counter += 1
-  return None
-
 
 def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE, mutation=MUTATION_RATE,
                    epoch_n=ACCURACY_EPOCH_N):
   # with open('ics.npy', 'rb') as icfile:
   #   ics = np.load(icfile)[:100]
   ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for i in range(20)]
-  # print(len(ics), "ics")
-  pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, init_method='decimal')
+  pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, init_method='binary')
   accuracies = [pop.evaluate(pop.loss())]
   unique_inds = [pop.num_unique_inds()]
   pop_history = {"epoch":[0]*pop.elite_n, "vals": [ind.rstring for ind in pop.inds]}
+  visited = {v.rstring: 0 for v in pop.visited}
   for epoch in range(epoch_n):
     accuracies.append(pop.iterate())
     unique_inds.append(pop.num_unique_inds())
+    for v in pop.visited:
+      visited.setdefault(v.rstring, epoch + 1)
     pop_history["epoch"].extend([epoch + 1] * pop.elite_n)
     pop_history["vals"].extend([ind.rstring for ind in pop.inds])
-    # yield
 
   name = f"{''.join(str(i) for i in trueB)}_{''.join(str(i) for i in trueS)}"
   dir = f"out/{name}(pop {pop_size}, ep {epoch_n})"
@@ -76,6 +66,37 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
 
   # print("Accuracy", accuracies[-1])
   # print("Best", pop.inds[0].b, pop.inds[0].s)
+  print("Visited", len(pop.visited))
+  vis_df = {'epoch': [], 'val':[], 'og':[]}
+  for v, og in visited.items():
+    for epoch in range(og, epoch_n + 1):
+      vis_df['epoch'].append(epoch)
+      vis_df['val'].append(v)
+      vis_df['og'].append(og - epoch)
+
+  rtrue = Rulestring.from_bs(trueB, trueS).rstring
+
+  # CONVERGENCE GRAPH
+  g = sns.scatterplot(data=history, x="epoch", y="vals", s = 30)
+  g.set(xlabel='Epoch', ylabel='Integer value of chromosome')
+  plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
+  plt.axhline(y=rtrue, color='r')
+  ax = plt.gca()
+  ax.set(yscale="log")
+  # ax.set_ylim(ymin = 0.9*rtrue, ymax=1.1*rtrue)
+  plt.show()
+
+
+  # SEARCH SPACE GRAPH
+  g = sns.scatterplot(data=vis_df, x="epoch", y="val", hue='og', s = 30, marker='x', legend=False)
+  g.set(xlabel='Epoch', ylabel='Integer value of chromosome')
+  plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
+  plt.axhline(y=rtrue, color='r')
+  ax = plt.gca()
+  # ax.set(yscale="log")
+  # ax.set_ylim(ymin = 0.99*rtrue, ymax=1.01*rtrue)
+  plt.show()
+
   return pop.inds[0], accuracies[-1]
 
   # epochs = [i for i in range(0, epoch_n + 1)]
@@ -99,7 +120,7 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
   # return np.mean(accuracies[-1 * (ACCURACY_EPOCH_N // 10):])
 
 
-def test_density_accuracy():
+def test_density_accuracy(ics):
   start_time = time.time()
   accuracies = [[] for _ in range(CHROMOSOME_LEN + 1)]
   for ones in range(CHROMOSOME_LEN + 1):
@@ -109,7 +130,7 @@ def test_density_accuracy():
       np.random.shuffle(goal)
       trueB = np.where(goal[:CHROMOSOME_LEN // 2] == 1)[0]
       trueS = np.where(goal[CHROMOSOME_LEN // 2:] == 1)[0]
-      accuracies[ones].append(accuracy_experiment(trueB, trueS))
+      accuracies[ones].append(accuracy_experiment(trueB, trueS, ics))
       yield
 
   print(f"Training Time: {int(time.time() - start_time)} seconds")
@@ -163,18 +184,16 @@ def test_initial_conds(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_R
 
 
 if __name__ == "__main__":
-  # experiments = (CHROMOSOME_LEN + 1) * EXPERIMENT_N
-  # with alive_bar(experiments, force_tty=True) as bar:
-  #   for _ in test_density_accuracy():
-  #     bar()
-  d = {"mut":[], "el":[], "best":[], "accuracy":[]}
-  for mut in np.linspace(0,0.5, num=12):
-    for el in np.linspace(0.2, 0.7, num=12):
-      start = time.time()
-      best, accuracy = test_single_GA({3}, {2, 3}, mutation=0.5, elitism=0.1)
-      d["mut"] = mut
-      d["el"] = el
-      d["best"] = best
-      d["accuracy"] = accuracy
+  # d = {"mut":[], "el":[], "best":[], "accuracy":[]}
+  # for mut in np.linspace(0,0.5, num=12):
+  #   for el in np.linspace(0.2, 0.7, num=12):
+  #     start = time.time()
+  #     best, accuracy = test_single_GA({3}, {2, 3}, mutation=mut, elitism=el, pop_size=20)
+  #     d["mut"].append(mut)
+  #     d["el"].append(el)
+  #     d["best"].append(best)
+  #     d["accuracy"].append(accuracy)
+  #
+  # DataFrame.from_dict(d).to_csv('life_hyperparam.csv')
 
-  DataFrame.from_dict(d).to_csv('life_hyperparam.csv')
+  test_single_GA({8}, {}, mutation=0.05, elitism=0.2, pop_size=20, epoch_n=30)
