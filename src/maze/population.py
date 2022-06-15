@@ -21,7 +21,7 @@ class Population:
 
   def iterate(self):
     # Selection
-    mean_dead_ends, mean_path_lens = self.select()
+    mean_dead_ends, mean_path_lens, _ = self.select()
 
     # Crossover
     self.crossover()
@@ -45,8 +45,7 @@ class Population:
     sorted_scores = np.sort(scores)[::-1]
     self.inds = self.inds[(-scores).argsort()]
     self.inds = self.inds[:self.elite_n]
-    # return mean_dead_ends, mean_path_lens, sorted_scores[:self.elite_n]
-    return mean_dead_ends, mean_path_lens
+    return mean_dead_ends, mean_path_lens, sorted_scores[:self.elite_n]
 
   def crossover(self):
     children = []
