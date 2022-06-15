@@ -1,13 +1,12 @@
 \chapter{Evaluation} \label{evaluation}
 
-\section{Life-Like CA}
-
-When evaluating the effectiveness of evolutionary techniques at learning life-like CA rules, it is important to contextualise quantitative properties like convergence rate, fitness, and diversity. We begin by performing an exploratory statistical analysis to gather data on the life-like CA rule space. In conjunction with the analyses of Wolfram\cite{wolfram1986theory} and Eppstein\cite{eppstein2010growth}, this will shed light into the characteristics that make a rule easier or harder to predict.
+\section{Metrics}
+In order to assess the effectiveness of evolutionary algorithms and analyse the types of solutions they produce, we design metrics with which to categorise CA and assess EAs. We also use properties discussed in Section~\ref{sec: life-like-exploration}
 
 \subsection{Convergence Metrics}
-There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis feasible through random simulation. This is a useful way to map properties of the rulespace so that we can evaluate  100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. If a state previously visited at time step $t$ is produced again at step $t+\delta$, the rule is said to have converged at $t+\delta$ time steps with period $\delta$. We examine each rule to find the percentage of initial conditions that converge within 100 steps and the mean oscillation period of those that converge.\\
+There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. If a state previously visited at time step $t$ is produced again at step $t+\delta$, the rule is said to have converged at $t+\delta$ time steps with period $\delta$. We examine each rule to find the percentage of initial conditions that converge within 100 steps and the mean oscillation period of those that converge.\\
 
-First we consider the two extremeties. 23.2\% of rules converge for all initial conditions and 49.8\% of rules converge for only 2 out 100 initial conditions. Note this is the minimum convergence number in our setting since all rules will converge for the trivial initial conditions with density 0 and density 1. The proof of this is detailed in \ref{quiescent-nullity}. This leaves 27.0\% or 70708 of the original rules remaining. While the original dataset had a median of 3\% convergence, the reduced set of rules present a more even spread with a median of 13\%.
+First we consider the two extremities. 23.2\% of rules converge for all initial conditions and 49.8\% of rules converge for only 2 out 100 initial conditions. Note this is the minimum convergence number in our setting since all rules will converge for the trivial initial conditions with density 0 and density 1. The proof of this is detailed in \ref{quiescent-nullity}. This leaves 27.0\% or 70708 of the original rules remaining. While the original dataset had a median of 3\% convergence, the reduced set of rules present a more even spread with a median of 13\%.
 
 \begin{definition}[Quiescence]
 A CA is quiescent if all cells are in the same state. A CA with each cell $c_i$ in state $\sigma_i(t) = 0$ is denoted $\vec{0}$ and the opposite quiescent CA with $\sigma_i(t) = 1$ is denoted $\vec{1}$. 
@@ -46,7 +45,7 @@ Consider an arbitrary cell $c_i$ in $\vec{0}$. $\sigma_i(0) = 0 \text{\ and\ } n
 
 \subsection{Similarity Metrics}
 
-It is useful to evaluate the manner in which the population converge towards solutions during evolution. Although we use the word convergence to describe this, it is important to note the difference between a \textit{CA} converging to fixed point or periodic solution and a \textit{population of chromosomes} converging towards an optimal transition function. To evaluate the convergence of a population, it is useful to have a notion of similarity between individuals. This allows us to quantify the speed of convergence and group individuals into families if they are converging towards different optima. For a binary string chromosome, the simple matching coefficient (SMC) between two individuals is an appropriate metric to quantify their relative similarity. 
+It is useful to evaluate the manner in which the population converge towards solutions during evolution. Although we use the word convergence to describe this, it is important to note the difference between a CA converging to fixed point or periodic solution and a population converging towards an optimal transition function. To evaluate the convergence of a population, it is useful to have a notion of similarity between individuals. This allows us to quantify the speed of convergence and group individuals into families if they are converging towards different optima. For a binary string chromosome, the simple matching coefficient (SMC) between two individuals is an appropriate metric to quantify their relative similarity. 
 \begin{definition}[Simple Matching Coefficient] Consider two binary strings $A$ and $B$. The frequency table enumerating the number of instances of each possible combination of bit settings is
 \begin{center}
     \begin{tabular}{ c c c }
@@ -67,9 +66,29 @@ Symmetrically, we consider the Simple Matching Distance, $\textnormal{SMD} = 1 -
 \]
 Although this is useful in settings with many false negatives that ought to be ignored, our use case benefits from knowing when a gene is \textit{not present} in both chromosomes as much as knowing if it \textit{is present} in both. For this reason we use the Simple Matching Distance.
 
+\section{Maze Generation}
+
+We begin by evaluating the effectiveness of the maze generator at maximizing the two fitness metrics. These are the length of the solution path ($p$) and the number of dead ends ($d$). From spot checks on a few examples in the simulator, we find that these two metrics happen to have similar ranges (around 70-100). For this reason we begin by treating them with equal weighting during hyperparameter tuning.\\
+
+\subsection{Hyperparameter Tuning}
+
+We tune a bias parameter $\lambda$ to find which bias maximizes $\lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\\
+
+
+\subsection{Roulette vs Truncation Selection}
+
+As the population evolves, the variance in fitness decreases. This makes a roulette selection increasingly likely to pick suboptimal parents. Truncation selection, on the other hand, asserts that a selected candidate will never have a lower fitness than a candidate that has not been selected. However, this can increase the likelihood of premature convergence since genes within incrementally worse solutions that have potential to produce global optima are lost.\\
+
+Since we are optimising for two metrics, we can take a linear combination of the objective values of $p$ and $d$ or we can rank each candidate separately by $p$ and $d$ then take a linear combination of the ranks. We call this objective and relative fitness respectively. As
+
+\section{Life-Like CA}
+
+When evaluating the effectiveness of evolutionary techniques at learning life-like CA rules, it is important to contextualise quantitative properties like convergence rate, fitness, and diversity. We begin by performing an exploratory statistical analysis to gather data on the life-like CA rule space. In conjunction with the analyses of Wolfram\cite{wolfram1986theory} and Eppstein\cite{eppstein2010growth}, this will shed light into the characteristics that make a rule easier or harder to predict.
+
+
 \subsection{Special Case Evaluation}
 
-We begin by attempting to learn for a few specific rules to test the efficacy of the learning process. Consider Conway's Life rule B2/S23. In binary this is '001000000001100000' and as an integer it is 32864. We use the following hyperparameters.
+We begin by attempting to learn for a few specific rules to test the efficacy of the learning process. Consider Conway's Life rule B3/S23. In binary this is '000100000001100000' and as an integer it is 16480. We use the following hyperparameters.
 \begin{center}
     \begin{tabular}{ l c }
         Epochs & 30\\
@@ -120,6 +139,5 @@ In order to reduce training time when testing different hyperparameters, we redu
 
 \subsection{Class-Wide Evaluation}
 
-\section{Maze Generation}
 
 \section{Gray-Scott Models}
