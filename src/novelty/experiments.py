@@ -4,8 +4,8 @@ from random import random
 import numpy as np
 import pandas as pd
 
-from lifelike.Population import Population
-from lifelike.constants import CHROMOSOME_LEN
+from novelty.Population import Population
+from novelty.constants import CHROMOSOME_LEN
 from util import binary
 #HYPERPARAMETER TUNING
 if __name__ == "__main__":
