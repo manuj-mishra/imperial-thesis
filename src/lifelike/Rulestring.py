@@ -1,10 +1,11 @@
 import random
 
 import numpy as np
+import pandas as pd
 from scipy.signal import convolve2d
 from scipy import stats
 
-from lifelike.CAs import CA, GRID_SIZE
+from lifelike.CAs import CA, GRID_SIZE, MimicCA
 from lifelike.constants import CHROMOSOME_LEN
 from util import binary
 
@@ -16,8 +17,19 @@ class Rulestring:
 
   @classmethod
   def from_rstring(cls, rstring):
-    # b= binary.ones(rstring >> (CHROMOSOME_LEN // 2))
-    b, s = binary.ones(rstring)
+    b= binary.ones(rstring >> (CHROMOSOME_LEN // 2))
+    s = binary.ones(rstring)
+    return cls(rstring, b, s)
+
+  @classmethod
+  def from_bs(cls, b, s):
+    bnum = 0
+    for pos in b:
+      bnum |= 1 << (CHROMOSOME_LEN - pos - 1)
+    snum = 0
+    for pos in s:
+      snum |= 1 << ((CHROMOSOME_LEN // 2) - pos - 1)
+    rstring = bnum + snum
     return cls(rstring, b, s)
 
   @classmethod
@@ -39,8 +51,8 @@ class Rulestring:
 
   def set_rstring(self, rstring):
     self.rstring = rstring
-    # self.b = binary.ones(rstring >> (CHROMOSOME_LEN // 2))
-    self.b, self.s = binary.ones(rstring)
+    self.b = binary.ones(rstring >> (CHROMOSOME_LEN // 2))
+    self.s = binary.ones(rstring)
 
   def mutate(self, p):
     mask = 0
@@ -75,3 +87,14 @@ class Rulestring:
     low = (a.sum() < a.size) ^ (b.sum() < b. size)
     return (low + mid + high) / 3
     # return mid
+
+  def isvalid(self, negdict):
+    return not pd.isna(negdict[self.rstring])
+    # return not (pd.isna(negdict[self.rstring]) or negdict[self.rstring] < 0.4)
+
+# if __name__ == "__main__":
+#   # r = Rulestring.from_bs({1}, {})
+#   # true = MimicCA.empty({3}, {2, 3})
+#   # hyperparams = {"max_step": 1, "eval_step": 1}
+#   # ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > 0.5 for i in range(1)]
+#   # print(r.loss(true, ics, hyperparams))

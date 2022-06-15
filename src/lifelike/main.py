@@ -19,7 +19,7 @@ CONV_MAX_EPOCH_N = 20  # Epochs for convergence experiment
 
 # Training variables
 POPULATION_SIZE = 100
-ELITISM_RATE = 0.5
+ELITISM_RATE = 0.2
 MUTATION_RATE = 0.05
 
 
@@ -47,14 +47,13 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
                    epoch_n=ACCURACY_EPOCH_N):
   # with open('ics.npy', 'rb') as icfile:
   #   ics = np.load(icfile)[:100]
-  ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for i in range(10)]
-  print(len(ics), "ics")
+  ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for i in range(20)]
+  # print(len(ics), "ics")
   pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, init_method='decimal')
   accuracies = [pop.evaluate(pop.loss())]
   unique_inds = [pop.num_unique_inds()]
   pop_history = {"epoch":[0]*pop.elite_n, "vals": [ind.rstring for ind in pop.inds]}
   for epoch in range(epoch_n):
-    print("epoch", epoch)
     accuracies.append(pop.iterate())
     unique_inds.append(pop.num_unique_inds())
     pop_history["epoch"].extend([epoch + 1] * pop.elite_n)
@@ -75,6 +74,10 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
 
   fit_div = DataFrame.from_dict({"fitness": accuracies, "num_inds": unique_inds})
   fit_div.to_csv(f'{dir}/fit-div.csv')
+
+  # print("Accuracy", accuracies[-1])
+  # print("Best", pop.inds[0].b, pop.inds[0].s)
+  return pop.inds[0], accuracies[-1]
 
   # epochs = [i for i in range(0, epoch_n + 1)]
   # fig, ax1 = plt.subplots()
@@ -165,4 +168,14 @@ if __name__ == "__main__":
   # with alive_bar(experiments, force_tty=True) as bar:
   #   for _ in test_density_accuracy():
   #     bar()
-  test_single_GA({3}, {2, 3})
+  d = {"mut":[], "el":[], "best":[], "accuracy":[]}
+  for mut in np.linspace(0,0.5, num=12):
+    for el in np.linspace(0.2, 0.7, num=12):
+      start = time.time()
+      best, accuracy = test_single_GA({3}, {2, 3}, mutation=0.5, elitism=0.1)
+      d["mut"] = mut
+      d["el"] = el
+      d["best"] = best
+      d["accuracy"] = accuracy
+
+  DataFrame.from_dict(d).to_csv('life_hyperparam.csv')

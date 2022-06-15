@@ -26,18 +26,19 @@ class CA:
     cache = self.X.copy()
     for _ in range(steps):
       n = convolve2d(self.X, self.K, mode='same', boundary='wrap') - self.X
-      res = (~self.X & np.isin(n, self.B)) | (self.X & np.isin(n, self.S))
+      res = (~self.X & np.isin(n, list(self.B))) | (self.X & np.isin(n, list(self.S)))
       if (cache == res).all():
         self.X = res
         return False
       else:
         cache = res
     self.X = res
+    # print(np.sum(self.X))
     return True
 
   def simple_step(self):
     n = convolve2d(self.X, self.K, mode='same', boundary='wrap') - self.X
-    self.X = (~self.X & np.isin(n, self.B)) | (self.X & np.isin(n, self.S))
+    self.X = (~self.X & np.isin(n, list(self.B))) | (self.X & np.isin(n, list(self.S)))
 
 class MimicCA(CA):
   def step_from(self, X, steps=1):
@@ -45,4 +46,5 @@ class MimicCA(CA):
     return self.step(steps)
 
 if __name__ == "__main__":
-  ca = CA.random({6, 8}, {2, 3})
+  ca = CA.random({}, {})
+  ca.step(10)
