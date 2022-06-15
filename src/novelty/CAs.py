@@ -2,7 +2,7 @@ import random
 import numpy as np
 from scipy.signal import convolve2d
 
-GRID_SIZE = 32
+GRID_SIZE = 13
 
 
 class CA:
@@ -11,6 +11,8 @@ class CA:
     self.B = B
     self.S = S
     self.K = np.ones((3, 3))
+    self.novelty = 0
+    self.steps = 0
 
   @classmethod
   def random(cls, B, S):
@@ -25,8 +27,10 @@ class CA:
   def step(self, steps=1):
     cache = self.X.copy()
     for _ in range(steps):
+      self.steps += 1
       n = convolve2d(self.X, self.K, mode='same', boundary='wrap') - self.X
       res = (~self.X & np.isin(n, self.B)) | (self.X & np.isin(n, self.S))
+      self.novelty += np.mean(cache ^ self.X)
       if (cache == res).all():
         self.X = res
         return False
@@ -34,10 +38,6 @@ class CA:
         cache = res
     self.X = res
     return True
-
-  def simple_step(self):
-    n = convolve2d(self.X, self.K, mode='same', boundary='wrap') - self.X
-    self.X = (~self.X & np.isin(n, self.B)) | (self.X & np.isin(n, self.S))
 
 class MimicCA(CA):
   def step_from(self, X, steps=1):

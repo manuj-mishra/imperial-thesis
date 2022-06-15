@@ -7,9 +7,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 from pandas import DataFrame
 
-from lifelike.CAs import GRID_SIZE
-from lifelike.Population import Population
-from lifelike.constants import CHROMOSOME_LEN
+from novelty.CAs import GRID_SIZE
+from novelty.Population import Population
+from novelty.constants import CHROMOSOME_LEN
 from alive_progress import alive_bar
 
 # Repetition variables
@@ -168,8 +168,8 @@ if __name__ == "__main__":
   # with alive_bar(experiments, force_tty=True) as bar:
   #   for _ in test_density_accuracy():
   #     bar()
-  for mut in (0.8,):
-    for el in (0.1, 0.2):
-      print("Mutation", mut)
-      print("Elitism", el)
-      test_single_GA({3}, {2, 3}, mutation=mut, elitism=el)
+  # for mut in (0.8,):
+  #   for el in (0.1, 0.2):
+  #     print("Mutation", mut)
+  #     print("Elitism", el)
+  test_single_GA({3}, {2, 3}, mutation=0.05, elitism=0.2)

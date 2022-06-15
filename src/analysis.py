@@ -116,13 +116,12 @@ def low_high_sparsity():
 
 
 if __name__ == "__main__":
-  # df = pd.read_csv('./taxonomy.csv')
-  # taxonomy_graphs(df)
-  # file = 'epoch30_pop100_singleres.csv'
-  # df = pd.read_csv(f"./{file}")
-  # print(file)
-  # df = df.loc[:, df.iloc[0] != 30]
-  # print(len(df.iloc[0]) / 100)
-  # print(max(df.iloc[0]))
-  # print(df)
-  low_high_sparsity()
+  df = pd.read_csv('./lifelike/random_negentropy.csv')
+  sns.histplot(df.negentropy)
+  plt.show()
+  negdict = dict(zip(df.rstring, -1 * df.negentropy))
+  # print(negdict[8])
+  print(negdict[int('000100000001100000', 2)])
+  # print(pd.isna(negdict[0]))
+  # print(df.negentropy.quantile(.95))
+  # print(df.conv_perc)

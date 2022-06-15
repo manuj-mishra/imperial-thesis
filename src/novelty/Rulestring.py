@@ -5,8 +5,8 @@ import pandas as pd
 from scipy.signal import convolve2d
 from scipy import stats
 
-from lifelike.CAs import CA, GRID_SIZE, MimicCA
-from lifelike.constants import CHROMOSOME_LEN
+from novelty.CAs import CA, GRID_SIZE, MimicCA
+from novelty.constants import CHROMOSOME_LEN
 from util import binary
 
 class Rulestring:
@@ -14,6 +14,8 @@ class Rulestring:
     self.rstring = rstring
     self.b = b
     self.s = s
+    self.novelty = None
+    self.loss = None
 
   @classmethod
   def from_rstring(cls, rstring):
@@ -64,8 +66,9 @@ class Rulestring:
     self.set_rstring(self.rstring ^ mask)
     return self.rstring
 
-  def loss(self, true, ics, hyperparams):
+  def calc_loss(self, true, ics, hyperparams):
     losses = []
+    novelties = []
     for ic in ics:
       # pred = CA.random(self.b, self.s)
       pred = CA(ic, self.b, self.s)
@@ -77,7 +80,9 @@ class Rulestring:
           # losses.append(self.three_res_loss(pred.X, true.X))
           if not true_active and not pred_active:
             break
-    return np.mean(losses)
+      novelties.append(pred.novelty / pred.steps)
+    self.novelty = np.mean(novelties)
+    self.loss = np.mean(losses)
 
   def three_res_loss(self, a, b):
     ksize = GRID_SIZE // 2
@@ -88,13 +93,12 @@ class Rulestring:
     return (low + mid + high) / 3
     # return mid
 
-  def isvalid(self, negdict):
-    return not pd.isna(negdict[self.rstring])
-    # return not (pd.isna(negdict[self.rstring]) or negdict[self.rstring] < 0.4)
+  def isvalid(self):
+    return True
 
 if __name__ == "__main__":
-  r = Rulestring.from_bs({3}, {2, 3})
+  r = Rulestring.from_rstring(0)
   true = MimicCA.empty({3}, {2, 3})
   hyperparams = {"max_step": 5, "eval_step": 10}
   ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for i in range(20)]
-  print(r.loss(true, ics, hyperparams))
+  print(r.calc_loss(true, ics, hyperparams))

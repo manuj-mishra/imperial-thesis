@@ -3,9 +3,9 @@ import random
 import numpy as np
 import pandas as pd
 
-from lifelike.CAs import MimicCA
-from lifelike.Rulestring import Rulestring
-from lifelike.constants import CHROMOSOME_LEN
+from novelty.CAs import MimicCA
+from novelty.Rulestring import Rulestring
+from novelty.constants import CHROMOSOME_LEN
 
 
 class Population:
@@ -28,26 +28,23 @@ class Population:
     else:
       raise Exception("Unsupported init_method for Population")
     self.visited = set()
-    loss = self.loss()
-    self.update(loss)
-
-    df = pd.read_csv('./negentropy.csv')
-    self.negdict = dict(zip(df.rstring, -1 * df.negentropy))
+    poploss = self.loss()
+    self.update(poploss)
 
   def iterate(self):
     self.crossover()
     self.mutate()
-    loss = self.loss()
+    poploss = self.loss()
     self.visited.update(self.inds)
-    self.update(loss)
-    return self.evaluate(loss)
+    self.update(poploss)
+    return self.evaluate(poploss)
 
-  def update(self, loss):
-    self.inds = self.inds[loss.argsort()]
+  def update(self, poploss):
+    self.inds = self.inds[poploss.argsort()]
     self.inds = self.inds[:self.elite_n]
 
-  def evaluate(self, loss):
-    return 1 - np.mean(np.sort(loss)[:self.elite_n])
+  def evaluate(self, poploss):
+    return 1 - np.mean(np.sort(poploss)[:self.elite_n])
 
   def crossover(self):
     children = []
@@ -58,22 +55,26 @@ class Population:
       left_a, right_a = a[:cpoint], a[cpoint:]
       left_b, right_b = b[:cpoint], b[cpoint:]
       child1 = Rulestring.from_rstring(int(left_a + right_b, 2))
-      if child1.isvalid(self.negdict):
+      if child1.isvalid():
         children.append(child1)
       child2 = Rulestring.from_rstring(int(left_b + right_a, 2))
-      if child1.isvalid(self.negdict):
+      if child1.isvalid():
         children.append(child2)
     self.inds = np.append(self.inds, np.array(children))
 
   def mutate(self):
     for ind in self.inds:
       ind.mutate(self.mutation)
-      while not ind.isvalid(self.negdict):
+      while not ind.isvalid():
         ind.mutate(self.mutation)
 
   def loss(self):
     true = MimicCA.empty(self.trueB, self.trueS)
-    return np.array([r.loss(true, self.ics, self.hyperparams) for r in self.inds])
+    for r in self.inds:
+      r.calc_loss(true, self.ics, self.hyperparams)
+    avg_nov = np.mean([i.novelty for i in self.inds])
+    poploss = [0.8 * abs(r.novelty - avg_nov) + 0.2 * r.loss for r in self.inds]
+    return np.array(poploss)
 
   def goal_found(self):
     return set(self.trueB) == set(self.inds[0].b) and set(self.trueS) == set(self.inds[0].s)
