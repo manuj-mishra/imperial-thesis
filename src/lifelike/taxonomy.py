@@ -18,6 +18,7 @@ if __name__ == "__main__":
         "period_mean": [],
         "period_std": [],
         "density": [],
+        "entropy": [],
         "volatility": []
     }
     seeds = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for _ in range(NUM_EXPS)]
@@ -29,7 +30,7 @@ if __name__ == "__main__":
                 writer.writerows(zip(*data.values()))
 
         print(f'{rstring}/{2**18}')
-        conv, period = [], []
+        conv, period, live, vol = [], [], [], []
         ca = None
         for exp in range(NUM_EXPS):
             b = binary.ones(rstring >> 9)
@@ -44,12 +45,16 @@ if __name__ == "__main__":
                     break
                 history[key] = counter
                 ca.simple_step()
+            live.append(np.sum(ca.X) / ca.X.size)
+            vol.append(ca.volatility / ca.steps)
         data["rstring"].append(rstring)
         data["conv_perc"].append(len(conv) / NUM_EXPS)
         data["conv_mean"].append(np.mean(conv))
         data["conv_std"].append(np.std(conv))
         data["period_mean"].append(np.mean(period))
         data["period_std"].append(np.std(period))
-        data["density"].append(np.sum(ca.X)/ca.X.size)
-        data["volatility"].append(ca.volatility / ca.steps)
+        data["density"].append(np.mean(live))
+        ent = [p * np.log(p) for p in live]
+        data["entropy"].append(np.mean(ent))
+        data["volatility"].append(np.mean(vol))
 
