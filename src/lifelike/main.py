@@ -36,16 +36,16 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
   # with open('ics.npy', 'rb') as icfile:
   #   ics = np.load(icfile)[:100]
   ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for i in range(20)]
-  pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, init_method='binary')
+  pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, init_method='decimal')
   accuracies = [pop.evaluate(pop.loss())]
   unique_inds = [pop.num_unique_inds()]
   pop_history = {"epoch":[0]*pop.elite_n, "vals": [ind.rstring for ind in pop.inds]}
-  visited = {v.rstring: 0 for v in pop.visited}
+  visited = {v: 0 for v in pop.visited}
   for epoch in range(epoch_n):
     accuracies.append(pop.iterate())
     unique_inds.append(pop.num_unique_inds())
     for v in pop.visited:
-      visited.setdefault(v.rstring, epoch + 1)
+      visited.setdefault(v, epoch + 1)
     pop_history["epoch"].extend([epoch + 1] * pop.elite_n)
     pop_history["vals"].extend([ind.rstring for ind in pop.inds])
 
@@ -94,7 +94,7 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
   plt.axhline(y=rtrue, color='r')
   ax = plt.gca()
   # ax.set(yscale="log")
-  # ax.set_ylim(ymin = 0.99*rtrue, ymax=1.01*rtrue)
+  ax.set_ylim(ymin = 0, ymax=2**18)
   plt.show()
 
   return pop.inds[0], accuracies[-1]
@@ -196,4 +196,4 @@ if __name__ == "__main__":
   #
   # DataFrame.from_dict(d).to_csv('life_hyperparam.csv')
 
-  test_single_GA({8}, {}, mutation=0.05, elitism=0.2, pop_size=20, epoch_n=30)
+  test_single_GA({3}, {2,3}, mutation=0.05, elitism=0.2, pop_size=20, epoch_n=30)

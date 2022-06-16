@@ -16,7 +16,9 @@ if __name__ == "__main__":
         "conv_mean": [],
         "conv_std": [],
         "period_mean": [],
-        "period_std": []
+        "period_std": [],
+        "density": [],
+        "volatility": []
     }
     seeds = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for _ in range(NUM_EXPS)]
     for rstring in range((2**18) + 1):
@@ -28,6 +30,7 @@ if __name__ == "__main__":
 
         print(f'{rstring}/{2**18}')
         conv, period = [], []
+        ca = None
         for exp in range(NUM_EXPS):
             b = binary.ones(rstring >> 9)
             s = binary.ones(rstring)
@@ -47,4 +50,6 @@ if __name__ == "__main__":
         data["conv_std"].append(np.std(conv))
         data["period_mean"].append(np.mean(period))
         data["period_std"].append(np.std(period))
+        data["density"].append(np.sum(ca.X)/ca.X.size)
+        data["volatility"].append(ca.volatility / ca.steps)
 

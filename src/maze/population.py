@@ -24,10 +24,10 @@ class Population:
     mean_dead_ends, mean_path_lens, _ = self.select()
 
     # Crossover
-    self.crossover()
+    # self.crossover()
 
     # Mutate
-    self.mutate(self.elite_n // 5)
+    # self.mutate(self.elite_n // 5)
     # best_diversity = 0
     # best_mutation = self.inds.copy()
     # for _ in range(self.novelty):

@@ -1,4 +1,5 @@
 import csv
+import os
 import time
 
 import matplotlib.pyplot as plt
@@ -10,7 +11,7 @@ from maze.population import Population
 
 EPOCH_N = 10
 
-def run_experiment(path_len_bias, pop_size=20, elitism=0.2, mutation=0.01, epoch_n=EPOCH_N):
+def run_experiment(path_len_bias, pop_size=20, elitism=0.2, mutation=0.05, epoch_n=EPOCH_N):
   start_time = time.time()
   mean_deads = []
   mean_paths = []
@@ -41,6 +42,7 @@ def save_experiments(pop, elite_scores, mean_paths, mean_deads):
     ca.save_experiment(rname)
 
   dir = f'out/{exp_n}'
+  os.makedirs(dir, exist_ok=True)
   file = open(f'{dir}/elite.csv', 'w+', newline='')
   with file:
     write = csv.writer(file)
@@ -68,19 +70,32 @@ def save_experiments(pop, elite_scores, mean_paths, mean_deads):
 
 
 if __name__ == "__main__":
-
-  b = []
+  # ABLATION
   d = []
   p = []
-  for bias in np.linspace(0.0, 100.0, num =11):
-    print(bias)
-    md, mp = run_experiment(bias)
-    b.append(bias)
+  n = 10
+  for _ in range(n):
+    md, mp = run_experiment(0.5)
     d.append(md)
     p.append(mp)
 
-  df = DataFrame.from_dict({"b": b, "d": d, "p": p})
-  df.to_csv("bias_tuning_hyp.csv")
+  df = DataFrame.from_dict({"category": ["no mutation or crossover"]*n, "d":d , "p": p})
+  df.to_csv("maze-nothing.csv", index=False)
+
+
+  # BIAS EXPERIMENT
+  # b = []
+  # d = []
+  # p = []
+  # for bias in np.linspace(0.0, 100.0, num =11):
+  #   print(bias)
+  #   md, mp = run_experiment(bias)
+  #   b.append(bias)
+  #   d.append(md)
+  #   p.append(mp)
+  #
+  # df = DataFrame.from_dict({"b": b, "d": d, "p": p})
+  # df.to_csv("bias_tuning_hyp.csv")
 
   # # HYPERPARAM EXPERIMENT:
   # mean_deads = []

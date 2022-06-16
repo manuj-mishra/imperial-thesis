@@ -11,6 +11,8 @@ class CA:
     self.B = B
     self.S = S
     self.K = np.ones((3, 3))
+    self.volatility = 0
+    self.steps = 0
 
   @classmethod
   def random(cls, B, S):
@@ -27,6 +29,7 @@ class CA:
     for _ in range(steps):
       n = convolve2d(self.X, self.K, mode='same', boundary='wrap') - self.X
       res = (~self.X & np.isin(n, list(self.B))) | (self.X & np.isin(n, list(self.S)))
+      self.steps += 1
       if (cache == res).all():
         self.X = res
         return False
@@ -37,8 +40,11 @@ class CA:
     return True
 
   def simple_step(self):
+    prior = self.X.copy()
     n = convolve2d(self.X, self.K, mode='same', boundary='wrap') - self.X
     self.X = (~self.X & np.isin(n, list(self.B))) | (self.X & np.isin(n, list(self.S)))
+    self.volatility += (prior ^ self.X)
+    self.steps += 1
 
 class MimicCA(CA):
   def step_from(self, X, steps=1):

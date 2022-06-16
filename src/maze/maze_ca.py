@@ -17,8 +17,8 @@ class MazeCA:
   def __init__(self, B, S):
     self.nx, self.ny = GRID_SIZE, GRID_SIZE
     self.X = np.random.random((self.ny, self.nx)) > INITIAL_DENSITY
-    self.B = B
-    self.S = S
+    self.B = list(B)
+    self.S = list(S)
 
   def run(self, media=False):
     self.generate(media=media)
@@ -205,4 +205,8 @@ class MazeCA:
       if attempt < 3:
         print("Trying again")
         self.save_experiment(rname, attempt=attempt + 1)
-    clear_temp_folders()
+    # clear_temp_folders()
+
+if __name__ == "__main__":
+  ca = MazeCA([3,6,7,8], [2,3,5,6,7,8])
+  ca.generate(media=True)
