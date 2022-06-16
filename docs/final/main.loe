@@ -1,19 +1,20 @@
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~2.1\else \numberline {2.1}Definition\fi \thmtformatoptarg {Cellular Automaton}}{10}{definition.2.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.2\else \numberline {2.2}Definition\fi \thmtformatoptarg {Inner-Totalistic}}{12}{definition.2.2}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.3\else \numberline {2.3}Definition\fi \thmtformatoptarg {Outer-Totalistic}}{12}{definition.2.3}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.4\else \numberline {2.4}Definition\fi \thmtformatoptarg {Birth-Survival notation}}{12}{definition.2.4}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.5\else \numberline {2.5}Definition\fi \thmtformatoptarg {Reaction-Diffusion System}}{14}{definition.2.5}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.1\else \numberline {2.1}Definition\fi \thmtformatoptarg {Cellular Automaton}}{11}{definition.2.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.2\else \numberline {2.2}Definition\fi \thmtformatoptarg {Inner-Totalistic}}{13}{definition.2.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.3\else \numberline {2.3}Definition\fi \thmtformatoptarg {Outer-Totalistic}}{13}{definition.2.3}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.4\else \numberline {2.4}Definition\fi \thmtformatoptarg {Birth-Survival notation}}{13}{definition.2.4}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.5\else \numberline {2.5}Definition\fi \thmtformatoptarg {Reaction-Diffusion System}}{15}{definition.2.5}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~3.1\else \numberline {3.1}Definition\fi \thmtformatoptarg {Majority Problem}}{21}{definition.3.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~3.2\else \numberline {3.2}Definition\fi \thmtformatoptarg {GKL Classifier}}{21}{definition.3.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~3.1\else \numberline {3.1}Definition\fi \thmtformatoptarg {Majority Problem}}{22}{definition.3.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~3.2\else \numberline {3.2}Definition\fi \thmtformatoptarg {GKL Classifier}}{22}{definition.3.2}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~5.1\else \numberline {5.1}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 1}}{37}{definition.5.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~5.2\else \numberline {5.2}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 2}}{38}{definition.5.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~5.1\else \numberline {5.1}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 1}}{38}{definition.5.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~5.2\else \numberline {5.2}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 2}}{39}{definition.5.2}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~6.1\else \numberline {6.1}Definition\fi \thmtformatoptarg {Gray-Scott Model}}{41}{definition.6.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~6.2\else \numberline {6.2}Definition\fi \thmtformatoptarg {Blended Crossover (BLX-$\alpha $)}}{46}{definition.6.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~6.1\else \numberline {6.1}Definition\fi \thmtformatoptarg {Gray-Scott Model}}{42}{definition.6.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~6.2\else \numberline {6.2}Definition\fi \thmtformatoptarg {Blended Crossover (BLX-$\alpha $)}}{45}{definition.6.2}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~7.1\else \numberline {7.1}Definition\fi \thmtformatoptarg {Quiescence}}{47}{definition.7.1}%
-\contentsline {lemma}{\ifthmt@listswap Lemma~7.1\else \numberline {7.1}Lemma\fi }{47}{lemma.7.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~7.2\else \numberline {7.2}Definition\fi \thmtformatoptarg {Simple Matching Coefficient}}{48}{definition.7.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.1\else \numberline {7.1}Definition\fi \thmtformatoptarg {CA convergence to a periodic state}}{48}{definition.7.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.2\else \numberline {7.2}Definition\fi \thmtformatoptarg {Quiescence}}{48}{definition.7.2}%
+\contentsline {lemma}{\ifthmt@listswap Lemma~7.1\else \numberline {7.1}Lemma\fi }{48}{lemma.7.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.3\else \numberline {7.3}Definition\fi \thmtformatoptarg {Simple Matching Coefficient}}{49}{definition.7.3}%

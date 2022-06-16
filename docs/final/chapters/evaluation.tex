@@ -1,12 +1,18 @@
 \chapter{Evaluation} \label{evaluation}
 
 \section{Metrics}
-In order to assess the effectiveness of evolutionary algorithms and analyse the types of solutions they produce, we design metrics with which to categorise CA and assess EAs. We also use properties discussed in Section~\ref{sec: life-like-exploration}
+Alongside properties discussed in Sections \ref{sec: life-like-exploration} and \ref{sec: gs-exploration}, we design metrics to categorise CA and assess the effectiveness of evolutionary algorithms.
 
-\subsection{Convergence Metrics}
-There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. If a state previously visited at time step $t$ is produced again at step $t+\delta$, the rule is said to have converged at $t+\delta$ time steps with period $\delta$. We examine each rule to find the percentage of initial conditions that converge within 100 steps and the mean oscillation period of those that converge.\\
+\subsection{Dynamic Metrics} \todo{Redo taxonomy experiment}
+We say a dynamic metric is one that tells us about the way a CA's state changes over time. Two useful dynamic metrics are periodicity and volatility.
 
-First we consider the two extremities. 23.2\% of rules converge for all initial conditions and 49.8\% of rules converge for only 2 out 100 initial conditions. Note this is the minimum convergence number in our setting since all rules will converge for the trivial initial conditions with density 0 and density 1. The proof of this is detailed in \ref{quiescent-nullity}. This leaves 27.0\% or 70708 of the original rules remaining. While the original dataset had a median of 3\% convergence, the reduced set of rules present a more even spread with a median of 13\%.
+It is useful to know when a CA has converged to a fixed point or periodic solution. By estimating the portion of initial conditions that enter a periodic state, and the speed with which they do so, we can infer the Wolfram class of CAs with reasonable accuracy. The key distinction we intend to make here is between CAs in class 1 or 2 against CAs in class 3 or 4. The former two classes should converge relatively quickly for almost all ICs whereas the latter two will not converge for a significant proportion of ICs.
+
+\begin{definition}[CA convergence to a periodic state]
+ If a state previously visited at time step $t$ is produced again at step $t+\delta$, the rule is said to have converged to a periodic solution at $t+\delta$ time steps with period $\delta$. If $\delta = 1$, this is called a fixed point solution. 
+\end{definition}
+
+For the trivial initial conditions with all zero-cells or all one-cells, all life-like CAs will converge to a periodic state with $\delta \leq 2$. The proof of this is detailed in \ref{quiescent-nullity}.
 
 \begin{definition}[Quiescence]
 A CA is quiescent if all cells are in the same state. A CA with each cell $c_i$ in state $\sigma_i(t) = 0$ is denoted $\vec{0}$ and the opposite quiescent CA with $\sigma_i(t) = 1$ is denoted $\vec{1}$. 
@@ -17,7 +23,7 @@ A quiescent life-like CA is at a fixed point or oscillates with period 2.
 \end{lemma}
 
 \begin{proof} \label{quiescent-nullity}
-Consider an arbitrary cell $c_i$ in $\vec{0}$. $\sigma_i(0) = 0 \text{\ and\ } n_i(t) = 0$\\
+Consider an arbitrary cell $c_i$ in $\vec{0}$. $\sigma_i(t)$ is the state of $c_i$ at time t and $n_i(t)$ is the number of live cells in the neighbourhood of $c_i$ not including itself. Initial conditions are $\sigma_i(0) = 0 \text{\ and\ } n_i(0) = 0$.
 \begin{multicols}{2}
 \noindent If $0 \notin B$:\\
 \null \quad $\sigma_i(1) = 0 \text{\ and\ } n_i(1) = 0 $\\
@@ -35,17 +41,29 @@ Consider an arbitrary cell $c_i$ in $\vec{0}$. $\sigma_i(0) = 0 \text{\ and\ } n
 \noindent The case for a CA at quiescent state $\vec{1}$ is exactly symmetrical.
 \end{proof}
 
-\begin{figure}[!h]
-\centering
-            \subfloat{\includegraphics[width=.5\textwidth]{images/full-taxonomy.png}}\hfill
-            \subfloat{\includegraphics[width=.5\textwidth]{images/reduced-taxonomy.png}}\hfill
-            \caption{Distributions of convergence of full and reduced set of life-like CAs}
-\label{fig:taxonomy-dist}
-\end{figure}
+\todo{Def of volatility?}
 
-\subsection{Similarity Metrics}
+Another useful measure is volatility, which measures the average number of cells that change per time step. We expect class 1 CA to have a volatility that approaches zero. Class 2 and 3 CA will have a volatility that approaches a non-zero constant. Class 4 CA can have a volatility that does not converge at all.\\
 
-It is useful to evaluate the manner in which the population converge towards solutions during evolution. Although we use the word convergence to describe this, it is important to note the difference between a CA converging to fixed point or periodic solution and a population converging towards an optimal transition function. To evaluate the convergence of a population, it is useful to have a notion of similarity between individuals. This allows us to quantify the speed of convergence and group individuals into families if they are converging towards different optima. For a binary string chromosome, the simple matching coefficient (SMC) between two individuals is an appropriate metric to quantify their relative similarity. 
+\subsection{Static Metrics} 
+
+\todo{Def of density?}
+A static metric is one that assesses the state of the CA at one snapshot in time, ideally after some fixed number of time steps $t$.
+A good way to separate class 1 and class 2 CA is to observe their density at $t$ time steps. Density is the average number of live cells in the CA state. If the CAs have converged to their respective cycles, we will find that class 1 CA have density of 0 or 1 for almost all initial conditions whereas class 2 CA will regularly have densities that are in between 0 and 1.\\
+
+\todo{Entropy metric??}
+% \subsection{Entropy}
+% By making repeated observations on the state of the CA after a set number of time steps, say $t$, we can assess average the amount of "information" in the state at time $t$. This helps us differentiate class 3 CAs which enter a state of unending chaos after transient patterns have dissolved. Information entropy is a useful measure of this information.
+% \begin{definition}[Entropy] Consider a CA with state $X$ at time $t$. We define the entropy of the CA at this point as
+    
+% \end{definition}
+
+% %COMMENT
+% % The problem here is that IC ~ binomial which is approx normal for p =0.5 but only using ICs with p=0.5 unfairly advantages CAs with birth or survival rates around 4. But if we use ICs uniform across density then the binomial = normal assumption breaks.
+
+\subsection{Similarity}
+
+It is useful to evaluate the manner in which a population converges towards solutions during evolution. Although we reuse the word convergence to describe this, note the difference between a CA converging to a periodic solution and a population converging towards an optimal transition function. To evaluate the convergence of a population, it is useful to have a notion of similarity between individuals. This allows us to quantify the speed of convergence and group individuals into families if they are converging towards different optima. For a binary string chromosome, the simple matching coefficient (SMC) between two individuals is an appropriate metric to quantify their relative similarity. 
 \begin{definition}[Simple Matching Coefficient] Consider two binary strings $A$ and $B$. The frequency table enumerating the number of instances of each possible combination of bit settings is
 \begin{center}
     \begin{tabular}{ c c c }
@@ -60,11 +78,29 @@ The simple matching coefficient between two binary strings $A$ and $B$ of length
 \]
     
 \end{definition}
-Symmetrically, we consider the Simple Matching Distance, $\textnormal{SMD} = 1 - \textnormal{SMC}$, as a measure of diversity between individuals. This is appropriate as SMD fulfills all the formal criteria for a distance metric: non-negativity, symmetry, identity of indiscernibles, and the triangle inequality. If each bit is to be imagined as a gene, the SMD is the mean number of differing genes in the chromosome. It can be calculated in $O(n)$ time where $n$ is the chromosome length. Aside from being simple to understand and efficient to calculate, the SMD is preferable to other metrics as it counts mutual presence and mutual absence. Jaccard Distance $d_J$, on the other hand, only counts mutual presence. For two binary strings $A$ and $B$
+Symmetrically, we consider the Simple Matching Distance, $\textnormal{SMD} = 1 - \textnormal{SMC}$, as a measure of diversity between individuals. This is appropriate as SMD fulfills all the formal criteria for a distance metric: non-negativity, symmetry, identity of indiscernibles, and the triangle inequality. If each bit is to be imagined as a gene, the SMD is the mean number of differing genes in the chromosome. It can be calculated in $O(n)$ time where $n$ is the chromosome length. Aside from being simple to understand and efficient to calculate, the SMD is preferable to other metrics as it accounts for mutual presence and mutual absence. Jaccard Distance $d_J$, on the other hand, only registers mutual presence. For two binary strings $A$ and $B$
 \[
     d_J = \frac{n_{0, 1} + n_{1, 0}}{n_{0, 1} + n_{1, 0} + n_{1, 1}}
 \]
-Although this is useful in settings with many false negatives that ought to be ignored, our use case benefits from knowing when a gene is \textit{not present} in both chromosomes as much as knowing if it \textit{is present} in both. For this reason we use the Simple Matching Distance.
+This is useful in settings where true negatives ought to be ignored. For example, when testing if two water samples came from the same source, we would not be interested in enumerating all the compounds that are \textit{not} present in both samples. However, our use case benefits from knowing when a gene is \textit{not present} in both chromosomes as much as knowing if it \textit{is present} since both of these properties can equally affect CA dynamics. For this reason we use the Simple Matching Distance.
+
+\section{Exploration}
+
+When evaluating the effectiveness of evolutionary techniques at learning life-like CA rules, it is important to contextualise quantitative properties like convergence rate, fitness, and diversity. We begin by performing an exploratory statistical analysis to gather data on the life-like CA rule space. In conjunction with the analyses of Wolfram\cite{wolfram1986theory} and Eppstein\cite{eppstein2010growth}, this will shed light into the characteristics that make a rule easier or harder to predict.\\
+
+There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. We examine each rule to find the percentage of initial conditions that converge within 100 steps and the mean oscillation period of those that converge.\\   
+
+\todo{Redo taxonomy}
+
+\begin{figure}[!h]
+\centering
+            \subfloat{\includegraphics[width=.5\textwidth]{images/full-taxonomy.png}}\hfill
+            \subfloat{\includegraphics[width=.5\textwidth]{images/reduced-taxonomy.png}}\hfill
+            \caption{Distributions of convergence of full and reduced set of life-like CAs}
+\label{fig:taxonomy-dist}
+\end{figure}
+
+First we consider the two extremities. 23.2\% of rules converge for all initial conditions and 49.8\% of rules converge for only 2 out 100 initial conditions. Note this is the minimum convergence number in our setting since all rules will converge for the trivial initial conditions with density 0 and density 1.  This leaves 27.0\% or 70708 of the original rules remaining. While the original dataset had a median of 3\% convergence, the reduced set of rules present a more even spread with a median of 13\%.
 
 \section{Maze Generation}
 
@@ -91,9 +127,9 @@ We perform a grid search on training hyperparameters across the following ranges
 \label{fig:maze-hyperparam}
 \end{figure}
 
-The optimum metrics achieved are ($d=92.75$, $p=72.04$) with configurations (number of epochs = $100$, population size = $100$, elitism rate = $0.1$, mutation rate = $0.01$). Under a time adjusted measure, we try to optimize for the value of the metric achieved relative to the execution time. Here, the optimum value is ($d=84.69$, $p=74.96$) for configurations (number of epochs = $10$, population size = $20$, elitism rate = $0.2$, mutation rate = $0.01$). This is not significantly worse than the optimum value achieved when disregarding execution time.
+The optimum metrics achieved are ($d=92.75$, $p=72.04$) with configurations (number of epochs = $100$, population size = $100$, elitism rate = $0.1$, mutation rate = $0.01$). Under a time adjusted measure, we try to optimize for the value of the metric achieved relative to the execution time. Here, the optimum value is ($d=84.69$, $p=74.96$) for configurations (number of epochs = $10$, population size = $20$, elitism rate = $0.2$, mutation rate = $0.01$). This is not significantly worse than the optimum value achieved when disregarding execution time.\\
 
-Using the latter parameter set, we tune a bias $\lambda$ to find the value that maximizes $\lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\\
+Using the latter parameter set, we tune a bias $\lambda$ to find the value that maximizes fitness  $f(\lambda) = \lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\todo{Redo bias tuning}\\
 
 
 \subsection{Roulette vs Truncation Selection}
@@ -104,16 +140,14 @@ Since we are optimising for two metrics, we can take a linear combination of the
 
 \section{Life-Like CA}
 
-When evaluating the effectiveness of evolutionary techniques at learning life-like CA rules, it is important to contextualise quantitative properties like convergence rate, fitness, and diversity. We begin by performing an exploratory statistical analysis to gather data on the life-like CA rule space. In conjunction with the analyses of Wolfram\cite{wolfram1986theory} and Eppstein\cite{eppstein2010growth}, this will shed light into the characteristics that make a rule easier or harder to predict.
-
-
 \subsection{Special Case Evaluation}
 
-We begin by attempting to learn for a few specific rules to test the efficacy of the learning process. Consider Conway's Life rule B3/S23. In binary this is '000100000001100000' and as an integer it is 16480. We use the following hyperparameters.
+We begin by attempting to learn for a few specific rules to test the efficacy of the learning process. Consider Conway's Life rule B3/S23. In binary this is '000100000001100000' and as an integer it is 16480. Based on spot checks, we use the following hyperparameters 
 \begin{center}
     \begin{tabular}{ l c }
-        Epochs & 30\\
-        Population Size & 100\\
+        Number of Epochs & 30\\
+        Population Size & 20\\
+        Number of Initial Conditions & 20\\
         Elitism Rate & 0.2\\
         Mutation Rate & 0.05\\
         Evaluation Steps & 10\\
@@ -121,7 +155,7 @@ We begin by attempting to learn for a few specific rules to test the efficacy of
         Maximum Step Size & 10\\
     \end{tabular}
 \end{center}
-These have been obtained by looking at common parameters used in the literature and validating on a few examples to ensure quality of learning while minimizing computation time. A more rigorous hyperparameter tuning is covered in Subsection~\ref{sub:hyperparameter-tuning}. Moving forward, we assume this configuration unless otherwise stated. We begin by testing each CA on 20 initial conditions sampled from a distribution uniform on density. This early attempt at learning Life yields poor results.
+These have been obtained by looking at common parameters used in the literature\todo{cite} and parameters from the maze generation experiments. A more rigorous hyperparameter tuning is covered in Subsection~\ref{sub:hyperparameter-tuning}. Moving forward, we assume this configuration unless otherwise stated. We begin by testing each CA on 20 initial conditions sampled from a distribution uniform on density. This early attempt at learning Life yields poor results.
 
 \begin{figure}[!h]
 \centering

@@ -1,6 +1,6 @@
 \chapter{Modelling Gray-Scott Systems} \label{gray-scott}
 
-To learn Gray-Scott models, we extend our evolutionary algorithm toolkit further to include more diverse methods such as evolutionary strategies and particle swarm optimization.
+To learn Gray-Scott models, the evolutionary algorithm toolkit is extended with a new simulator, new genetic operators, and support for evolutionary strategies (ES).
 
 \section{Simulator} \label{subsec:simulator}
 
@@ -27,7 +27,7 @@ Another popular choice is the nine-point stencil\cite{rosser1975nine}.
     0.25 & 0.5 & 0.25
   \end{bmatrix}
 \]
-Testing on a few examples revealed that both kernels capture complex diffusion behaviour with similar effectiveness. However, the choice of kernel is not arbitrary and these two choices are well principled. We briefly outline the reasoning behind the nine-point stencil. If we briefly consider $u$ as a function of only $x$ (i.e fix $y$ and $t$ constant) and rearrange the Taylor series expansions for $u(x+h)$ and $u(x-h)$, we get
+Testing on a few examples revealed that both kernels capture complex diffusion behaviour with similar effectiveness. However, the choice of kernel is not arbitrary and these two choices are well principled. We briefly outline the reasoning behind the nine-point stencil. If we consider $u$ as a function of only $x$ (i.e fix $y$ and $t$ constant) and rearrange the Taylor series expansions for $u(x+h)$ and $u(x-h)$, we get
 \begin{align*}
   \pdv{u}{x} &= \frac{u(x+h) - u(x)}{h} - \frac{u^{(2)}(x)}{2!}h - \frac{u^{(3)}(x)}{3!}h^2 - \frac{u^{(4)}(x)}{4!}h^3 - ... \\
   \pdv{u}{x} &= - \frac{u(x-h) - u(x)}{h} + \frac{u^{(2)}(x)}{2!}h - \frac{u^{(3)}(x)}{3!}h^2 + \frac{u^{(4)}(x)}{4!}h^3 - ...
@@ -38,7 +38,7 @@ Subtracting one from the other yields the 3-point stencil approximation for the 
   \implies \pdv{u}{x^2} &=  \underbrace{\frac{u(x-h) -2u(x) + u(x+h)}{h^2}}_{\let\scriptstyle\textstyle
   \substack{=: \Delta^{(3)}u(x)}} + O(h^2)
 \end{align*}
-By combining two of these we get a two dimensional 5-point stencil.
+By combining the 3-point stencils for the $x$ and $y$ directions, we get a two dimensional 5-point stencil.
 \begin{align*}
   \Delta u(x, y) &= \pdv{u}{x^2} + \pdv{u}{y^2}\\
                      &\approx \frac{u(x-h, y) -2u(x, y) + u(x+h, y)}{h^2} + \frac{u(x, y-h) -2u(x, y) + u(x, y+h)}{h^2}\\
@@ -108,20 +108,45 @@ The simulator allows for two different initialisation settings. Both have a back
 \label{fig:splatter}
 \end{figure}
 
-\section{Chromosome}
-The chromosome is made up of two vectors, \textit{state} and \textit{control}. The state vector contains the parameters of model, feed and kill rate, as two real numbers, $f$ and $k$. The control vector encodes the volatility of these parameters as real numbers $df$ and $dk$. The toolkit allows the user to initialise chromosomes in one of two ways. The first choice is to sample a random uniform distribution with $0.0 \leq f \leq 0.30$ and $0.0 \leq k \leq 0.08$. The boundaries are based on the nontrivial region depicted in Munafo's phase diagram in Figure~\ref{fig:xmorphia}. The second choice is to sample pairs close to the saddle-node bifurcation threshold $f = f(4+k)^2$ depicted as the solid line in Figure~\ref{fig:pearsons-threshold}. Values of $f$ is picked uniformly between the roots of the bifurcation parabola, $0.0$ and $0.25$. $k$ is the positive solution of this parabola $k = \frac{1}{2}\sqrt{f} - f$ perturbed by $\pm 10\%$ Gaussian noise and truncated at $k = 0$.
+\section{Genetic Algorithm III}
 
-\section{Fitness and Selection}
-Once the population of chromosomes has been initialised, we consider an objective function. As before, we simulate a true CA based on the goal parameters and maintain a surrogate cellular automata which is regularly synchronised with the true CA. The loss for a single cell is calculated by finding the difference in density between the true and surrogate cell as a fraction of the true density. The loss of the whole CA is the mean of these values and the fitness is defined as $1 - \textnormal{loss}$. This is a continuous extension of the XOR loss used for life-like CA. In roulette selection, each member of the population has a probability of progressing to the next generation equal to their fitness divided by the sum of the fitnesses of every individual in that population. In truncation selection, individuals are ranked by fitness and a fraction of the top ranking candidates are picked.\\
+\subsection{Chromosome}
+The chromosome is made up of two vectors, \textit{state} and \textit{control}. The state vector contains the parameters of model, feed and kill rate, as two real numbers, $f$ and $k$. The control vector encodes the volatility of these parameters as real numbers $df$ and $dk$. This allows us to implement a variable mutation rate which is important given the search space is made up of a small band of interesting behaviour amidst a background of trivial solutions. The toolkit allows the user to initialise chromosomes in one of two ways. The first choice is to sample a random uniform distribution with $0.0 \leq f \leq 0.30$ and $0.0 \leq k \leq 0.08$. The boundaries are based on the nontrivial region depicted in Munafo's phase diagram in Figure~\ref{fig:xmorphia}. The second choice is to sample pairs close to the saddle-node bifurcation threshold $f = f(4+k)^2$ depicted as the solid line in Figure~\ref{fig:pearsons-threshold}. Values of $f$ are picked uniformly between the roots of the bifurcation parabola, $0.0$ and $0.25$. $k$ is the positive solution of this parabola $k = \frac{1}{2}\sqrt{f} - f$ perturbed by $\pm 10\%$ Gaussian noise and truncated at $k = 0$.
+\todo{Image: constant vs variable mutation convergence?}
 
-Selection comes in two flavours, \textit{plus} and \textit{comma}. Under plus-selection, parents and children alike are considered for progression to the next generation. This is the standard setting we used for life-like CA too. Under comma-selection, only offspring can progress to the next generation. We implement this setting as it enforces a "lifetime" of one generation on all candidates which promotes exploration outside of local optima. The downside to this is that it is easy for promising solutions to die out if they do not immediately pass on their advantageous characteristics to the next generation. This hinders convergence.\\
+\subsection{Genetic Operators}
+The crossover method used is a combination of uniform crossover and blended crossover (BLX-$\alpha$). For two parents $x$ and $y$, the state of the child $c$ is defined by a value sampled uniformly from the interval between the corresponding state in the parents.
+\begin{align*}
+  c_f &\sim \mathit{Uniform}(\min(x_f, y_f),\ \max(x_f, y_f))\\
+  c_k &\sim \mathit{Uniform}(\min(x_k, y_k),\ \max(x_k, y_k))
+\end{align*}
+However, the control property is different due to the BLX-$\alpha$ algorithm which combines exploration and exploitation. A traditional crossover algorithm seeks to exploit generational knowledge to create novel candidate solutions by deriving a child state interior to the boundaries defined by the parents' states. For example, consider a single-point crossover on a binary string. If both parents have a 1 in the $i^{th}$ position bit, it is impossible for the child to have a 0 in the $i^{th}$ bit. In this sense, BLX-$\alpha$ is not pure crossover as it explores areas of the search outside the parent-defined borders.
 
-Crossover and mutation are dependent on the evolutionary algorithm being used. The two key evolutionary algorithms implemented are an evolutionary strategy and a genetic algorithm. We explore these in turn.
+\begin{definition}[Blended Crossover (BLX-$\alpha$)]
+We define the blended crossover of real numbers $x_i$, $y_i \in [a_i, b_i]$ with $x_i < y_i$ and parameter $\alpha \in \mathbb{R^+}$ as a sample\\
+\[
+  BLX(x_i, y_i, \alpha) \sim \mathit{Uniform}(x_i - \alpha(y_i - x_i),\  y_i + \alpha(y_i - x_i))
+\]
+\end{definition}
+The hyperparameter $\alpha$ defines how much exploration the operator undertakes as a fraction of the difference between the parent states. In the special case $\alpha = 0$ this is another uniform crossover and when $\alpha$ is maximised, this approaches a uniform mutation operator where the value of a child gene is a uniform sample across the predefined gene boundaries $a_i$ and $b_i$.\\
+
+\begin{figure}[!h]
+\centering
+    \includegraphics[width=.5\textwidth]{images/blx.png}
+    \caption{Blended Crossover \cite{abido2006multiobjective}}
+\label{fig:blx-alpha}
+\end{figure}
+
+To ensure exploration is occurring for state properties too, a Gaussian mutation is added to $f$ and $k$. The variance of this mutation is dictated by the control property 
+
+\subsection{Fitness Function}
+As before, we simulate a true CA based on the goal parameters and maintain a surrogate CA which is regularly synchronised with the true CA. The loss for a single cell is calculated by finding the difference in density between the true and surrogate cell as a fraction of the true density. The loss of the whole CA is the mean of these values and the fitness is defined as $1 - \textnormal{loss}$. This is a continuous extension of the XOR loss used for life-like CA.\\
+\todo{Sobel filter fitness}
 
 \section{Evolutionary Strategy}
-Evolutionary strategies (ES) are black-box optimization algorithms suited to continuous domains. Some ES use fitness-based recombination where parents with a higher fitness produce more offspring[CITE]. In this case, selection pressure and exploitation of generational knowledge are pursued simultaneously, so traditional environmental selection can be omitted. For our use case, we stick with a fitness-independent recombination method and a separate environmental selection scheme to allow more flexibility in tuning both processes.\\
+Evolutionary strategies (ES) are black-box optimization algorithms suited to continuous domains. Some ES use fitness-based recombination where parents with a higher fitness produce more offspring[CITE]. In this case, selection pressure and exploitation of generational knowledge are pursued simultaneously, so traditional environmental selection can be omitted. For our use case, we stick with a fitness-independent recombination method and a separate environmental selection scheme to allow flexibility in tuning both processes individually.\\
 
-An ES individual has the form $a_i: (\bm{x}, \bm{\sigma}, F(\bm{x}))$ which are the state parameters, control parameters, and fitness respectively. The control parameters define the average size of mutation and are specific to each individual. ES also often use more than 2 parents for recombination unlike GA. Typically, all children are produced from the top $\rho$ parents with $\rho \leq \mu$. Common recombination operators include:
+An ES individual has the form $a_i: (\bm{x}, \bm{\sigma}, F(\bm{x}))$ which are the state parameters, control parameters, and fitness respectively. The control parameters control the average size of mutation and are specific to each individual. ES also often use more than 2 parents for recombination unlike GA. Typically, all children are produced from the top $\rho$ parents with $\rho \leq \mu$. Common recombination operators include:
 \begin{itemize}
   \item Discrete: For each of the offspring's state variables, one of the $\rho$ parents is picked from which to inherit.
   \item Intermediate: The offspring's state is the mean of the states of the parents.
@@ -158,27 +183,3 @@ We implement this strategy but, in the style of Hansen et al.\cite{hansen2015evo
 
 % TODO?
 
-\section{Genetic Algorithm III}
-The genetic algorithm performs crossover, recombination, mutation, and selection as usual. The crossover method used is a combination of uniform crossover and blended crossover (BLX-$\alpha$). Uniform crossover is used on the state property of each chromosome. For two parents $x$ and $y$, a property of a child $c$ is defined by a value sampled uniformly from the interval between the corresponding property in the parents.
-\begin{align*}
-  c_f &\sim \mathit{Uniform}(\min(x_f, y_f),\ \max(x_f, y_f))\\
-  c_k &\sim \mathit{Uniform}(\min(x_k, y_k),\ \max(x_k, y_k))
-\end{align*}
-However, the control property is different due to the BLX-$\alpha$ algorithm which combines exploration and exploitation. A traditional crossover algorithm seeks to exploit generational knowledge to create novel candidate solutions by deriving a child state interior to the boundaries defined by the parents' states. For example, consider a single-point crossover on a binary string. If both parents have a 1 in the $i^{th}$ position bit, it is impossible for the child to have a 0 in the $i^{th}$ bit. In this sense, BLX-$\alpha$ is not pure crossover as it explores areas of the search outside the parent-defined borders.
-
-\begin{definition}[Blended Crossover (BLX-$\alpha$)]
-We define the blended crossover of real numbers $x_i$, $y_i \in [a_i, b_i]$ with $x_i < y_i$ and parameter $\alpha \in \mathbb{R^+}$ as a sample\\
-\[
-  BLX(x_i, y_i, \alpha) \sim \mathit{Uniform}(x_i - \alpha(y_i - x_i),\  y_i + \alpha(y_i - x_i))
-\]
-\end{definition}
-The hyperparameter $\alpha$ defines how much exploration the operator undertakes as a fraction of the difference between the parent states. In the special case $\alpha = 0$ this is another uniform crossover and when $\alpha$ is maximised, this approaches a uniform mutation operator where the value of a child gene is a uniform sample across the predefined gene boundaries $a_i$ and $b_i$.\\
-
-\begin{figure}[!h]
-\centering
-    \includegraphics[width=.5\textwidth]{images/blx.png}
-    \caption{Blended Crossover \cite{abido2006multiobjective}}
-\label{fig:blx-alpha}
-\end{figure}
-
-To ensure exploration is occurring for state properties too, shrink mutation is applied. This is where Gaussian noise is added to $f$ and $k$. The variance of this noise is dictated by the control property 
