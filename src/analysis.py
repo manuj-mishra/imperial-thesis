@@ -67,30 +67,31 @@ def eppstein(df):
 # print(parameters)
 #
 
-def runs_vs_convperc(root = "life-hyper"):
+def runs_vs_convperc(root = "lifelike/hyper"):
   d = {'maxstep': [], 'evalstep': [], 'convergence':[], 'visited':[], 'convtime':[]}
   for file in os.listdir(root):
     maxstep = float(re.search('maxstep(.*)_evalstep', file).group(1))
-    evalstep = float(re.search('evalstep(.*)_', file).group(1))
+    evalstep = float(re.search('evalstep(.*).csv', file).group(1))
     d['maxstep'].append(maxstep)
     d['evalstep'].append(evalstep)
     locdf = pd.read_csv(f"./{root}/{file}")
     locdf = locdf[locdf.convtime != 30]
     d['convergence'].append(len(locdf.index)/100)
     d['visited'].append(sum(locdf.visited)/len(locdf.index))
-    d['convtime'].extend(list(locdf.convtime))
+    d['convtime'].extend(sum(locdf.convtime) / len(locdf.index))
 
 
-  df = pd.DataFrame(data=d)
-  g = sns.lineplot(data=df, x="maxstep", y="convergence", hue="evalstep", palette="Set2")
-  g.set(xscale='log', xlabel='Maximum step size', ylabel='Proportion of goals precisely learnt in under 30 epochs', title='Tuning maximum step size')
-  plt.show()
-  plt.cla()
-
-
-  h = sns.histplot(x=df.convtime, kde=True, stat='frequency')
-  h.set(xscale='log', xlabel='Convergence Time', ylabel='Frequency Density', title='Distribution of Convergence')
-  plt.show()
+  # df = pd.DataFrame(data=d)
+  print(d)
+  # g = sns.lineplot(data=df, x="maxstep", y="convergence", hue="evalstep", palette="Set2")
+  # g.set(xscale='log', xlabel='Maximum step size', ylabel='Proportion of goals precisely learnt in under 30 epochs', title='Tuning maximum step size')
+  # plt.show()
+  # plt.cla()
+  #
+  #
+  # h = sns.histplot(x=df.convtime, kde=True, stat='frequency')
+  # h.set(xscale='log', xlabel='Convergence Time', ylabel='Frequency Density', title='Distribution of Convergence')
+  # plt.show()
   # h = sns.lineplot(data=df, x="maxstep", y="visited", hue="evalstep", palette="Set2")
   # h.set(xscale='log', xlabel='Maximum step size', ylabel='Proportion of rule space traversed', title='')
   # plt.show()
@@ -116,12 +117,14 @@ def low_high_sparsity():
 
 
 if __name__ == "__main__":
-  df = pd.read_csv('./lifelike/random_negentropy.csv')
-  sns.histplot(df.negentropy)
-  plt.show()
-  negdict = dict(zip(df.rstring, -1 * df.negentropy))
-  # print(negdict[8])
-  print(negdict[int('000100000001100000', 2)])
+  # df = pd.read_csv('./lifelike/random_negentropy.csv')
+  # sns.histplot(df.negentropy)
+  # plt.show()
+  # negdict = dict(zip(df.rstring, -1 * df.negentropy))
+  # # print(negdict[8])
+  # print(negdict[int('000100000001100000', 2)])
   # print(pd.isna(negdict[0]))
   # print(df.negentropy.quantile(.95))
   # print(df.conv_perc)
+
+  runs_vs_convperc()

@@ -85,7 +85,7 @@ if __name__ == "__main__":
   # SELECTION TYPE EXPERIMENT
   d = []
   p = []
-  for i in range(30):
+  for i in range(20):
     print("Exp", i)
     md, mp = run_experiment(0.5)
     d.append(md)

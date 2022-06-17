@@ -32,7 +32,7 @@ class Population:
     self.update(loss)
 
   def iterate(self):
-    # self.crossover()
+    self.crossover()
     self.mutate()
     loss = self.loss()
     self.visited.update([i.rstring for i in self.inds])

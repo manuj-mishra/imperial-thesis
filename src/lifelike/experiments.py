@@ -4,14 +4,17 @@ from random import random
 import numpy as np
 import pandas as pd
 
+from lifelike.CAs import GRID_SIZE
 from lifelike.Population import Population
 from lifelike.constants import CHROMOSOME_LEN
 from util import binary
 #HYPERPARAMETER TUNING
 if __name__ == "__main__":
+  ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > np.random.random() for i in range(20)]
+  goals = [np.random.randint(1, 2 ** CHROMOSOME_LEN - 1) for _ in range(100)]
   for eval_step in (1, 5, 10):
-    for max_step in np.logspace(0, 2, num=5):
-      pop_size = 100
+    for max_step in (1, 5, 10):
+      pop_size = 20
       elitism = 0.2
       mutation = 1 / CHROMOSOME_LEN
       epoch_n = 30
@@ -19,17 +22,15 @@ if __name__ == "__main__":
         "max_step": int(round(max_step)),
         "eval_step": eval_step
       }
-      exp_name = f"exp_maxstep{max_step}_evalstep{eval_step}_multires"
+      exp_name = f"exp_maxstep{max_step}_evalstep{eval_step}"
       print(f"Running {exp_name}")
       rules = []
       conv_epochs = []
       num_visited = []
       best_rules = []
-      with open('lifelike/ics.npy', 'rb') as icfile:
-        ics = np.load(icfile)
-      with open('lifelike/goals.npy', 'rb') as goalfile:
-        goals = np.load(goalfile)
+      pcount = 0
       for goalarr in goals:
+        print(pcount)
         rules.append(goalarr)
         trueB = binary.ones(goalarr >> (CHROMOSOME_LEN // 2))
         trueS = binary.ones(goalarr)
@@ -43,6 +44,7 @@ if __name__ == "__main__":
         conv_epochs.append(counter)
         num_visited.append(len(pop.visited))
         best_rules.append(pop.inds[0].rstring)
+        pcount += 1
 
       df = pd.DataFrame({"rstring": rules,
                          "convtime": conv_epochs,
