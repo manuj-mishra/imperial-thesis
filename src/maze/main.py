@@ -91,8 +91,8 @@ if __name__ == "__main__":
     d.append(md)
     p.append(mp)
 
-  df = DataFrame.from_dict({"type": ["Relative Roulette"] * len(d), "d": d, "p": p})
-  df.to_csv("roulette_ranks.csv")
+  df = DataFrame.from_dict({"type": ["Relative Truncation"] * len(d), "d": d, "p": p})
+  df.to_csv("rel_truncation.csv")
 
   # BIAS EXPERIMENT
   # b = []

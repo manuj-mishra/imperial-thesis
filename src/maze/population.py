@@ -43,9 +43,9 @@ class Population:
   def select(self):
     scores, mean_dead_ends, mean_path_lens = self.evaluate()
     # sorted_scores = np.sort(scores)[::-1]
-    # self.inds = self.inds[(-scores).argsort()]
-    # self.inds = self.inds[:self.elite_n]
-    self.inds = random.choices(self.inds, scores, k=self.elite_n)
+    self.inds = self.inds[(-scores).argsort()]
+    self.inds = self.inds[:self.elite_n]
+    # self.inds = random.choices(self.inds, scores, k=self.elite_n)
     return mean_dead_ends, mean_path_lens
     # return mean_dead_ends, mean_path_lens, sorted_scores[:self.elite_n]
 
