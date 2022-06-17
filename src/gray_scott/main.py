@@ -127,5 +127,5 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
 
 if __name__ == "__main__":
     # np.set_printoptions(precision=3, suppress=True)
-    test_single_EA(true_f=0.03, true_k=0.06, rname="GA_30EP_25POP", algorithm="GA", recombination="PLUS",
+    test_single_EA(true_f=0.055, true_k=0.062, rname="GA_30EP_100POP", algorithm="GA", recombination="PLUS",
                    selection="LINEAR", initialisation="RANDOM", seed="SPLATTER")

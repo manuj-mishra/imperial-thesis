@@ -10,9 +10,11 @@ from scipy import stats
 
 if __name__ == "__main__":
 
-  df = pd.read_csv('./maze/roulette_ranks.csv')
-  print(df)
-  g = sns.scatterplot(x=.5 * (df.p + df.d), y = [1] * len(df))
+  trunc = pd.read_csv('./rel_truncation.csv')
+  obj = pd.read_csv('./roulette_ranks.csv')
+  df = pd.concat([obj, trunc], ignore_index=True)
+  g = sns.kdeplot(x=.5 * (df.p + df.d), hue = df.type, legend=False, fill=True)
+  plt.legend(loc='upper left', title='Type', labels=['Relative Truncation', 'Relative Roulette'])
   g.set(xlabel='Fitness')
   plt.show()
 

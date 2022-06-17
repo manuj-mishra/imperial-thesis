@@ -26,7 +26,7 @@ def run_experiment(path_len_bias, pop_size=50, elitism=0.2, mutation=0.0, epoch_
   mean_deads.append(mean_dead_ends)
   mean_paths.append(mean_path_lens)
   # save_experiments(pop, mean_paths, mean_deads)
-  return mean_dead_ends, mean_path_lens
+  return mean_dead_ends, mean_path_lens, time.time() - start_time
 
 
 def save_experiments(pop, mean_paths, mean_deads):
@@ -83,16 +83,16 @@ if __name__ == "__main__":
   # df.to_csv("maze-nothing.csv", index=False)
 
   # SELECTION TYPE EXPERIMENT
-  d = []
-  p = []
-  for i in range(20):
-    print("Exp", i)
-    md, mp = run_experiment(0.5)
-    d.append(md)
-    p.append(mp)
-
-  df = DataFrame.from_dict({"type": ["Relative Truncation"] * len(d), "d": d, "p": p})
-  df.to_csv("rel_truncation.csv")
+  # d = []
+  # p = []
+  # for i in range(20):
+  #   print("Exp", i)
+  #   md, mp = run_experiment(0.5)
+  #   d.append(md)
+  #   p.append(mp)
+  #
+  # df = DataFrame.from_dict({"type": ["Relative Truncation"] * len(d), "d": d, "p": p})
+  # df.to_csv("rel_truncation.csv")
 
   # BIAS EXPERIMENT
   # b = []
@@ -109,21 +109,21 @@ if __name__ == "__main__":
   # df.to_csv("bias_tuning_hyp.csv")
 
   # # HYPERPARAM EXPERIMENT:
-  # mean_deads = []
-  # mean_paths = []
-  # train_times = []
-  # ids = []
-  # for pop in (20, 50, 100):
-  #   for el in (0.1, 0.2, 0.5):
-  #     for mut in (0.01, 0.05, 0.1):
-  #       for ep in (10, 50, 100):
-  #         ids.append(f"pop{pop}_el{int(el * 100)}_mut{int(mut * 100)}_ep{int(ep*100)}")
-  #         mean_dead_ends, mean_path_lens, train_time = run_experiment(0.5, pop_size=pop, elitism=el, mutation=mut, epoch_n=ep)
-  #         mean_deads.append(mean_dead_ends)
-  #         mean_paths.append(mean_path_lens)
-  #         train_times.append(train_time)
-  # df = DataFrame.from_dict({"id": ids, "d": mean_deads, "p":mean_paths, "t": train_times})
-  # df.to_csv("maze_hyperparam.csv")
+  mean_deads = []
+  mean_paths = []
+  train_times = []
+  ids = []
+  for pop in (20, 50, 100):
+    for el in (0.1, 0.2, 0.5):
+      for mut in (0.01, 0.05, 0.1):
+        for ep in (10, 50, 100):
+          ids.append(f"pop{pop}_el{int(el * 100)}_mut{int(mut * 100)}_ep{int(ep*100)}")
+          mean_dead_ends, mean_path_lens, train_time = run_experiment(0.5, pop_size=pop, elitism=el, mutation=mut, epoch_n=ep)
+          mean_deads.append(mean_dead_ends)
+          mean_paths.append(mean_path_lens)
+          train_times.append(train_time)
+  df = DataFrame.from_dict({"id": ids, "d": mean_deads, "p":mean_paths, "t": train_times})
+  df.to_csv("maze_hyperparam.csv")
 
   # # NOVELTY EXPERIMENT
   # N = 3

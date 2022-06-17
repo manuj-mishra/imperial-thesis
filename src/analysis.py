@@ -75,10 +75,9 @@ def runs_vs_convperc(root = "lifelike/hyper"):
     d['maxstep'].append(maxstep)
     d['evalstep'].append(evalstep)
     locdf = pd.read_csv(f"./{root}/{file}")
-    locdf = locdf[locdf.convtime != 30]
     d['convergence'].append(len(locdf.index)/100)
-    d['visited'].append(sum(locdf.visited)/len(locdf.index))
-    d['convtime'].extend(sum(locdf.convtime) / len(locdf.index))
+    d['visited'].append(sum(locdf.visited)/(len(locdf.index)))
+    d['convtime'].append(sum(locdf.convtime) / len(locdf.index))
 
 
   # df = pd.DataFrame(data=d)

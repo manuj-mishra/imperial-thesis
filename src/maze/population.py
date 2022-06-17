@@ -27,7 +27,7 @@ class Population:
     self.crossover()
 
     # Mutate
-    # self.mutate(self.elite_n // 5)
+    self.mutate()
     # best_diversity = 0
     # best_mutation = self.inds.copy()
     # for _ in range(self.novelty):
@@ -64,8 +64,8 @@ class Population:
     self.inds = np.append(self.inds, np.array(children))
 
 
-  def mutate(self, non_mutate_n):
-    for ind in self.inds[non_mutate_n:]:
+  def mutate(self):
+    for ind in self.inds:
       ind.mutate(self.mutation)
 
   def evaluate(self):
