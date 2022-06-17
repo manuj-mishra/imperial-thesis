@@ -87,11 +87,11 @@ class Population:
     dead_ranks[dead_ixs] = np.linspace(0, 1, num=n)
     path_ranks = np.empty(n)
     path_ranks[path_ixs] = np.linspace(0, 1, num=n)
-    scores1 = ((1 - self.path_len_bias) * dead_ixs) + (self.path_len_bias * path_ixs)
-    # scores2 = ((1 - self.path_len_bias) * dead_ranks) + (self.path_len_bias * path_ranks)
-    scores1 = np.where(path_lens == 0, 0, scores1)
-    # scores2 = np.where(path_lens == 0, 0, scores2)
-    return scores1, np.mean(dead_ends[dead_ends != 0]), np.mean(path_lens[path_lens != 0])
+    # scores1 = ((1 - self.path_len_bias) * dead_ixs) + (self.path_len_bias * path_ixs)
+    scores2 = ((1 - self.path_len_bias) * dead_ranks) + (self.path_len_bias * path_ranks)
+    # scores1 = np.where(path_lens == 0, 0, scores1)
+    scores2 = np.where(path_lens == 0, 0, scores2)
+    return scores2, np.mean(dead_ends[dead_ends != 0]), np.mean(path_lens[path_lens != 0])
 
   def diversity_to(self, rstring):
     return np.mean([hamming(rstring, i.rstring) for i in self.inds])
