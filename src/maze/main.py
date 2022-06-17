@@ -11,25 +11,25 @@ from maze.population import Population
 
 EPOCH_N = 10
 
-def run_experiment(path_len_bias, pop_size=20, elitism=0.2, mutation=0.05, epoch_n=EPOCH_N):
+def run_experiment(path_len_bias, pop_size=50, elitism=0.2, mutation=0.0, epoch_n=EPOCH_N):
   start_time = time.time()
   mean_deads = []
   mean_paths = []
   pop = Population(pop_size, path_len_bias, elitism, mutation)
   for epoch in range(epoch_n - 1):
-    print("Epoch:", epoch + 1)
+    # print("Epoch:", epoch + 1)
     mean_dead_ends, mean_path_lens = pop.iterate()
     mean_deads.append(mean_dead_ends)
     mean_paths.append(mean_path_lens)
 
-  mean_dead_ends, mean_path_lens, elite_scores = pop.select()
+  mean_dead_ends, mean_path_lens = pop.select()
   mean_deads.append(mean_dead_ends)
   mean_paths.append(mean_path_lens)
-  save_experiments(pop, elite_scores, mean_paths, mean_deads)
+  # save_experiments(pop, mean_paths, mean_deads)
   return mean_dead_ends, mean_path_lens
 
 
-def save_experiments(pop, elite_scores, mean_paths, mean_deads):
+def save_experiments(pop, mean_paths, mean_deads):
   exp_n = f"pop{pop.pop_size}_el{pop.elitism * 100}_mut{pop.mutation * 100}"
   for rulestring in pop.inds[:(pop.elite_n//5)]:
     rulestring.b.sort()
@@ -48,7 +48,7 @@ def save_experiments(pop, elite_scores, mean_paths, mean_deads):
     write = csv.writer(file)
     write.writerow([f"{e.b}_{e.s}" for e in pop.inds])
     write.writerow([e.get_rstring() for e in pop.inds])
-    write.writerow(elite_scores)
+    # write.writerow(elite_scores)
 
   epochs = [i for i in range(1, EPOCH_N + 1)]
   fig, ax1 = plt.subplots()
@@ -71,17 +71,28 @@ def save_experiments(pop, elite_scores, mean_paths, mean_deads):
 
 if __name__ == "__main__":
   # ABLATION
+  # d = []
+  # p = []
+  # n = 10
+  # for _ in range(n):
+  #   md, mp = run_experiment(0.5)
+  #   d.append(md)
+  #   p.append(mp)
+  #
+  # df = DataFrame.from_dict({"category": ["no mutation or crossover"]*n, "d":d , "p": p})
+  # df.to_csv("maze-nothing.csv", index=False)
+
+  # SELECTION TYPE EXPERIMENT
   d = []
   p = []
-  n = 10
-  for _ in range(n):
+  for i in range(30):
+    print("Exp", i)
     md, mp = run_experiment(0.5)
     d.append(md)
     p.append(mp)
 
-  df = DataFrame.from_dict({"category": ["no mutation or crossover"]*n, "d":d , "p": p})
-  df.to_csv("maze-nothing.csv", index=False)
-
+  df = DataFrame.from_dict({"type": ["Relative Roulette"] * len(d), "d": d, "p": p})
+  df.to_csv("roulette_ranks.csv")
 
   # BIAS EXPERIMENT
   # b = []

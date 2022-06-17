@@ -67,7 +67,7 @@ def eppstein(df):
 # print(parameters)
 #
 
-def runs_vs_convperc(root = "multires"):
+def runs_vs_convperc(root = "life-hyper"):
   d = {'maxstep': [], 'evalstep': [], 'convergence':[], 'visited':[], 'convtime':[]}
   for file in os.listdir(root):
     maxstep = float(re.search('maxstep(.*)_evalstep', file).group(1))

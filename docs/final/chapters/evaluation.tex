@@ -130,36 +130,33 @@ We perform a grid search on training hyperparameters across the following ranges
 The optimum metrics achieved are ($d=92.75$, $p=72.04$) with configurations (number of epochs = $100$, population size = $100$, elitism rate = $0.1$, mutation rate = $0.01$). Under a time adjusted measure, we try to optimize for the value of the metric achieved relative to the execution time. Here, the optimum value is ($d=84.69$, $p=74.96$) for configurations (number of epochs = $10$, population size = $20$, elitism rate = $0.2$, mutation rate = $0.01$). This is not significantly worse than the optimum value achieved when disregarding execution time.
 
 \subsection{Ablation Analysis}
-Hyperparameter tuning revealed the lowest mutation rate tested to be most conducive to high metrics. This suggests that mutation may not be necessary for maze evolution. To test this hypothesis, we conduct an ablation analysis on the genetic operators used. We run a 10 maze generations, each for 10 epochs. We then repeat this procedure, each time systematically adding and removing genetic operators from the learning procedure. Figure~\ref{fig:maze-ablation} shows a kernel density estimate plot which visualises the area occupied by the optimal results produced by each of these learning procedures.\\
+Hyperparameter tuning revealed that the lowest mutation rate produced the best results. This suggests that mutation may not be necessary for maze evolution. To test this hypothesis, we conduct an ablation analysis on the genetic operators used. We run a 10 maze generations, each for 10 epochs. We then repeat this procedure, each time systematically adding and removing genetic operators from the learning procedure. Figure~\ref{fig:maze-ablation} shows a kernel density estimate plot which visualises the area occupied by the optimal results produced by each of these learning procedures.\\
 
 \begin{figure}[!h]
 \centering
-            \subfloat[No mutation]{\includegraphics[width=.5\textwidth]{images/maze_eval/mutation-kde.png}}\hfill
-            \subfloat[No crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/cross-kde.png}}\hfill
+            \subfloat[No mutation and no crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/nothing-kde.png}}\hfill
+            \subfloat[Mutation and no crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/cross-kde.png}}\hfill
             \newline
-            \subfloat[No mutation or crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/nothing-kde.png}}\hfill
+            \subfloat[Crossover and no mutation]{\includegraphics[width=.5\textwidth]{images/maze_eval/mutation-kde.png}}\hfill
             \subfloat[Both mutation and crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/both-kde.png}}\hfill
             \caption{Ablation analysis on mutation and crossover for mazes}
 \label{fig:maze-ablation}
 \end{figure}
 
-It is clear that crossover is important 
-
-\subsection{Bias Tuning}
-
-Using the latter parameter set, we tune a bias $\lambda$ to find the value that maximizes fitness  $f(\lambda) = \lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\todo{Redo bias tuning}\\
-
-
+It is clear that crossover is important for convergence to a strong solution as both experiments without crossover had high variance in the results produced. However, mutation appears to be unnecessary in this case. Although mutation can allow better solutions to be produced in some cases, the additional variance means that the average result is usually worse if mutation is included. \todo{Why is mutation not needed here}
 
 \subsection{Roulette vs Truncation Selection}
 
 As the population evolves, the variance in fitness decreases. This makes a roulette selection increasingly likely to pick suboptimal parents. Truncation selection, on the other hand, asserts that a selected candidate will never have a lower fitness than a candidate that has not been selected. However, this can increase the likelihood of premature convergence since genes within incrementally worse solutions that have potential to produce global optima are lost.\\
 
-Since we are optimising for two metrics, we can take a linear combination of the objective values of $p$ and $d$ or we can rank each candidate separately by $p$ and $d$ then take a linear combination of the ranks. We call this objective and relative fitness respectively. As
+Consider a roulette selection first. Since we are optimising for two metrics, we can take a linear combination of the objective values of $p$ and $d$ or we can rank each candidate separately by $p$ and $d$ then take a linear combination of the ranks. We call this objective and relative fitness respectively. 
+
+\subsection{Bias Tuning}
+The bias parameter $\lambda$ decides the weighting given to solution path length over number of dead ends when calculating fitness. Although this can be set by the user based on personal preference, we can tune the bias to find the value that maximizes overall fitness  $f(\lambda) = \lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\todo{Redo bias tuning}
 
 \section{Life-Like CA}
 
-\subsection{Single Case Evaluation}
+\subsection{Single Case Evaluation} \label{sub:single-case}
 
 We begin by attempting to learn for a few specific rules to test the efficacy of the learning process. Consider Conway's Life rule B3/S23. In binary this is '000100000001100000' and as an integer it is 16480. Based on spot checks, we use the following hyperparameters 
 \begin{center}
@@ -174,7 +171,7 @@ We begin by attempting to learn for a few specific rules to test the efficacy of
         Maximum Step Size & 5\\
     \end{tabular}
 \end{center}
-These have been obtained by looking at common parameters used in the literature\todo{cite}, using parameters from the maze generation experiments, and running spot checks on a few examples. A more rigorous hyperparameter tuning is covered in Subsection~\ref{sub:hyperparameter-tuning}. We test on initial conditions sampled uniformly on density. 
+These have been obtained by looking at common parameters used in the literature\todo{cite}, using parameters from the maze generation experiments, and running spot checks on a few examples. A more rigorous hyperparameter tuning of the final 3 parameters is covered in Subsection~\ref{sub:stepsize}. We test on initial conditions sampled uniformly on density. 
 
 \begin{figure}[!h]
 \centering
@@ -195,34 +192,26 @@ Figure~\ref{fig:life-convgraph} shows the algorithm to be very successful at lea
 Figure~\ref{fig:life-searchgraph} shows the portion of the search space visited by the algorithm. As we can see, the top areas far from the goal quickly fade away as selection pressure removes such solutions and offspring in this area are no longer produced. We can also see some other dark bands existing far from the goal at epoch 30. The evolution history shows that by epoch 8, all the elite candidates are identical copies of the goal. This means that the dark bands seen at the end of the graph are not local optima but rather instances of the limited types of offspring that can be produced by applying crossover between two identical rule strings representing the goal solution.\\
 
 \subsection{Ablation Analysis}
-Ablation analysis reveals that both mutation and crossover are critical to achieving a performance like this. Consider Figure~\ref{fig:life-ablation}. 'Visited' indicates the number of unique candidates considered by the algorithm in 30 epochs. Under no mutation and no crossover, we see that the population does not evolve at all. The number of visited candidates is equal to the initial population size, 20. With crossover but no mutation, the algorithm quickly converges to a local minimum from which it is powerless to escape. This also stagnates the number of candidates visited to 37. With mutation but no crossover, the algorithm is incapable of convergence as it is unable to retain generational knowledge. When both mutation and crossover are maintained, the algorithm successfully converges to the global minimum.\\ 
+Ablation analysis reveals that both mutation and crossover are critical to achieving a performance like this. Consider Figure~\ref{fig:life-ablation}. 'Visited' indicates the number of unique candidates considered by the algorithm in 30 epochs. Under no mutation and no crossover, we see that the population does not evolve at all. The number of visited candidates is equal to the initial population size, 20. With mutation but no crossover, the algorithm is incapable of convergence as it is unable to retain generational knowledge. With crossover but no mutation, the algorithm quickly converges to a local minimum from which it is powerless to escape. This also stagnates the number of candidates visited to 37. When both mutation and crossover are maintained, the algorithm successfully converges to the global minimum.\\ 
 
 \begin{figure}[!h]
 \centering
-            \subfloat[No mutation (visited = 37)]{\includegraphics[width=.5\textwidth]{images/life_like_eval/life-no-mutation.png}}\hfill
-            \subfloat[No crossover (visited = 90)]{\includegraphics[width=.5\textwidth]{images/life_like_eval/life-no-crossover.png}}\hfill
+            \subfloat[No mutation and no crossover (visited = 20)]{\includegraphics[width=.5\textwidth]{images/life_like_eval/life-nothing.png}}\hfill
+            \subfloat[Mutation and no crossover (visited = 90)]{\includegraphics[width=.5\textwidth]{images/life_like_eval/life-no-crossover.png}}\hfill
             \newline
-            \subfloat[No mutation or crossover (visited = 20)]{\includegraphics[width=.5\textwidth]{images/life_like_eval/life-nothing.png}}\hfill
+            \subfloat[Crossover and no mutation (visited = 37)]{\includegraphics[width=.5\textwidth]{images/life_like_eval/life-no-mutation.png}}\hfill
             \subfloat[Both mutation and crossover (visited = 197)]{\includegraphics[width=.5\textwidth]{images/life_like_eval/life-both.png}}\hfill
             \caption{Ablation analysis on mutation and crossover for modelling life-like CA}
 \label{fig:life-ablation}
 \end{figure}
 
-\subsection{Hyperparameter Tuning}\label{sub:hyperparameter-tuning}
+\subsection{Stepsize Tuning}\label{sub:hyperparameter-tuning}
+ 
+Since the rule space is of order $10^6$, performing hyperparameter tuning across all parameters on a representative sample of the search space would be infeasible in the given time frame with the resources available. We find the parameters established in \ref{sub:single-case} to be appropriate based on spot checks on a set of rules covering all 4 Wolfram classes. These bear some similarity to the hyperparameters established in the procedural generation case. One point of interest is optimising the number of evaluations and the stepsize as these factors have considerable effect on the training time.\\
 
-We begin by performing some crude hyperparameter testing on the genetic algorithm. Considering a random uniform stepsize, $\delta_k \sim \mathit{Uniform}(D_{max}, D_{min})$ we set $D_{min} = 1$ since we would like to give the algorithm a chance of learning on very small steps. To determine $D_{max}$, the algorithm is run on 100 goal rules and each the loss of each rule is calculated by simulating on 100 random initial conditions. By running the algorithm on populations of size 10 and 100 with $D_{max} \in \{1, 10, 100\}$ for 30 epochs, we find the highest proportion of experiments converging to the precise goal rule within 30 epochs when the population is of size 100 and $D_{max}$ is 10. With this configuration, 32\% of goals are precisely learnt. It is clear that population size makes a considerable difference on performance so for all future tests, we maintain a population size of 100.\\
+Considering a random uniform stepsize, $\delta_k \sim \mathit{Uniform}(D_{max}, D_{min})$ we set $D_{min} = 1$ since we would like to give the algorithm a chance of learning on very small steps. To determine $D_{max}$, the algorithm is run on 100 goal rules and each the loss of each rule is calculated by simulating on 20 random initial conditions.
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.7\textwidth]{images/tune-max-step.png}
-\caption{Percentage of runs that converge within 30 epochs}
-\label{fig:tune-max-step}
-\end{figure}
-
-In order to reduce training time when testing different hyperparameters, we reduce the size of the training set of initial conditions from 100 to 20. Although this somewhat compromises on the strength of the overall algorithm, it allows us to quickly compare multiple different configurations. One such choice is between loss functions. We consider the performance of the single resolution loss against the multiple resolution loss on a population of 100 over 30 epochs with 20 random initial conditions tested per individual.\\    
-
-
-\subsection{Class-Wide Evaluation}
+\subsection{Class Evaluation}
 
 
 \section{Gray-Scott Models}

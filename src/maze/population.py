@@ -11,20 +11,20 @@ EVAL_ITER = 5
 
 class Population:
   def __init__(self, pop_size, path_len_bias, elitism, mutation):
-    self.inds = np.array([Rulestring() for _ in range(pop_size)])
     self.pop_size = pop_size
     self.path_len_bias = path_len_bias
     self.elitism = elitism
     self.mutation = mutation
     self.elite_n = math.floor(elitism * pop_size)
     self.child_n = pop_size - self.elite_n
+    self.inds = np.array([Rulestring() for _ in range(self.elite_n)])
 
   def iterate(self):
     # Selection
-    mean_dead_ends, mean_path_lens, _ = self.select()
+    mean_dead_ends, mean_path_lens = self.select()
 
     # Crossover
-    # self.crossover()
+    self.crossover()
 
     # Mutate
     # self.mutate(self.elite_n // 5)
@@ -42,10 +42,12 @@ class Population:
 
   def select(self):
     scores, mean_dead_ends, mean_path_lens = self.evaluate()
-    sorted_scores = np.sort(scores)[::-1]
-    self.inds = self.inds[(-scores).argsort()]
-    self.inds = self.inds[:self.elite_n]
-    return mean_dead_ends, mean_path_lens, sorted_scores[:self.elite_n]
+    # sorted_scores = np.sort(scores)[::-1]
+    # self.inds = self.inds[(-scores).argsort()]
+    # self.inds = self.inds[:self.elite_n]
+    self.inds = random.choices(self.inds, scores, k=self.elite_n)
+    return mean_dead_ends, mean_path_lens
+    # return mean_dead_ends, mean_path_lens, sorted_scores[:self.elite_n]
 
   def crossover(self):
     children = []
@@ -85,11 +87,11 @@ class Population:
     dead_ranks[dead_ixs] = np.linspace(0, 1, num=n)
     path_ranks = np.empty(n)
     path_ranks[path_ixs] = np.linspace(0, 1, num=n)
-    # scores1 = ((1 - self.path_len_bias) * dead_ixs) + (self.path_len_bias * path_ixs)
-    scores2 = ((1 - self.path_len_bias) * dead_ranks) + (self.path_len_bias * path_ranks)
-    # scores1 = np.where(path_lens == 0, 0, scores1)
-    scores2 = np.where(path_lens == 0, 0, scores2)
-    return scores2, np.mean(dead_ends[dead_ends != 0]), np.mean(path_lens[path_lens != 0])
+    scores1 = ((1 - self.path_len_bias) * dead_ixs) + (self.path_len_bias * path_ixs)
+    # scores2 = ((1 - self.path_len_bias) * dead_ranks) + (self.path_len_bias * path_ranks)
+    scores1 = np.where(path_lens == 0, 0, scores1)
+    # scores2 = np.where(path_lens == 0, 0, scores2)
+    return scores1, np.mean(dead_ends[dead_ends != 0]), np.mean(path_lens[path_lens != 0])
 
   def diversity_to(self, rstring):
     return np.mean([hamming(rstring, i.rstring) for i in self.inds])
