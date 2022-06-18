@@ -115,7 +115,7 @@ We perform a grid search on training hyperparameters across the following ranges
         Number of Epochs & 10, 50, 100\\
         Population Size & 20, 50, 100\\
         Elitism Rate & 0.1, 0.2, 0.5\\
-        Mutation Rate & 0.01, 0.05, 0.1\\
+        Mutation Rate & 0.01, 0.05, 0.1
     \end{tabular}
 \end{center}
 
@@ -147,7 +147,7 @@ It is clear that crossover is important for convergence to a strong solution as 
 
 \subsection{Objective vs Relative Fitness}
 
-Since we are optimising for two metrics, we can take a linear combination of the objective values of $p$ and $d$ or we can rank each candidate separately by $p$ and $d$ then take a linear combination of the ranks. We call this objective and relative fitness respectively. For each fitness type, we run 20 experiments with a bias of 0.5 (i.e. equal weighting to the two goals) In Figure~\ref{fig:objective} KDE plots show the difference in performance of roulette and truncation selection using each of objective and relative fitness for selection. Note that the x axis here is still objective fitness as that is what the algorithm as a whole is attempting to maximise.
+Since we are optimising for two metrics, we can take a linear combination of the objective values of $p$ and $d$ or we can rank each candidate separately by $p$ and $d$ then take a linear combination of the ranks. We call this objective and relative fitness respectively. For each fitness type, we run 20 experiments with a bias of 0.5 (i.e. equal weighting to the two goals) In Figure~\ref{fig:objective} KDE plots show the difference in performance of roulette and truncation selection using each of objective and relative fitness for selection. Note that the x axis here is still objective fitness as that is what the algorithm as a whole is attempting to maximise.\\
 
 \begin{figure}[!h]
 \centering
@@ -166,7 +166,7 @@ The bias parameter $\lambda$ decides the weighting given to solution path length
 
 \subsection{Single Case Evaluation} \label{sub:single-case}
 
-We begin by attempting to learn for a few specific rules to test the efficacy of the learning process. Consider Conway's Life rule B3/S23. In binary this is '000100000001100000' and as an integer it is 16480. Based on spot checks, we use the following hyperparameters 
+We begin by attempting to learn for a few specific rules to test the efficacy of the learning process. Consider Conway's Life rule B3/S23. In binary this is '000100000001100000' and as an integer it is 16480. Based on spot checks, we use the following hyperparameters\\ 
 \begin{center}
     \begin{tabular}{ l c }
         Number of Epochs & 30\\
@@ -179,7 +179,7 @@ We begin by attempting to learn for a few specific rules to test the efficacy of
         Maximum Step Size & 5\\
     \end{tabular}
 \end{center}
-These have been obtained by looking at common parameters used in the literature\todo{cite}, using parameters from the maze generation experiments, and running spot checks on a few examples. A more rigorous hyperparameter tuning of the final 3 parameters is covered in Subsection~\ref{sub:stepsize}. We test on initial conditions sampled uniformly on density. 
+These have been obtained by looking at common parameters used in the literature\todo{cite}, using parameters from the maze generation experiments, and running spot checks on a few examples. A more rigorous hyperparameter tuning of the final 3 parameters is covered in Subsection~\ref{sub:stepsize}. We test on initial conditions sampled uniformly on density.\\ 
 
 \begin{figure}[!h]
 \centering
@@ -197,7 +197,7 @@ Figure~\ref{fig:life-convgraph} shows the algorithm to be very successful at lea
 \label{fig:life-searchgraph}
 \end{figure}
 
-Figure~\ref{fig:life-searchgraph} shows the portion of the search space visited by the algorithm. As we can see, the top areas far from the goal quickly fade away as selection pressure removes such solutions and offspring in this area are no longer produced. We can also see some other dark bands existing far from the goal at epoch 30. The evolution history shows that by epoch 8, all the elite candidates are identical copies of the goal. This means that the dark bands seen at the end of the graph are not local optima but rather instances of the limited types of offspring that can be produced by applying crossover between two identical rule strings representing the goal solution.\\
+Figure~\ref{fig:life-searchgraph} shows the portion of the search space visited by the algorithm. As we can see, the top areas far from the goal quickly fade away as selection pressure removes such solutions and offspring in this area are no longer produced. We can also see some other dark bands existing far from the goal at epoch 30. The evolution history shows that by epoch 8, all the elite candidates are identical copies of the goal. This means that the dark bands seen at the end of the graph are not local optima but rather instances of the limited types of offspring that can be produced by applying crossover between two identical rule strings representing the goal solution.
 
 \subsection{Ablation Analysis}
 Ablation analysis reveals that both mutation and crossover are critical to achieving a performance like this. Consider Figure~\ref{fig:life-ablation}. 'Visited' indicates the number of unique candidates considered by the algorithm in 30 epochs. Under no mutation and no crossover, we see that the population does not evolve at all. The number of visited candidates is equal to the initial population size, 20. With mutation but no crossover, the algorithm is incapable of convergence as it is unable to retain generational knowledge. With crossover but no mutation, the algorithm quickly converges to a local minimum from which it is powerless to escape. This also stagnates the number of candidates visited to 37. When both mutation and crossover are maintained, the algorithm successfully converges to the global minimum.\\ 
@@ -241,15 +241,40 @@ However, it is also important to note the size of the test set. The set of 100 t
 
 \subsection{Fitness Functions}
 
-
 \subsection{Class Evaluation}
 
 
 \section{Gray-Scott Models}
 
-The search space for Gray-Scott models is infinite so we consider a sample of example parameter targets. In the style of 
+The search space for Gray-Scott models is infinite so in the style of Giampaolo et al.\cite{giampaolo2022physics}, we consider four example targets.
 
-\subsection{Genetic Algorithm}
+\begin{center}
+    \begin{tabular}{ |l|c|c| }
+        \hline
+        Target Name & Feed Rate ($f$) & Kill Rate ($k$)\\
+        \hline
+        Flower & 0.055 & 0.062\\
+        Mitosis & 0.028 & 0.062\\
+        Soliton & 0.030 & 0.060\\
+        Zebrafish & 0.035 & 0.060\\
+        \hline
+    \end{tabular}
+\end{center}
 
+We choose to train a population of 25 candidates for 30 epochs since similar values worked effectively for life-like CA and limited computational resources mean that it is infeasible to run the range of experiments required on larger populations or for longer periods. We use a linear truncation loss, splatter initialisation for each CA, and random uniform initialisation of the parameters in the ranges ($0.0 \leq f \leq 0.30$) and ($0.0 \leq k \leq 0.08$).
 
 \subsection{Evolutionary Strategy}
+
+Using a self-adapting evolutionary strategy, we find that the patterns converge to local optima. Consider the flower pattern. Figure~\ref{fig:flower-fail} shows both the state and control parameters converging at around 17 epochs. However, the converged solution of ($f = 0.138, k = 0.036$) is not the true solution.\\
+
+\begin{figure}[!h]
+\centering
+            \subfloat[State paramaters]{\includegraphics[width=.5\textwidth]{images/flower-params.png}}\hfill
+            \subfloat[Control parameters]{\includegraphics[width=.5\textwidth]{images/flower-derivs.png}}\hfill
+            \caption{Evolution of \textit{flower} pattern using evolutionary strategy (population size = 20)}
+\label{fig:flower-fail}
+\end{figure}
+
+Increasing the population size does not appear to 
+
+\subsection{Genetic Algorithm}
