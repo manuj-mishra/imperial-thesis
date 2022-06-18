@@ -9,21 +9,19 @@ from matplotlib import pyplot as plt
 from scipy import stats
 
 if __name__ == "__main__":
-
-  trunc = pd.read_csv('./rel_truncation.csv')
-  obj = pd.read_csv('./roulette_ranks.csv')
-  df = pd.concat([obj, trunc], ignore_index=True)
-  g = sns.kdeplot(x=.5 * (df.p + df.d), hue = df.type, legend=False, fill=True)
-  plt.legend(loc='upper left', title='Type', labels=['Relative Truncation', 'Relative Roulette'])
-  g.set(xlabel='Fitness')
-  plt.show()
-
+  # trunc = pd.read_csv('./rel_truncation.csv')
+  # obj = pd.read_csv('./roulette_ranks.csv')
+  # df = pd.concat([obj, trunc], ignore_index=True)
+  # g = sns.kdeplot(x=.5 * (df.p + df.d), hue = df.type, legend=False, fill=True)
+  # plt.legend(loc='upper left', title='Type', labels=['Relative Truncation', 'Relative Roulette'])
+  # g.set(xlabel='Fitness')
+  # plt.show()
 
   # df = pd.read_csv('./maze_hyperparam.csv')
   # df = df.loc[(df.d + df.p).sort_values(ascending=False).index]
   # print(df)
-  # g = sns.scatterplot(y=df.d/df.t, x = df.p/df.t)
-  # g.set(xlabel='Path length / Time taken', ylabel='# of dead ends / Time taken')
+  # g = sns.scatterplot(y=df.d, x=df.p)
+  # g.set(xlabel='Path length', ylabel='# of dead ends')
   # plt.show()
 
   # both = pd.read_csv('./maze/maze-both.csv')

@@ -90,7 +90,7 @@ When evaluating the effectiveness of evolutionary techniques at learning life-li
 
 There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. We examine each rule to find the percentage of initial conditions that converge within 100 steps and the mean oscillation period of those that converge.\\   
 
-\todo{Redo taxonomy}
+\todo{Rerun taxonomy with fixed simulator}
 
 \begin{figure}[!h]
 \centering
@@ -106,7 +106,7 @@ First we consider the two extremities. 23.2\% of rules converge for all initial 
 
 We begin by evaluating the effectiveness of the maze generator at maximizing the two fitness metrics. These are the length of the solution path ($p$) and the number of dead ends ($d$). From spot checks on a few examples in the simulator, we find that these two metrics happen to have similar ranges (around 70-100). For this reason we begin by treating them with equal weighting during hyperparameter tuning.\\
 
-\subsection{Hyperparameter Tuning} \todo{Redo hyperparam for maze}
+\subsection{Hyperparameter Tuning}
 
 We perform a grid search on training hyperparameters across the following ranges
 \begin{center}
@@ -127,10 +127,10 @@ We perform a grid search on training hyperparameters across the following ranges
 \label{fig:maze-hyperparam}
 \end{figure}
 
-The optimum metrics achieved are ($d=92.75$, $p=72.04$) with configurations (number of epochs = $100$, population size = $100$, elitism rate = $0.1$, mutation rate = $0.01$). Under a time adjusted measure, we try to optimize for the value of the metric achieved relative to the execution time. Here, the optimum value is ($d=84.69$, $p=74.96$) for configurations (number of epochs = $10$, population size = $20$, elitism rate = $0.2$, mutation rate = $0.01$). This is not significantly worse than the optimum value achieved when disregarding execution time.
+The optimum metrics achieved are ($d=109.1$, $p=81.8$) with configurations (number of epochs = $100$, population size = $20$, elitism rate = $0.5$, mutation rate = $0.01$). Under a time adjusted measure, we try to optimize for the value of the metric achieved relative to the execution time. Here, the optimum value is ($d=100.5$, $p=69.8$) for configurations (number of epochs = $100$, population size = $20$, elitism rate = $0.1$, mutation rate = $0.05$). This is not significantly worse than the optimum value achieved when disregarding execution time.
 
 \subsection{Ablation Analysis} \todo{Redo (due to elite n intialisation) if there's time}
-Hyperparameter tuning revealed that the lowest mutation rate produced the best results. This suggests that mutation may not be necessary for maze evolution. To test this hypothesis, we conduct an ablation analysis on the genetic operators used. We run a 10 maze generations, each for 10 epochs. We then repeat this procedure, each time systematically adding and removing genetic operators from the learning procedure. Figure~\ref{fig:maze-ablation} shows a kernel density estimate plot which visualises the area occupied by the optimal results produced by each of these learning procedures.\\
+Hyperparameter tuning revealed that the lowest mutation rate produced the best results. This suggests that mutation may not be necessary for maze evolution. To test this hypothesis, we conduct an ablation analysis on the genetic operators used. We run 10 maze generations, each for 100 epochs. We use the optimal runtime-adjusted hyperparameters for efficiency. We then repeat this procedure, each time systematically adding and removing genetic operators from the learning procedure. Figure~\ref{fig:maze-ablation} shows a kernel density estimate plot which visualises the area occupied by the optimal results produced by each of these learning procedures.\\
 
 \begin{figure}[!h]
 \centering
@@ -160,7 +160,24 @@ Since we are optimising for two metrics, we can take a linear combination of the
 Under both objective and relative fitness, truncation selection outperforms roulette selection on average. There is also a lower variance in the fitness of solutions produced using truncation selection. This is especially exemplified in the case with relative fitness. One reason for this is the decreasing variability in fitness of elite candidates as the population evolves. This makes a roulette selection increasingly likely to pick suboptimal parents. Truncation selection, on the other hand, asserts that a selected candidate will never have a lower fitness than a candidate that has not been selected. However, this can also increase the likelihood of premature convergence since genes within incrementally worse solutions that have potential to produce global optima are lost. Based on the results shown, we opt for a truncation selection using relative fitness. It is interesting to see that a alternative selection criterion, relative fitness, can optimize the objective function better than using the objective function itself for selection.
 
 \subsection{Bias Tuning}
-The bias parameter $\lambda$ decides the weighting given to solution path length over number of dead ends when calculating fitness. Although this can be set by the user based on personal preference, we can tune the bias to find the value that maximizes overall fitness  $f(\lambda) = \lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\todo{Redo bias tuning}
+The bias parameter $\lambda$ decides the weighting given to solution path length over number of dead ends when calculating fitness. Although this can be set by the user based on personal preference, we can tune the bias to find the value that maximizes overall fitness  $f(\lambda) = \lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\\ 
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{images/old-bias.png}
+\caption{Best rule strings discovered under different bias values $\lambda$ (shown on horizontal axis)}
+\label{fig:bias-tuning}
+\end{figure}
+Figure~\ref{fig:bias-tuning}, depicts the opposing nature of the two fitness metrics. As $\lambda$ approaches 1, the number of dead ends decreases and the solution path length increases. The opposite is true as $\lambda$ approaches 0. A bias of around $0.4$ appears to keep the value of both metrics relatively high. Figure~\ref{fig:bias-mazes} shows the top mazes produced for different bias values. Qualitatively these appear to optimize the metrics they are being tested against.\\
+\begin{figure}[!h]
+\centering
+            \subfloat[B16/S1235 ($\lambda=0.0$)]{\includegraphics[width=.33\textwidth]{images/0-bias-maze.png}}\hfill
+            \subfloat[B2678/S12348 ($\lambda=0.4$)]{\includegraphics[width=.33\textwidth]{images/40-bias-maze.png}}\hfill
+            \subfloat[B238/S12356 ($\lambda = 1.0$)]{\includegraphics[width=.33\textwidth]{images/100-bias-maze.png}}\hfill
+            \caption{Best mazes produced from rules discovered using different bias values}
+\label{fig:bias-mazes}
+\end{figure}
+
+\todo{Redo bias tuning using most recent hyperparameters}
 
 \section{Life-Like CA}
 
@@ -220,29 +237,75 @@ Since the rule space is of order $10^6$, performing hyperparameter tuning across
 Considering a random uniform stepsize, $\delta_k \sim \mathit{Uniform}(D_{max}, D_{min})$ we set $D_{min} = 1$ since we would like to give the algorithm a chance of learning on very small steps. To determine $D_{max}$, the algorithm is run on 100 goal rules sampled uniformly across the integer rule values and each the loss of each rule is calculated by simulating on 20 random initial conditions. Note that by initialising the population uniformly on rule densities but sampling the goals uniformly on integer values, we ensure that we are not testing giving ourselves an unfair advantage by testing on a subset of the search space where our algorithm is naturally more likely to place initial guesses.\\
 
 \begin{table}
-    \centering
-    \begin{tabular}{|c||c|c|c|}
-        \hline
-        & \multicolumn{3}{|c|}{Number of Steps } \\
-        \hline
-        Maximum Step Size ($D_{max}$) & 1 & 5 & 10 \\
-        \hline
-        1 & 9.5 & 17.0 & 20.8\\
-        5 & 9.7 & 9.2 & 8.6 \\
-        10 & 8.8 & 9.6 & 9.6\\
-        \hline
-    \end{tabular}
-    \caption{\label{tab:stepsize-life-conv}Average convergence time for different numbers of steps and step sizes}
+    \centering\hfill
+    \subfloat[Average convergence rate]{
+        \begin{tabular}{|c||c|c|c|}
+            \hline
+            $D_{max}$ & \multicolumn{3}{|c|}{Number of Steps } \\
+            \hline
+            & 1 & 5 & 10 \\
+            \hline
+            1 & 100\% & 76\% & 52\% \\
+            5 & 100\% & 100\%& 100\% \\
+            10 & 100\% & 100\%& 100\% \\
+            \hline
+    \end{tabular}}\hfill
+    \subfloat[Average convergence time (epochs)]{
+        \begin{tabular}{|c||c|c|c|}
+            \hline
+            $D_{max}$ & \multicolumn{3}{|c|}{Number of Steps} \\
+            \hline
+            & 1 & 5 & 10 \\
+            \hline
+            1 & 9 & 12 & 11 \\
+            5 & 9 & 9 & 10\\
+            10 & 9 & 9 & 9\\
+            \hline
+    \end{tabular}}\hfill
 \end{table}
 
-All configurations of step number and step size were able to converge to 100\% of the target rules within 30 epochs. However, there were noticeable differences in the average number of epochs required to find the target solution. For a stepsize of 1, increasing the number of evaluation steps decreased performance. In the extreme case of the configuration with 10 consecutive steps, an average of 20.8 epochs were required to converge. Here, the CA is in the early stages of simulation with many transient patterns so additional observations appears to be counter-productive . However, this also indicates that the genetic algorithm can perform surprisingly well calculating fitness on a single immediate observation of the goal rule after 1 time step. Computationally, this kind of observation can be very efficient compared to multiple stochastically chosen observations over longer periods of time. With $D_{max} = 5$, we find a sweet spot where additional observations patently improve performance. For $D_{max}=10$, we find that increasing observations does not improve performance. Here, there are many late-stage observations being made which can dilute information gathered in the early-stages of observation. Also, with a large maximum step size, we can have unlucky cases where the algorithm skips over the early stage of simulation entirely. In the best case, with 10 observations, we find that the algorithm can converge in 8.6 steps on average. With the best configurations tested, these algorithms are able to find the correct solution after considering less than 130 candidates. This is extremely impressive given that this "visited region" makes up less than $0.05\%$ of the entire search space.\\
+Almost all configurations of step number and step size were able to converge to 100\% of the target rules within 30 epochs. The two configurations that failed to do this involved a maximum step size of 1 and many evaluation steps. In the extreme case of the configuration with 10 consecutive steps, only 52\% of targets were learnt successfully. Here, the CA is in the early stages of simulation with many transient patterns, so additional observations appears to be counter-productive. However, we also see that the genetic algorithm can perform surprisingly well calculating fitness on a single immediate observation of the goal rule after 1 time step. Computationally, this is very efficient compared to multiple stochastically chosen observations over longer periods of time. \\
+
+There is some variability in the average convergence times obtained when repeating this experiment so we only consider average convergence time to the nearest epoch. Almost all configurations seem equally good in this regard with the exception of configurations with very small step sizes or very high number of observations. In general, many late-stage observations can dilute information gathered in the early-stages of observation. With the top configurations tested, these algorithms are able to find the correct solution after considering less than 130 candidates. This is extremely impressive given that this "visited region" makes up less than $0.05\%$ of the entire search space.\\
 
 However, it is also important to note the size of the test set. The set of 100 targets, despite being representative of the all possible rule strings, also makes up less than $0.05\%$ of the entire search space. It is plausible to imagine that there is a section of the search space in which our algorithm performs badly but has not been represented in the small test set. With additional time and computational resources, it would be sensible to run this experiment again with a larger test set to see if any rules emerge that cannot be learnt by the algorithm in 30 epochs.
 
 \subsection{Fitness Functions}
 
-\subsection{Class Evaluation}
+We now perform the same hyperparameter grid search on the second fitness function designed: multi-resolution loss. This function takes 3 differently sized smoothing convolutions of the true and surrogate CA, XORs them with each other to get the difference in density in a region around each cell, and takes the average of these differences. The reasoning behind this method is that we expect candidates with similar genotypes to have similar phenotypic behaviour. Therefore, we would expect similar rules to create patterns of similar density in different regions of the lattice. A convolution leverages this effect since the loss between two states with a slight phase shift would be much higher using single-resolution loss than using multi-resolution loss.\\
 
+\begin{table}
+    \centering\hfill
+    \subfloat[Average convergence rate]{
+        \begin{tabular}{|c||c|c|c|}
+            \hline
+            $D_{max}$ & \multicolumn{3}{|c|}{Number of Steps } \\
+            \hline
+            & 1 & 5 & 10 \\
+            \hline
+            1 & 96\% & 63\% & 52\% \\
+            5 & 96\% & 97\%& 98\% \\
+            10 & 96\% & 98\%& 98\% \\
+            \hline
+    \end{tabular}}\hfill
+    \subfloat[Average convergence time (epochs)]{
+        \begin{tabular}{|c||c|c|c|}
+            \hline  
+            $D_{max}$ & \multicolumn{3}{|c|}{Number of Steps} \\
+            \hline
+            & 1 & 5 & 10 \\
+            \hline
+            1 & 11 & 12 & 15 \\
+            5 & 12 & 12 & 12\\
+            10 & 10 & 11 & 12\\
+            \hline
+    \end{tabular}}\hfill
+\end{table}
+
+We find that multi-resolution loss is patently worse than single resolution loss. When learning with multi-resolution loss, all configurations are able to learn fewer targets and convergence time is higher. This suggests that the algorithm is not using high level, stable features to distinguish between different CAs. Instead, it is using high-fidelity behaviour in the early chaotic stages of each CA to uniquely identify them. This also explains why performance decreases as the number of observations increase.
+
+\subsection{Class Evaluation}
+\todo{Class evaluation}
 
 \section{Gray-Scott Models}
 
@@ -254,9 +317,9 @@ The search space for Gray-Scott models is infinite so in the style of Giampaolo 
         Target Name & Feed Rate ($f$) & Kill Rate ($k$)\\
         \hline
         Flower & 0.055 & 0.062\\
-        Mitosis & 0.028 & 0.062\\
-        Soliton & 0.030 & 0.060\\
         Zebrafish & 0.035 & 0.060\\
+        Soliton & 0.030 & 0.060\\
+        Mitosis & 0.028 & 0.062\\
         \hline
     \end{tabular}
 \end{center}
@@ -275,6 +338,17 @@ Using a self-adapting evolutionary strategy, we find that the patterns converge 
 \label{fig:flower-fail}
 \end{figure}
 
-Increasing the population size does not appear to 
+Increasing the population size does not appear to resolve matters as seen in Figure~\ref{fig:zebra-fail}.\\
 
+\begin{figure}[!h]
+\centering
+            \subfloat[State paramaters]{\includegraphics[width=.5\textwidth]{images/zebra-params.png}}\hfill
+            \subfloat[Control parameters]{\includegraphics[width=.5\textwidth]{images/zebra-derivs.png}}\hfill
+            \caption{Evolution of \textit{zebrafish} pattern using evolutionary strategy (population size = 50)}
+\label{fig:zebra-fail}
+\end{figure}
+
+\todo{Test changing laplacian}
+\todo{Add image of goal vs pred}
 \subsection{Genetic Algorithm}
+\todo{Test GA}

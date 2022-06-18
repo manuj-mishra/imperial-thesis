@@ -86,7 +86,7 @@ class Rulestring:
     mid = np.mean(convolve2d(a, kmid, mode='valid').round().astype('bool') ^ convolve2d(b, kmid, mode='valid').round().astype('bool'))
     low = (a.sum() < a.size) ^ (b.sum() < b. size)
     return (low + mid + high) / 3
-    # return mid
+    # return low
 
 # if __name__ == "__main__":
 #   # r = Rulestring.from_bs({1}, {})

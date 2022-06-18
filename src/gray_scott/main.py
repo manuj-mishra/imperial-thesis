@@ -63,8 +63,7 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
     file = open(f'{dir}/elite.csv', 'w+', newline='')
     with file:
         write = csv.writer(file)
-        for e in pop.inds:
-            write.writerow(
+        write.writerow(
                 [f"f:{e.state[0]:.3f} k:{e.state[1]:.3f} df:{e.control[0]:.3f} dk:{e.control[1]:.3f}" for e in
                  pop.inds])
 
@@ -127,5 +126,5 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
 
 if __name__ == "__main__":
     # np.set_printoptions(precision=3, suppress=True)
-    test_single_EA(true_f=0.055, true_k=0.062, rname="GA_30EP_100POP", algorithm="GA", recombination="PLUS",
+    test_single_EA(true_f=0.03, true_k=0.06, rname="ES_30EP_50POP_(new)", algorithm="ES", recombination="PLUS",
                    selection="LINEAR", initialisation="RANDOM", seed="SPLATTER")

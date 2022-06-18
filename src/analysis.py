@@ -67,21 +67,38 @@ def eppstein(df):
 # print(parameters)
 #
 
-def runs_vs_convperc(root = "lifelike/hyper"):
+def runs_vs_convperc(root = "lifelike/multi-hyper"):
   d = {'maxstep': [], 'evalstep': [], 'convergence':[], 'visited':[], 'convtime':[]}
   for file in os.listdir(root):
-    maxstep = float(re.search('maxstep(.*)_evalstep', file).group(1))
-    evalstep = float(re.search('evalstep(.*).csv', file).group(1))
+    maxstep = float(re.search('max(.*)_eval', file).group(1))
+    evalstep = float(re.search('eval(.*).csv', file).group(1))
     d['maxstep'].append(maxstep)
     d['evalstep'].append(evalstep)
     locdf = pd.read_csv(f"./{root}/{file}")
+    locdf = locdf[locdf.rstring == locdf.bestrule]
     d['convergence'].append(len(locdf.index)/100)
     d['visited'].append(sum(locdf.visited)/(len(locdf.index)))
     d['convtime'].append(sum(locdf.convtime) / len(locdf.index))
 
+  for i in range(len(d['maxstep'])):
+    print(d['maxstep'][i], d['evalstep'][i], d['convergence'][i], d['convtime'][i], d['visited'][i])
+  # dfs = []
+  # for file in os.listdir(root):
+  #     df = pd.read_csv(f"./{root}/{file}")
+  #     df["type"] = file[:-4]
+  #     dfs.append(df)
+  # bigboi = pd.concat(dfs, ignore_index=True)
+  # g = sns.kdeplot(data=bigboi, x='convtime', hue='type', label=False)
+  # plt.legend(loc='upper right', title='Type', labels=['Multi-Resolution Loss', 'Single Resolution Loss'])
+  # g.set(xlabel='Convergence Time')
+  # plt.show()
+
+  # sns.kdeplot(single.convtime)
+  # sns.kdeplot(multi.convtime)
+  # plt.show()
 
   # df = pd.DataFrame(data=d)
-  print(d)
+  # print(d)
   # g = sns.lineplot(data=df, x="maxstep", y="convergence", hue="evalstep", palette="Set2")
   # g.set(xscale='log', xlabel='Maximum step size', ylabel='Proportion of goals precisely learnt in under 30 epochs', title='Tuning maximum step size')
   # plt.show()
