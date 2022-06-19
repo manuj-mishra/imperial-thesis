@@ -2,7 +2,7 @@ import random
 import numpy as np
 from scipy.signal import convolve2d
 
-GRID_SIZE = 32
+GRID_SIZE = 20
 
 
 class CA:

@@ -2,7 +2,7 @@
 
 To learn Gray-Scott models, the evolutionary algorithm toolkit is extended with a new simulator, new genetic operators, and support for evolutionary strategies (ES).
 
-\section{Simulator} \label{subsec:simulator}
+\section{Simulator} \label{sec:simulator-2}
 
 In this setting, we run a discretized simulation of a continuous system so there are more subtleties to consider. We use two NumPy arrays of floats to store the density of $u$ and $v$ across the CA. To simulate the change in these densities efficiently, we use a pair of finite-difference equations that approximate the continuous partial differential equations in Def~\ref{def:reaction-diffusion}. We first define discrete approximations for the derivative of each density.
 \begin{definition}[Gray-Scott Model]\label{def:gs}
@@ -108,7 +108,7 @@ The simulator allows for two different initialisation settings. Both have a back
 \label{fig:splatter}
 \end{figure}
 
-\section{Genetic Algorithm III}
+\section{Genetic Algorithm III} \label{sec:ga-3}
 
 \subsection{Chromosome}
 The chromosome is made up of two vectors, \textit{state} and \textit{control}. The state vector contains the parameters of model, feed and kill rate, as two real numbers, $f$ and $k$. The control vector encodes the volatility of these parameters as real numbers $df$ and $dk$. This allows us to implement a variable mutation rate which is important given the search space is made up of a small band of interesting behaviour amidst a background of trivial solutions. The toolkit allows the user to initialise chromosomes in one of two ways. The first choice is to sample a random uniform distribution with $0.0 \leq f \leq 0.30$ and $0.0 \leq k \leq 0.08$. The boundaries are based on the nontrivial region depicted in Munafo's phase diagram in Figure~\ref{fig:xmorphia}. The second choice is to sample pairs close to the saddle-node bifurcation threshold $f = f(4+k)^2$ depicted as the solid line in Figure~\ref{fig:pearsons-threshold}. Values of $f$ are picked uniformly between the roots of the bifurcation parabola, $0.0$ and $0.25$. $k$ is the positive solution of this parabola $k = \frac{1}{2}\sqrt{f} - f$ perturbed by $\pm 10\%$ Gaussian noise and truncated at $k = 0$.
@@ -143,7 +143,7 @@ To ensure exploration is occurring for state properties too, a Gaussian mutation
 As before, we simulate a true CA based on the goal parameters and maintain a surrogate CA which is regularly synchronised with the true CA. The loss for a single cell is calculated by finding the difference in density between the true and surrogate cell as a fraction of the true density. The loss of the whole CA is the mean of these values and the fitness is defined as $1 - \textnormal{loss}$. This is a continuous extension of the XOR loss used for life-like CA.\\
 \todo{Sobel filter fitness}
 
-\section{Evolutionary Strategy}
+\section{Evolutionary Strategy} \label{sec:es}
 Evolutionary strategies (ES) are black-box optimization algorithms suited to continuous domains. Some ES use fitness-based recombination where parents with a higher fitness produce more offspring[CITE]. In this case, selection pressure and exploitation of generational knowledge are pursued simultaneously, so traditional environmental selection can be omitted. For our use case, we stick with a fitness-independent recombination method and a separate environmental selection scheme to allow flexibility in tuning both processes individually.\\
 
 An ES individual has the form $a_i: (\bm{x}, \bm{\sigma}, F(\bm{x}))$ which are the state parameters, control parameters, and fitness respectively. The control parameters control the average size of mutation and are specific to each individual. ES also often use more than 2 parents for recombination unlike GA. Typically, all children are produced from the top $\rho$ parents with $\rho \leq \mu$. Common recombination operators include:

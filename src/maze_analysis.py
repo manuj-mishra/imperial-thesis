@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
+from scipy.interpolate import interp1d
 from scipy import stats
 
 if __name__ == "__main__":
@@ -24,41 +25,52 @@ if __name__ == "__main__":
   # g.set(xlabel='Path length', ylabel='# of dead ends')
   # plt.show()
 
-  both = pd.read_csv('./maze/maze-both.csv')
-  # both = both.loc[:, ~both.columns.str.match('Unnamed')]
-  mut = pd.read_csv('./maze/maze-no-mutation.csv')
-  # mut = mut.loc[:, ~mut.columns.str.match('Unnamed')]
-  cross = pd.read_csv('./maze/maze-no-crossover.csv')
-  # nothing = pd.read_csv('./maze/maze-nothing.csv')
-  # both.category = both.category.astype(str) + " mutation and crossover"
-  # print(both)
-  df = pd.concat([cross, mut, both], ignore_index=True)
-  dlo, dhi = min(df.d), max(df.d)
-  plo, phi = min(df.p), max(df.p)
-  plt.ylim(dlo, dhi)
-  plt.xlim(plo, phi)
-  g = sns.kdeplot(data=cross, y="d", x = "p", color='r', fill=True)
-  g.set(xlabel='Path length', ylabel='# of dead ends')
+  df = pd.read_csv('./bias_tuning_hyp2.csv')
+  df.b = 0.01 * df.b
+  y = (1 - df.b) * df.d + df.b * df.p
+  x_interp = np.linspace(df.b[0], df.b.iat[-1], 1000)
+  y_interp = interp1d(df.b, y , kind='cubic')(x_interp)
+  # g = sns.lineplot(y=y_interp, x=x_interp)
+  g = sns.scatterplot(y=y, x=df.b)
+
+  g.set(xlabel='Bias', ylabel='Fitness')
   plt.show()
-  plt.cla()
+
+  # both = pd.read_csv('./maze/maze-both.csv')
+  # # both = both.loc[:, ~both.columns.str.match('Unnamed')]
+  # mut = pd.read_csv('./maze/maze-no-mutation.csv')
+  # # mut = mut.loc[:, ~mut.columns.str.match('Unnamed')]
+  # cross = pd.read_csv('./maze/maze-no-crossover.csv')
+  # # nothing = pd.read_csv('./maze/maze-nothing.csv')
+  # # both.category = both.category.astype(str) + " mutation and crossover"
+  # # print(both)
+  # df = pd.concat([cross, mut, both], ignore_index=True)
+  # dlo, dhi = min(df.d), max(df.d)
+  # plo, phi = min(df.p), max(df.p)
+  # plt.ylim(dlo, dhi)
+  # plt.xlim(plo, phi)
+  # g = sns.kdeplot(data=cross, y="d", x = "p", color='r', fill=True)
+  # g.set(xlabel='Path length', ylabel='# of dead ends')
+  # plt.show()
+  # plt.cla()
   # plt.ylim(dlo, dhi)
   # plt.xlim(plo, phi)
   # g = sns.kdeplot(data=nothing, y="d", x = "p", color='b', fill=True)
   # g.set(xlabel='Path length', ylabel='# of dead ends')
   # plt.show()
   # plt.cla()
-  plt.ylim(dlo, dhi)
-  plt.xlim(plo, phi)
-  g = sns.kdeplot(data=mut, y="d", x = "p", color='b', fill=True)
-  g.set(xlabel='Path length', ylabel='# of dead ends')
-  plt.show()
-  plt.cla()
-  plt.ylim(dlo, dhi)
-  plt.xlim(plo, phi)
-  g = sns.kdeplot(data=both, y="d", x = "p", color='g', fill=True)
-  g.set(xlabel='Path length', ylabel='# of dead ends')
-  plt.show()
-  plt.cla()
+  # plt.ylim(dlo, dhi)
+  # plt.xlim(plo, phi)
+  # g = sns.kdeplot(data=mut, y="d", x = "p", color='b', fill=True)
+  # g.set(xlabel='Path length', ylabel='# of dead ends')
+  # plt.show()
+  # plt.cla()
+  # plt.ylim(dlo, dhi)
+  # plt.xlim(plo, phi)
+  # g = sns.kdeplot(data=both, y="d", x = "p", color='g', fill=True)
+  # g.set(xlabel='Path length', ylabel='# of dead ends')
+  # plt.show()
+  # plt.cla()
 
   # plt.legend(loc='lower right')
   # sns.scatterplot(data=df, y="d", x = "p", hue="category")

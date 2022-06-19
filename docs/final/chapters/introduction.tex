@@ -22,7 +22,7 @@ In this thesis, we tackle the inverse problem for cellular automata (CAs). These
 
 \section{Objectives}
 
-Top-down investigations into CA behaviour are vast and varied\cite{packard1985two, wolfram2002,, eppstein2010growth}. Mathematical analyses seek to classify CAs and prove general results about long-term behaviour from intrisic properties. In the natural and social sciences, CAs are designed to model real world systems. In this thesis, we explore a bottom-up approach where we deduce the underlying properties of a CA by observing its behaviour. In particular, we use evolutionary algorithms to learn transition functions that define the behaviour of a CA.\\
+Top-down investigations into CA behaviour are vast and varied\cite{packard1985two, wolfram2002,eppstein2010growth}. Mathematical analyses seek to classify CAs and prove general results about long-term behaviour from intrisic properties. In the natural and social sciences, CAs are designed to model real world systems. In this thesis, we explore a bottom-up approach where we deduce the underlying properties of a CA by observing its behaviour. In particular, we use evolutionary algorithms to learn transition functions that define the behaviour of a CA.\\
 
 Evolutionary algorithms (EAs) have long been held as effective tools for black-box optimisation problems. Grounded in the principles of Darwinian evolution, EAs traverse over a search space by performing selection, mutation, and crossover on a population of candidate solutions. As selection pressure grows, increasingly strong solutions emerge. Using EAs, we tackle multiple optimisation problems from procedural generation of desirable states to fully learning the dynamics of the system.\\
 
@@ -31,27 +31,29 @@ We focus on two classes of CA in particular. The first are binary outer-totalist
 \begin{enumerate}
     \item \textbf{Procedural generation}\label{obj-1}\\
     Use evolutionary algorithms to learn transition functions for life-like CA that induce stable states with desirable properties for random initial conditions.
-    \item \textbf{Learning discrete CA dynamics}\label{obj-1}\\
+    \item \textbf{Learning discrete CA dynamics}\\
     Use evolutionary algorithms to learn the exact transition function of life-like CA based on a small sample of observations.
     \item \textbf{Learning continuous CA dynamics}\\
     Use evolutionary algorithms to learn the exact transition function of Gray-Scott models based on a small sample of observations.
 \end{enumerate}
 
-
-
-\section{Contributions} \todo{Add statistics to contributions section}
-The technical contributions of this project are:
+\section{Contributions}
+\textbf{Software}
 \begin{itemize}
     \item \textbf{Evolutionary algorithm toolkit}\\ A versatile toolkit that implements multiple evolutionary algorithms to train and optimise different classes of CA. We use this to predict the update rule of life-like CA from observations on random initial conditions. We show that this can be extended to Gray-Scott models where we predict the parameters of diffusion-reaction equations from simulations of chemical reactions.
-    \item \textbf{Cellular automaton simulator}\\ A system that can efficiently simulate discrete and continuous cellular automata. This allows various fitness functions to be implemented in the EA toolkit. This can also render snapshots of the CA directly during simulation which allows animations to be automatically generated afterwards.
+    \item \textbf{Cellular automaton simulators}\\ Systems to efficiently simulate discrete and continuous cellular automata. This allows various fitness functions to be implemented in the EA toolkit. These also render snapshots of the CA directly during simulation which allows animations to be automatically generated afterwards.
     \item \textbf{Procedural maze generator}\\ A CA-based maze generation program that uses the EA toolkit to produce "difficult" mazes. Mazes generated are guaranteed to have a solution and are optimised to exhibit characteristics preferred by users such as a long solution path and many dead ends.
-    % \item \textbf{Systematic analysis of life-like CA}\\ An analysis of every life-like CA based on repeated finite time simulations over random initial conditions. This provides statistical support to previous mathematical analyses on 2D CA behaviour\todo{cite}.
+    \item \textbf{Systematic analysis of life-like CA}\\ An breakdown of life-like CA based on repeated finite time simulations over random initial conditions. This provides statistical support to previous mathematical analyses on 2D CA behaviour\todo{cite}.
 \end{itemize}
+
+As the first work to investigate evolutionary algorithms for the discovery of 2D cellular automata transition functions, we show that genetic algorithms can learn life-like CA rules in 100\% of tested cases while traversing only 0.047\% of the total search space. We find that such genetic algorithms and evolutionary strategies are less effective at learning rules on Gray-Scott systems but we establish a strong foundation for future work to investigate more advanced evolutionary techniques in this setting.
 
 \section{Technical Challenges}
 The primary technical challenges faced during this project were:
 \begin{itemize}
-    \item \textbf{Ensuring efficient simulation}\\ Each evolutionary algorithm runs on large populations over multiple epochs. Fitness is calculated by repeated simulation of individual CAs which means that thousands of simulations need to be run for each experiment. Therefore, the simulator must be efficient. This is especially important for the Gray-Scott simulator which uses numerical integration to approximate solutions for the continuous differential equations that underlie chemical interactions.
-    \item \textbf{Avoiding local optima}\\ Evolutionary algorithms are very susceptible premature convergence. We tackle this by using different types of evolutionary algorithm, testing a range of genetic operators, and designing creative loss functions.
-    \item \textbf{Media generation}\\ Effectively learning from experiments requires statistical summaries, images, and animations to be produced. These provide quantitative and qualitative feedback for later analysis. Converting numerical data into high-fidelity media was a key point of focus.
+    \item \textbf{Building from the ground up} This project is built entirely from scratch with no external libraries except simple data and image processing packages (e.g. NumPy, Pandas, Python Image Library). This involved producing implementations of cellular automata, evolutionary procedures, genetic operators, and loss functions. These components went through many iterations to ensure they were extensible and modular.\\
+    \item \textbf{Ensuring efficient simulation}\\ Each evolutionary algorithm runs on large populations over multiple epochs. Fitness is calculated by repeated simulation of individual CAs which means that thousands of simulations need to be run for each experiment. Therefore, the simulator must be efficient. This is especially important for the Gray-Scott simulator which uses numerical integration to approximate solutions for 2D partial differential equations. Producing a realistic yet efficient simulation in this case required much trial and error.\\
+    \item \textbf{Avoiding local optima}\\ Evolutionary algorithms are very susceptible premature convergence. Often, it is infeasible to test every combination of evolutionary techniques, genetic operators, and loss functions from the set of ideas being considered. Therefore, we the design of these algorithms had to be approached with forethought to maximize the chances of avoiding local optima.
+    \item \textbf{Limited Experimentation}\\ Hyperparameter tuning and evaluation of each technique required running large-scale experiments. With the computational resources available, it was important to consider which experiments would provide the most insight relative to the time taken to run them. 
+    \item \textbf{Media generation}\\ Effectively learning from experiments requires statistical summaries, images, and animations to be produced. These provide quantitative and qualitative feedback for later analysis. Converting numerical data into high-fidelity media was a key point of focus in this project.
 \end{itemize}

@@ -18,7 +18,7 @@ The EA toolkit is written entirely in Python making use only of basic data manip
 \end{itemize}
 Each time we learn a new class of CA or optimise for a new objective, we write a new instance of the Population,  Chromosome, and Simulator classes.
 
-\section{Simulator} \label{subsec:simulator}
+\section{Simulator} \label{subsec:simulator-1}
 Due to the undecidability of various CA rules, the state of an automaton after some time cannot, in general, be calculated without simulating each transition in turn. For this, a CA simulator was built.\\
 
 The simulator stores the state of a 2D square CA of side length $N$ in an $N \times N$ NumPy array. The CA is initialised with birth set $B$ and survival set $S$ which are given as direct arguments or calculated from the chromosome as shown in \ref{eq:bs-calc}. When simulating $n$ time steps, the simulator begins by caching the current state $X^{(t)}$. Then a neighbourhood matrix $M$ is calculated by convolving $X^{(t)}$ with kernel $\kappa$ where
@@ -46,7 +46,7 @@ where the left conjunction corresponds to the case of a dead cell becoming alive
 \label{fig:stains}
 \end{figure}
 
-\section{Procedural Generation}
+\section{Procedural Generation} \label{sec:proc-gen}
 A maze is generated from a chromosome in three stages: growth, region search, and region merging. During the growth stage, a CA is run in the simulator for a fixed number of iterations, typically 50, using the birth and survival sets encoded in the chromosome. 
 
 \subsection{Region Search}

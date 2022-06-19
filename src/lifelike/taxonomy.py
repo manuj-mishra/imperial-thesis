@@ -6,8 +6,8 @@ import numpy as np
 from lifelike.CAs import CA, GRID_SIZE
 from util import binary
 
-NUM_ITERS = 100
-NUM_EXPS = 100
+NUM_ITERS = 30
+NUM_EXPS = 50
 
 if __name__ == "__main__":
     data = {

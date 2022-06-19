@@ -161,11 +161,11 @@ Under both objective and relative fitness, truncation selection outperforms roul
 The bias parameter $\lambda$ decides the weighting given to solution path length over number of dead ends when calculating fitness. Although this can be set by the user based on personal preference, we can tune the bias to find the value that maximizes overall fitness  $f(\lambda) = \lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\\ 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{images/old-bias.png}
-\caption{Best rule strings discovered under different bias values $\lambda$ (shown on horizontal axis)}
+\includegraphics[width=0.7\textwidth]{images/bias-tuning.png}
+\caption{Best fitness rule strings discovered under different bias values $\lambda$}
 \label{fig:bias-tuning}
 \end{figure}
-Figure~\ref{fig:bias-tuning}, depicts the opposing nature of the two fitness metrics. As $\lambda$ approaches 1, the number of dead ends decreases and the solution path length increases. The opposite is true as $\lambda$ approaches 0. A bias of around $0.4$ appears to keep the value of both metrics relatively high. Figure~\ref{fig:bias-mazes} shows the top mazes produced for different bias values. Qualitatively these appear to optimize the metrics they are being tested against.\\
+Figure~\ref{fig:bias-tuning} shows that the algorithm performs best for higher bias values except $\lambda=0.0$ which has a very high performance. For a maze with a mix of dead ends and long solution path, the user may find better results from a bias of around 0.5 than around 0.3. Figure~\ref{fig:bias-mazes} shows the top mazes produced for different bias values. Qualitatively these appear to optimize the metrics they are being tested against.\\
 \begin{figure}[!h]
 \centering
             \subfloat[B16/S1235 ($\lambda=0.0$)]{\includegraphics[width=.33\textwidth]{images/0-bias-maze.png}}\hfill
@@ -174,8 +174,6 @@ Figure~\ref{fig:bias-tuning}, depicts the opposing nature of the two fitness met
             \caption{Best mazes produced from rules discovered using different bias values}
 \label{fig:bias-mazes}
 \end{figure}
-
-\todo{Redo bias tuning using most recent hyperparameters}
 
 \section{Life-Like CA}
 
@@ -336,17 +334,28 @@ Using a self-adapting evolutionary strategy, we find that the patterns converge 
 \label{fig:flower-fail}
 \end{figure}
 
-Increasing the population size does not appear to resolve matters as seen in Figure~\ref{fig:zebra-fail}.\\
+Increasing the population size does not appear to resolve matters. Changing the discrete Laplacian operator to the alternative presented by Compeau\cite{compeau}
+\[
+  K= \begin{bmatrix}
+    0.05 & 0.2 & 0.05\\
+    0.2 & -1 & 0.2\\
+    0.05 & 0.2 & 0.05
+  \end{bmatrix}
+\]
+also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}
 
 \begin{figure}[!h]
 \centering
-            \subfloat[State paramaters]{\includegraphics[width=.5\textwidth]{images/zebra-params.png}}\hfill
-            \subfloat[Control parameters]{\includegraphics[width=.5\textwidth]{images/zebra-derivs.png}}\hfill
-            \caption{Evolution of \textit{zebrafish} pattern using evolutionary strategy (population size = 50)}
-\label{fig:zebra-fail}
+            \subfloat[State paramaters for \textit{zebrafish} pattern (pop size = 50, Laplacian = nine-point stencil)]{\includegraphics[width=.5\textwidth]{images/zebra-params.png}}\hfill
+            \subfloat[State paramaters for \textit{soliton} pattern (population size = 25, Laplacian = Compeau operator)]{\includegraphics[width=.5\textwidth]{images/soliton-params.png}}\hfill
+            \caption{Evolution of Gray-Scott models with different population sizes and Laplacian operators}
+\label{fig:more-fails}
 \end{figure}
 
-\todo{Test changing laplacian}
-\todo{Add image of goal vs pred}
 \subsection{Genetic Algorithm}
+
+
+
+
 \todo{Test GA}
+\todo{Add image of goal vs pred}
