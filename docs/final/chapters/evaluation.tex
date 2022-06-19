@@ -322,7 +322,7 @@ The search space for Gray-Scott models is infinite so in the style of Giampaolo 
 
 We choose to train a population of 25 candidates for 30 epochs since similar values worked effectively for life-like CA and limited computational resources mean that it is infeasible to run the range of experiments required on larger populations or for longer periods. We use a linear truncation loss, splatter initialisation for each CA, and random uniform initialisation of the parameters in the ranges ($0.0 \leq f \leq 0.30$) and ($0.0 \leq k \leq 0.08$).
 
-\subsection{Evolutionary Strategy}
+\subsection{Evolutionary Strategy and Genetic Algorithm III}
 
 Using a self-adapting evolutionary strategy, we find that the patterns converge to local optima. Consider the flower pattern. Figure~\ref{fig:flower-fail} shows both the state and control parameters converging at around 17 epochs. However, the converged solution of ($f = 0.138, k = 0.036$) is not the true solution.\\
 
@@ -352,10 +352,51 @@ also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}
 \label{fig:more-fails}
 \end{figure}
 
-\subsection{Genetic Algorithm}
 
 
+The case for genetic algorithms is very similar. We tabulate the optima found and their distance from the target for each algorithm, chromosome initialisation method, initial condition, recombination operator, and mutation rate below.
 
+\begin{table}
+    \centering\hfill
+        \begin{tabular}{|c|c|c|c|c|c|c|}
+            \hline
+            Algorithm & Initialisation & Initial Condition & Recombination & Mutation Rate & Result & MSE \\
+            \hline
+            ES & Random  & Splatter & Plus & - & &  \\
+            ES & Random  & Splatter & Comma & - & &  \\
+            ES & Random  & Seed & Plus & - & &  \\
+            ES & Random  & Seed & Comma & - & &  \\
+            ES & Threshold  & Splatter & Plus & - & &  \\
+            ES & Threshold  & Splatter & Comma & - & &  \\
+            ES & Threshold  & Seed & Plus & - & &  \\
+            ES & Threshold  & Seed & Comma & - & &  \\
+            GA & Random  & Splatter & Plus & 0.001 & &  \\
+            GA & Random  & Splatter & Comma & 0.001 & &  \\
+            GA & Random  & Seed & Plus & 0.001 & &  \\
+            GA & Random  & Seed & Comma & 0.001 & &  \\
+            GA & Threshold  & Splatter & Plus & 0.001 & &  \\
+            GA & Threshold  & Splatter & Comma & 0.001 & &  \\
+            GA & Threshold  & Seed & Plus & 0.001 & &  \\
+            GA & Threshold  & Seed & Comma & 0.001 & &  \\
+            GA & Random  & Splatter & Plus & 0.01 & &  \\
+            GA & Random  & Splatter & Comma & 0.01 & &  \\
+            GA & Random  & Seed & Plus & 0.01 & &  \\
+            GA & Random  & Seed & Comma & 0.01 & &  \\
+            GA & Threshold  & Splatter & Plus & 0.01 & &  \\
+            GA & Threshold  & Splatter & Comma & 0.01 & &  \\
+            GA & Threshold  & Seed & Plus & 0.01 & &  \\
+            GA & Threshold  & Seed & Comma & 0.01 & &  \\
+            GA & Random  & Splatter & Plus & 0.1 & &  \\
+            GA & Random  & Splatter & Comma & 0.1 & &  \\
+            GA & Random  & Seed & Plus & 0.1 & &  \\
+            GA & Random  & Seed & Comma & 0.1 & &  \\
+            GA & Threshold  & Splatter & Plus & 0.1 & &  \\
+            GA & Threshold  & Splatter & Comma & 0.1 & &  \\
+            GA & Threshold  & Seed & Plus & 0.1 & &  \\
+            GA & Threshold  & Seed & Comma & 0.1 & &  \\
+            \hline
+    \end{tabular}
+\end{table}
 
 \todo{Test GA}
 \todo{Add image of goal vs pred}

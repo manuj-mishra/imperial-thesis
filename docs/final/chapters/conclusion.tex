@@ -18,11 +18,11 @@ This project reveals many potential avenues for future exploration. We briefly d
 
 \subsection{Procedural Generation}
 
-Using CA for procedural generation extends to many domains outside of graphics and games. One particular area of interest is network design. Evolutionary algorithms could be used to train CA to grow in patterns that resemble efficient transport networks. This would require some notion of orientation to embedded within the CA chromosome which would make outer-totalistic CA an unsuitable search space.
+Using CA for procedural generation extends to many domains outside of graphics and games. One particular area of interest is network design. Evolutionary algorithms could be used to train CA to grow in patterns that resemble efficient transport networks. This would require some notion of orientation to be embedded within the CA chromosome. This makes outer-totalistic CA transition functions unsuitable. A better approach may be to consider something similar to the perception vector used by Mordvintsev et al.\cite{mordvintsev2020growing} in their work on neural cellular automata. Here, alongside the number of neighbours, each chromosome would leverage information about the gradient in the $x$ and $y$ directions. This could be captured using Sobel filters.
 
 \subsection{New CA Topologies}
 
-In this work, we focus on CA that exist on square lattices with periodic boundary conditions. This combination is a toroidal topology. It would be useful to consider whether the results established in this work extend to other topologies. A simple change would be to consider fixed boundary conditions. A more drastic change would be to consider a lattice non-uniform cells such as those obtained by performing a Voronoi decomposition.
+In this work, we focus on CA that exist on square lattices with periodic boundary conditions. This combination is a toroidal topology. It would be useful to consider whether the results established in this work extend to other topologies. A simple change would be to consider fixed boundary conditions. A more drastic change would be to consider a lattice non-uniform cells such as those obtained by performing a Voronoi decomposition. It has been shown neural cellular automata can effectively learn full rule dynamics for Life on Voronoi lattices\cite{grattarola2021learning}. It would be interesting to see if these results can also be achieved with evolutionary computation.
 
 \subsection{Evolutionary Strategies}
 
@@ -30,4 +30,4 @@ When learning on Gray-Scott models, we used evolutionary strategies with modern 
 
 \subsection{Neural Networks}
 
-Neural cellular automata are at the forefront of current research around self-organising systems and cellular automata. Such systems are very successful at complex morphogenesis goals. These systems typically use a CA where the transition function is itself a neural network which is optimized through random observations. It is possible that similar techniques could be used to tackle the inverse problem in domains where evolutionary algorithms appear to fall short, like Gray-Scott models.
+Neural cellular automata are at the forefront of current research around self-organising systems and cellular automata. Such systems are very successful at complex morphogenesis goals. These systems typically use a CA where the transition function is itself a neural network which is optimized through random observations. It is possible that similar techniques could be used to tackle the inverse problem in domains where evolutionary algorithms appear to fall short, like learning Gray-Scott models.

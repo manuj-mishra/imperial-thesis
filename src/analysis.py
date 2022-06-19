@@ -143,4 +143,11 @@ if __name__ == "__main__":
   # print(df.negentropy.quantile(.95))
   # print(df.conv_perc)
 
-  runs_vs_convperc()
+
+  df = pd.read_csv('./gray_scott/res.csv')
+  sns.color_palette("flare", as_cmap=True)
+  df = df[df.t > 10]
+  g = sns.lineplot(x=df.k, y=df.f, sort=False)
+  plt.show()
+
+  # runs_vs_convperc()

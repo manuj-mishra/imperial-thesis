@@ -7,26 +7,30 @@ STEP_SIZE = 500
 
 
 class Chromosome:
-  def __init__(self, state, control):
+  def __init__(self, state, seed, control=None):
     self.state = state
+    self.seed = seed
     self.control = control
 
   @classmethod
-  def threshold(cls, control):
+  def threshold(cls, seed, control=None):
     f = np.random.uniform(low=0.0, high=0.25)
     k = (np.sqrt(f) / 2) - f
     k = max(np.random.normal(loc=k, scale=0.1), 0)
-    return cls(state=np.array([f, k]), control=control)
+    return cls(state=np.array([f, k]), seed=seed, control=control)
 
   @classmethod
-  def random(cls, control):
+  def random(cls, seed, control=None):
     f = np.random.uniform(low=0.0, high=0.30)
     k = np.random.uniform(low=0.0, high=0.08)
-    return cls(state=np.array([f, k]), control=control)
+    return cls(state=np.array([f, k]), seed=seed, control=control)
 
   def loss(self, real):
     losses = []
-    pred = CA.splatter(self.state[0], self.state[1])
+    if self.seed == "SPLATTER":
+      pred = CA.splatter(self.state[0], self.state[1])
+    elif self.seed == "PATCH":
+      pred = CA.patch(self.state[0], self.state[1])
     for _ in range(NUM_STEPS):
       true_active = real.step_from(pred.A, pred.B, STEP_SIZE)
       pred_active = pred.step(STEP_SIZE)

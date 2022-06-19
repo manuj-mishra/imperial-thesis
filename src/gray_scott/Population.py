@@ -7,7 +7,7 @@ from gray_scott.Chromosome import Chromosome
 
 
 class Population:
-    def __init__(self, n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation):
+    def __init__(self, n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation, seed):
         self.n_parents = n_parents
         self.n_children = n_children
         self.pop_size = n_parents + n_children
@@ -18,11 +18,12 @@ class Population:
         self.algorithm = algorithm
         self.recombination = recombination
         self.selection = selection
+        self.seed = seed
         self.real = MimicCA.empty(self.true_f, self.true_k)
         if initialisation == "THRESHOLD":
-            self.inds = np.array([Chromosome.threshold(control=np.array([0.001, 0.001])) for _ in range(self.pop_size)])
+            self.inds = np.array([Chromosome.threshold(seed) for _ in range(self.pop_size)])
         elif initialisation == "RANDOM":
-            self.inds = np.array([Chromosome.random(control=np.array([0.001, 0.001])) for _ in range(self.pop_size)])
+            self.inds = np.array([Chromosome.random(seed) for _ in range(self.pop_size)])
         else:
             raise Exception("Invalid argument for initialisation type")
 
@@ -88,7 +89,8 @@ class Population:
             child = Chromosome(
                 state=np.array([np.random.uniform(leftf, rightf),
                                 np.random.uniform(leftk, rightk)]),
-                control= None
+                seed = self.seed,
+                control= None,
             )
             children.append(child)
         return np.array(children)
