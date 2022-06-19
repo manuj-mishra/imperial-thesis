@@ -22,8 +22,8 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
     # losses = [pop.evaluate(pop.loss())]
     top_f = [pop.inds[0].state[0]]
     top_k = [pop.inds[0].state[1]]
-    top_df = [pop.inds[0].control[0]]
-    top_dk = [pop.inds[0].control[1]]
+    # top_df = [pop.inds[0].control[0]]
+    # top_dk = [pop.inds[0].control[1]]
 
     fig, ax = plt.subplots()
 
@@ -33,8 +33,8 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
         # losses.append(loss)
         top_f.append(pop.inds[0].state[0])
         top_k.append(pop.inds[0].state[1])
-        top_df.append(pop.inds[0].control[0])
-        top_dk.append(pop.inds[0].control[1])
+        # top_df.append(pop.inds[0].control[0])
+        # top_dk.append(pop.inds[0].control[1])
 
         ax.scatter([i.state[1] for i in pop.inds], [i.state[0] for i in pop.inds], c='b')
         ax.scatter(true_k, true_f, c='r')
@@ -84,20 +84,20 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
     plt.savefig(f'{dir}/params.png', bbox_inches='tight')
     plt.close(fig)
 
-    fig, ax1 = plt.subplots()
-    color = 'tab:green'
-    ax1.set_xlabel('Epoch')
-    ax1.set_ylabel('delta_F')
-    ax1.plot(epochs, top_df, color=color)
-    ax1.tick_params(axis='y', labelcolor=color)
-    color = 'tab:red'
-    ax2 = ax1.twinx()
-    ax2.set_ylabel('delta_K')
-    ax2.plot(epochs, top_dk, color=color)
-    ax2.tick_params(axis='y', labelcolor=color)
-    fig.tight_layout()
-    plt.savefig(f'{dir}/derivs.png', bbox_inches='tight')
-    plt.close(fig)
+    # fig, ax1 = plt.subplots()
+    # color = 'tab:green'
+    # ax1.set_xlabel('Epoch')
+    # ax1.set_ylabel('delta_F')
+    # ax1.plot(epochs, top_df, color=color)
+    # ax1.tick_params(axis='y', labelcolor=color)
+    # color = 'tab:red'
+    # ax2 = ax1.twinx()
+    # ax2.set_ylabel('delta_K')
+    # ax2.plot(epochs, top_dk, color=color)
+    # ax2.tick_params(axis='y', labelcolor=color)
+    # fig.tight_layout()
+    # plt.savefig(f'{dir}/derivs.png', bbox_inches='tight')
+    # plt.close(fig)
 
     # fig, ax = plt.subplots()
     # ax.plot(epochs, losses, color='tab:blue')
@@ -126,5 +126,5 @@ def test_single_EA(true_f, true_k, rname, algorithm, recombination, selection, i
 
 if __name__ == "__main__":
     # np.set_printoptions(precision=3, suppress=True)
-    test_single_EA(true_f=0.03, true_k=0.06, rname="ES_30EP_50POP_(new)", algorithm="ES", recombination="PLUS",
+    test_single_EA(true_f=0.03, true_k=0.06, rname="GA_30EP_25POP_(new)", algorithm="GA", recombination="PLUS",
                    selection="LINEAR", initialisation="RANDOM", seed="SPLATTER")

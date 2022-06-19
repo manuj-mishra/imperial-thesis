@@ -70,15 +70,12 @@ where $\omega \ast f$ is a 2D convolution over image $f$ with filter kernel $\om
 The filter kernel used, $\omega_m$, is the all-ones matrix divided by the size of the kernel to ensure that $\omega_m \ast X$ has entries between 0 and 1 and that, after rounding, the convolution is a binary matrix with each cell representing whether there are more live or dead cells in an $m \times m$ region of the lattice. After XORing and summation, the loss $\bar{L}$ is between 0 and 1 and so is the fitness.
 
 \todo{Major: A 3rd loss function using sobel filters?}
-
 \begin{figure}[!h]
 \centering
+            \subfloat[Goal State]{\includegraphics[width=.2\textwidth]{images/multires/1.png}}\hfill
+            \subfloat[Prediction 1, fitness = 0]{\includegraphics[width=.2\textwidth]{images/multires/2.png}}
             \hfill
-            \subfloat[Goal State]{\includegraphics[width=.15\textwidth]{images/multires/1.png}}\hfill
-            \subfloat[Prediction 1, fitness = 0]{\includegraphics[width=.15\textwidth]{images/multires/2.png}}
-            \hfill
-            \subfloat[Prediction 2, fitness = 0.55]{\includegraphics[width=.15\textwidth]{images/multires/3.png}}\hfill
-            \hfill
+            \subfloat[Prediction 2, fitness = 0.55]{\includegraphics[width=.2\textwidth]{images/multires/3.png}}\hfill
             \caption{Example of fine-grain loss failing to capture macroscropic properties}
 \label{fig:singleres-fail}
 \end{figure}

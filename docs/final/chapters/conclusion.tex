@@ -2,10 +2,10 @@
 
 This project has shown that evolutionary algorithms can be very powerful tools for tackling inverse problems in the domain of cellular automata. At the outset, we introduced three objectives. We address these in turn.
 \begin{enumerate}
-    \item \textbf{Procedural generation}\label{obj-1}\\
+    \item \textbf{Procedural generation}\\
     We built genetic algorithms to learn life-like CA transition functions that randomly generate templates for mazes. With minor post-processing, these become challenging mazes with the desired qualities: long solution paths and many dead ends. This pushes the boundaries on existing work using CA for maze generation\cite{adams2017procedural, adams2018evolving} through a stochastic region merging algorithm that is unbiased with respect to orientation and guarantees playability.
-    \item \textbf{Learning discrete CA dynamics}\label{obj-1}\\
-    We built genetic algorithms that successfully learned the full rule dynamics of 100\% of tested life-like CA using a very small number of observations. This was a very quick learning process as it required an average of 8.6 epochs of training on a population of 20 individuals. This represents a traversal of only 0.048\% of the total search space. As the first work to learn full rule dynamics for a class of 2D CA, we push the state-of-the-art further in this regard.
+    \item \textbf{Learning discrete CA dynamics}\\
+    We built genetic algorithms that successfully learned the full rule dynamics of 100\% of tested life-like CA using a very small number of observations. This was a very quick learning process as it required an average of 9 epochs of training on a population of 20 individuals. This represents a traversal of only 0.047\% of the total search space. As the first work to learn full rule dynamics for a class of 2D CA, we push the state-of-the-art further in this regard.
     \item \textbf{Learning continuous CA dynamics}\\
     We further extended these genetic algorithms to work on continuous state CA. We also wrote an evolutionary strategy method. When testing on a few key examples, both of these algorithms failed to learn the parameters of the Gray-Scott system, getting stuck in local optima. This is an area that has great potential for future work.
 \end{enumerate}
@@ -31,5 +31,3 @@ When learning on Gray-Scott models, we used evolutionary strategies with modern 
 \subsection{Neural Networks}
 
 Neural cellular automata are at the forefront of current research around self-organising systems and cellular automata. Such systems are very successful at complex morphogenesis goals. These systems typically use a CA where the transition function is itself a neural network which is optimized through random observations. It is possible that similar techniques could be used to tackle the inverse problem in domains where evolutionary algorithms appear to fall short, like Gray-Scott models.
-
-\todo{Add appendix w/ BFS on grid algorithm}

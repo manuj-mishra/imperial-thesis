@@ -3,7 +3,7 @@
 \section{Metrics}
 Alongside properties discussed in Sections \ref{sec: life-like-exploration} and \ref{sec: gs-exploration}, we design metrics to categorise CA and assess the effectiveness of evolutionary algorithms.
 
-\subsection{Dynamic Metrics} \todo{Redo taxonomy experiment}
+\subsection{Dynamic Metrics}
 We say a dynamic metric is one that tells us about the way a CA's state changes over time. Two useful dynamic metrics are periodicity and volatility.
 
 It is useful to know when a CA has converged to a fixed point or periodic solution. By estimating the portion of initial conditions that enter a periodic state, and the speed with which they do so, we can infer the Wolfram class of CAs with reasonable accuracy. The key distinction we intend to make here is between CAs in class 1 or 2 against CAs in class 3 or 4. The former two classes should converge relatively quickly for almost all ICs whereas the latter two will not converge for a significant proportion of ICs.
@@ -129,21 +129,19 @@ We perform a grid search on training hyperparameters across the following ranges
 
 The optimum metrics achieved are ($d=109.1$, $p=81.8$) with configurations (number of epochs = $100$, population size = $20$, elitism rate = $0.5$, mutation rate = $0.01$). Under a time adjusted measure, we try to optimize for the value of the metric achieved relative to the execution time. Here, the optimum value is ($d=100.5$, $p=69.8$) for configurations (number of epochs = $100$, population size = $20$, elitism rate = $0.1$, mutation rate = $0.05$). This is not significantly worse than the optimum value achieved when disregarding execution time.
 
-\subsection{Ablation Analysis} \todo{Redo (due to elite n intialisation) if there's time}
+\subsection{Ablation Analysis}
 Hyperparameter tuning revealed that the lowest mutation rate produced the best results. This suggests that mutation may not be necessary for maze evolution. To test this hypothesis, we conduct an ablation analysis on the genetic operators used. We run 10 maze generations, each for 100 epochs. We use the optimal runtime-adjusted hyperparameters for efficiency. We then repeat this procedure, each time systematically adding and removing genetic operators from the learning procedure. Figure~\ref{fig:maze-ablation} shows a kernel density estimate plot which visualises the area occupied by the optimal results produced by each of these learning procedures.\\
 
 \begin{figure}[!h]
 \centering
-            \subfloat[No mutation and no crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/nothing-kde.png}}\hfill
-            \subfloat[Mutation and no crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/cross-kde.png}}\hfill
-            \newline
-            \subfloat[Crossover and no mutation]{\includegraphics[width=.5\textwidth]{images/maze_eval/mutation-kde.png}}\hfill
-            \subfloat[Both mutation and crossover]{\includegraphics[width=.5\textwidth]{images/maze_eval/both-kde.png}}\hfill
+            \subfloat[Mutation and no crossover]{\includegraphics[width=.3\textwidth]{images/maze_eval/cross-kde.png}}\hfill
+            \subfloat[Crossover and no mutation]{\includegraphics[width=.3\textwidth]{images/maze_eval/mutation-kde.png}}\hfill
+            \subfloat[Both mutation and crossover]{\includegraphics[width=.3\textwidth]{images/maze_eval/both-kde.png}}\hfill
             \caption{Optimum results produced when removing mutation and crossover components for mazes}
 \label{fig:maze-ablation}
 \end{figure}
 
-It is clear that crossover is important for convergence to a strong solution as both experiments without crossover had high variance in the results produced. However, mutation appears to be unnecessary in this case. Although mutation can allow better solutions to be produced in some cases, the additional variance means that the average result is usually worse if mutation is included. \todo{Why is mutation not needed here}
+It is clear that crossover is important for convergence to a strong solution as the experiment without crossover had a much higher variance in the results produced. However, mutation appears to have a much smaller effect in this case. Without mutation, we obtain a slightly higher variance in results produced and these results tend to have a lower number of dead ends. If both mutation and crossover are omitted, no learning occurs and we find no legitimate mazes in the majority of cases.
 
 \subsection{Objective vs Relative Fitness}
 

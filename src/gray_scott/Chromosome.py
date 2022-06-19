@@ -36,7 +36,7 @@ class Chromosome:
       if np.isnan(np.min(pred.state())):
         break
 
-      losses.append(np.mean(np.abs(pred.state() - real.state()) / real.state()))
+      losses.append(np.mean(np.abs(pred.state() - real.state())))
       if not true_active and not pred_active:
         break
     return np.mean(losses) if losses else 1

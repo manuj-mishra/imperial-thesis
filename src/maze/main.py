@@ -70,18 +70,18 @@ def save_experiments(pop, mean_paths, mean_deads):
 
 
 if __name__ == "__main__":
-  # ABLATION
-  d = []
-  p = []
-  n = 10
-  for i in range(n):
-    print(i)
-    md, mp = run_experiment(0.5)
-    d.append(md)
-    p.append(mp)
-
-  df = DataFrame.from_dict({"d":d , "p": p})
-  df.to_csv("maze-both.csv", index=False)
+  # # ABLATION
+  # d = []
+  # p = []
+  # n = 10
+  # for i in range(n):
+  #   print(i)
+  #   md, mp = run_experiment(0.5)
+  #   d.append(md)
+  #   p.append(mp)
+  #
+  # df = DataFrame.from_dict({"d":d , "p": p})
+  # df.to_csv("maze-nothing.csv", index=False)
 
   # SELECTION TYPE EXPERIMENT
   # d = []
@@ -96,18 +96,18 @@ if __name__ == "__main__":
   # df.to_csv("rel_truncation.csv")
 
   # BIAS EXPERIMENT
-  # b = []
-  # d = []
-  # p = []
-  # for bias in np.linspace(0.0, 100.0, num =11):
-  #   print(bias)
-  #   md, mp = run_experiment(bias)
-  #   b.append(bias)
-  #   d.append(md)
-  #   p.append(mp)
-  #
-  # df = DataFrame.from_dict({"b": b, "d": d, "p": p})
-  # df.to_csv("bias_tuning_hyp.csv")
+  b = []
+  d = []
+  p = []
+  for bias in np.linspace(0.0, 100.0, num =11):
+    print(bias)
+    md, mp = run_experiment(bias)
+    b.append(bias)
+    d.append(md)
+    p.append(mp)
+
+  df = DataFrame.from_dict({"b": b, "d": d, "p": p})
+  df.to_csv("bias_tuning_hyp2.csv")
 
   # # HYPERPARAM EXPERIMENT:
   # mean_deads = []

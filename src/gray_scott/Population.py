@@ -31,7 +31,8 @@ class Population:
         if self.algorithm == "ES":
             children = self.esx()
         elif self.algorithm == "GA":
-            children = self.blx()
+            # children = self.blx()
+            children = self.uniform()
         else:
             raise Exception("Invalid argument for algorithm type")
 
@@ -46,7 +47,8 @@ class Population:
         # Mutation (nothing for ES)
         if self.algorithm == "GA":
             for ind in self.inds:
-                ind.state += np.random.normal(scale=ind.control)
+                # ind.state += np.random.normal(scale=ind.control)
+                ind.state += np.random.normal(scale=0.005)
                 ind.state = ind.state.clip(min=0)
 
         # Selection
@@ -73,8 +75,25 @@ class Population:
             children.append(Chromosome(new_state, new_control))
         return np.array(children)
 
+    def uniform(self):
+        # Uniform crossover
+        children = []
+        for _ in range(self.n_children):
+            parents = np.random.choice(self.inds, 2, replace=False)
+            a, b = parents[0], parents[1]
+            af, ak = a.state[0], a.state[1]
+            bf, bk = b.state[0], b.state[1]
+            leftf, rightf = sorted((af, bf))
+            leftk, rightk = sorted((ak, bk))
+            child = Chromosome(
+                state=np.array([np.random.uniform(leftf, rightf),
+                                np.random.uniform(leftk, rightk)]),
+                control= None
+            )
+            children.append(child)
+        return np.array(children)
+
     def blx(self, alpha=0.1):
-        # Blended alpha crossover
         children = []
         for _ in range(self.n_children):
             parents = np.random.choice(self.inds, 2, replace=False)
