@@ -73,7 +73,7 @@ class Population:
             mutation = np.random.standard_normal(size=2)
             new_control = np.exp(global_step_size) * np.multiply(centroid_control, np.exp(local_step_size))
             new_state = centroid_state + np.multiply(new_control, mutation)
-            children.append(Chromosome(new_state, new_control))
+            children.append(Chromosome(new_state, self.seed, control=new_control))
         return np.array(children)
 
     def uniform(self):
