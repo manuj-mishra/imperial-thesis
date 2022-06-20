@@ -86,23 +86,30 @@ This is useful in settings where true negatives ought to be ignored. For example
 
 \section{Exploration}
 
-When evaluating the effectiveness of evolutionary techniques at learning life-like CA rules, it is important to contextualise quantitative properties like convergence rate, fitness, and diversity. We begin by performing an exploratory statistical analysis to gather data on the life-like CA rule space. In conjunction with the analyses of Wolfram\cite{wolfram1986theory} and Eppstein\cite{eppstein2010growth}, this will shed light into the characteristics that make a rule easier or harder to predict.\\
+When evaluating the effectiveness of evolutionary techniques at learning life-like CA rules, it is important to contextualise quantitative properties like convergence rate, fitness, and diversity. We perform an exploratory statistical analysis to gather data on the life-like CA rule space. In conjunction with the analyses of Wolfram\cite{wolfram1986theory} and Eppstein\cite{eppstein2010growth}, this will shed light into the characteristics that make a rule easier or harder to predict.\\
 
 There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. We examine each rule to find the percentage of initial conditions that converge within 100 steps and the mean oscillation period of those that converge.\\   
 
-\todo{EXPERIMENT 1}: TODO - Redo this analysis with fixed simulator and newer metrics
-
----- OLD STUFF STARTS HERE
 \begin{figure}[!h]
 \centering
-            \subfloat{\includegraphics[width=.5\textwidth]{images/full-taxonomy.png}}\hfill
-            \subfloat{\includegraphics[width=.5\textwidth]{images/reduced-taxonomy.png}}\hfill
+            \subfloat[Full dataset (262144 rules)]{\includegraphics[width=.5\textwidth]{images/full-taxonomy.png}}\hfill
+            \subfloat[Reduced dataset (74425 rules)]{\includegraphics[width=.5\textwidth]{images/reduced-taxonomy.png}}\hfill
             \caption{Distributions of convergence of full and reduced set of life-like CAs}
 \label{fig:taxonomy-dist}
 \end{figure}
 
-First we consider the two extremities. 23.2\% of rules converge for all initial conditions and 49.8\% of rules converge for only 2 out 100 initial conditions. Note this is the minimum convergence number in our setting since all rules will converge for the trivial initial conditions with density 0 and density 1.  This leaves 27.0\% or 70708 of the original rules remaining. While the original dataset had a median of 3\% convergence, the reduced set of rules present a more even spread with a median of 13\%.
----- OLD STUFF ENDS HERE
+First we consider the two extremities. 11.4\% of rules converge for all initial conditions and 60.3\% converge for no initial conditions. This leaves 28.3\% or 74425 of the original rules remaining. Although most rules in this reduced dataset have a relatively low convergence proportion, there is no clear decision boundary visible to separate trivial and periodic CAs (class 1 and 2) from chaotic and complex CAs (class 3 and 4).\\
+
+For the 39.7\% of rules that converge for at least one initial condition, we consider 3 key properties. The mean convergence time (i.e. how many time steps did it take before a periodic cycle was entered), the mean period, the density of the state after 100 time steps, and the average volatility throughout 100 time steps. Figure~\ref{fig:tax-pairplot} shows the distributions and relationships between these properties. We separate rules based on whether they converged for \textit{all} initial conditions or only \textit{some} initial conditions.\\
+
+\begin{figure}[!h]
+\centering 
+\includegraphics[width=\textwidth]{images/tax-pairplot.png}
+\caption{KDE plots showing distributions between convergence mean, density of final state, and volatility for all CAs that converged to a periodic cycle for at least one initial condition}
+\label{fig:tax-pairplot}
+\end{figure}
+
+We see that the mean convergence time is positively skewed and mean period is very positively skewed. This is especially true of rules that converge for all initial conditions. Such rules also tend to converge to very high density or very low density states. These can be thought of as "explosive" or "implosive" rules respectively. Explosive rules are likely to have many elements in their birth set and few elements in their death set making them conducive to rapid growth into a high density state. The opposite is true for implosive rules. Rules at these extremities are likely to be class 1 whereas the rules in between are likely to be class 2. For rules that converge for some initial conditions, there are still indications of explosive/implosive behaviour in the form of two spikes on either side of the central KDE plot but we see that there is clear bias towards rules with a density around 0.5. This is what we would expect if we were randomly generating states. Rules that converge for all states tend to have very low volatility indicating they converge out of slowly developing patterns rather than chaos.\\
 
 \section{Maze Generation}
 
@@ -344,7 +351,7 @@ Increasing the population size does not appear to resolve matters. Changing the 
     0.05 & 0.2 & 0.05
   \end{bmatrix}
 \]
-also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}
+also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}\\
 
 \begin{figure}[!h]
 \centering
@@ -384,7 +391,7 @@ The case for genetic algorithms is very similar. We tabulate the optima found an
     \centering\hfill
         \begin{tabular}{|c|c|c|c|c|c|c|}
             \hline
-            Algorithm & Initialisation & Initial Condition & Recombination & Mutation Rate & Result & MSE \\
+            Algorithm & Initialisation & Initial Condition & Recombination & Mutation Rate & Best Result & MSE \\
             \hline
             ES & Random  & Splatter & Plus & - & &  \\
             ES & Random  & Splatter & Comma & - & &  \\

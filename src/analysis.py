@@ -9,31 +9,18 @@ from matplotlib import pyplot as plt
 from scipy import stats
 
 def taxonomy_graphs(df):
-  N = 262144
-  df.b1 = (df.rstring & (1 << 17)) != 0
-  print(df.b1)
-  df = df[df.b1 != 1]
   data = df.conv_perc
-  print(data.describe())
-  graph(data, title="", xlab="")
-
-def taxonomy_graphs(df):
-  N = 262144
-  df.b1 = (df.rstring & (1 << 17)) != 0
-  print(df.b1)
-  df = df[df.b1 != 1]
-  data = df.conv_perc
-  print(data.describe())
-  graph(data, title="", xlab="")
+  graph(data, title="", xlab="Convergence Proportion")
 
 def graph(data, title, xlab, ylab="Frequency Density"):
   sns.set(style="darkgrid")
-  f, (ax_box, ax_hist) = plt.subplots(2, sharex=True, gridspec_kw={"height_ratios": (.15, .85)})
-  b = sns.boxplot(data, ax=ax_box)
-  h = sns.histplot(x=data, ax=ax_hist, kde=True, stat='frequency')
+  f, (ax_box, ax_hist) = plt.subplots(2, sharex='all', gridspec_kw={"height_ratios": (.15, .85)})
+  b = sns.boxplot(x=data, ax=ax_box)
+  h = sns.histplot(x=data, ax=ax_hist, stat='frequency',binwidth=0.01)
   ax_box.set(xlabel='', title=title)
   ax_hist.set(xlabel=xlab, ylabel=ylab)
   plt.ticklabel_format(style='scientific', axis='y', scilimits=(0,0))
+  plt.ylim((0, 8e5))
   plt.show()
 
 def eppstein(df):
@@ -45,7 +32,7 @@ def eppstein(df):
   print(ones / len(df))
   # df = df[df.conv_mean != 1]
   h = sns.histplot(x=df.conv_mean, kde=True, stat='frequency')
-  h.set(xlabel="Time steps to convergence", ylabel="Frequency Density", title="Convergence of rules not including B1, B2, or B3")
+  h.set(xlabel="Time steps to convergence",  ylabel="Frequency Density", title="Convergence of rules not including B1, B2, or B3")
   sns.set(style="darkgrid")
 
   plt.ticklabel_format(style='scientific', axis='y', scilimits=(0,0))
@@ -144,10 +131,40 @@ if __name__ == "__main__":
   # print(df.conv_perc)
 
 
-  df = pd.read_csv('./gray_scott/res.csv')
-  sns.color_palette("flare", as_cmap=True)
-  df = df[df.t > 10]
-  g = sns.lineplot(x=df.k, y=df.f, sort=False)
-  plt.show()
+  # df = pd.read_csv('./gray_scott/res.csv')
+  # sns.color_palette("flare", as_cmap=True)
+  # df = df[df.t > 10]
+  # g = sns.lineplot(x=df.k, y=df.f, sort=False)
+  # plt.show()
 
   # runs_vs_convperc()
+
+
+  with open('lifelike/ics.npy', 'rb') as file:
+    ics = np.load(file)
+
+  hyp = pd.read_csv('./lifelike/single-hyper/single_max5_eval5.csv')
+  tax = pd.read_csv('./taxonomy.csv')
+  tax = tax[tax.conv_perc != 0]
+  tax['type'] = pd.cut(tax.conv_perc, bins= [0.0, 0.99, 1], labels=['Some', 'All'])
+  tax = tax.drop(columns=['conv_perc', 'conv_std', 'period_std', 'entropy', 'rstring'])
+  sns.pairplot(tax, plot_kws={'fill':True}, kind='kde', diag_kind='kde', hue='type')
+  plt.show()
+  # hyp = hyp.set_index('rstring')
+  # hyp['conv_perc'] = tax.conv_perc
+  # hyp['conv_mean'] = tax.conv_mean
+  # hyp['period_mean'] = tax.period_mean
+  # hyp['density'] = tax.density
+  # hyp['volatility'] = tax.volatility
+  # print(df.conv_perc.value_counts())
+  # df = odf[odf.conv_perc != 0]
+  # df = df[df.conv_perc != 1]
+  # print(len(df.index))
+  # print(len(df.index))
+  # graph(df.entropy, "", "")
+  # taxonomy_graphs(df)
+  # print(hyp)
+  # for thing in ('conv_perc', 'conv_mean', 'period_mean', 'density', 'volatility'):
+  #   sns.scatterplot(data=hyp, x = 'visited', y =thing)
+  #   plt.show()
+  #   plt.cla()

@@ -82,7 +82,7 @@ if __name__ == "__main__":
             for initi in ("RANDOM", "THRESHOLD"):
                 for seed in ("SPLATTER", "PATCH"):
                   rname = f"GA_{recomb}_{select}_{initi}_{seed}"
-                  f,k = test_single_EA(true_f=0.03, true_k=0.06, algorithm="GA", recombination=recomb,
+                  f,k = test_single_EA(true_f=0.03, true_k=0.06, algorithm="ES", recombination=recomb,
                                  selection=select, initialisation=initi, seed=seed)
                   res["fs"].append(f)
                   res["ks"].append(k)
@@ -90,4 +90,4 @@ if __name__ == "__main__":
                   res["select"].append(select)
                   res["initi"].append(initi)
                   res["seed"].append(seed)
-                  DataFrame.from_dict(res).to_csv("chonkyboi.csv")
+                  DataFrame.from_dict(res).to_csv("chonkyboi2.csv")
