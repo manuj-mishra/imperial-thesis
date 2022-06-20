@@ -13,7 +13,7 @@ class Chromosome:
     if control is None:
       self.control = 0.01
     else:
-      self.control
+      self.control = control
   @classmethod
   def threshold(cls, seed):
     f = np.random.uniform(low=0.0, high=0.25)
