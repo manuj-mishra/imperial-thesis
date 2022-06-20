@@ -90,8 +90,9 @@ When evaluating the effectiveness of evolutionary techniques at learning life-li
 
 There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. We examine each rule to find the percentage of initial conditions that converge within 100 steps and the mean oscillation period of those that converge.\\   
 
-\todo{Rerun taxonomy with fixed simulator}
+\todo{EXPERIMENT 1}: TODO - Redo this analysis with fixed simulator and newer metrics
 
+---- OLD STUFF STARTS HERE
 \begin{figure}[!h]
 \centering
             \subfloat{\includegraphics[width=.5\textwidth]{images/full-taxonomy.png}}\hfill
@@ -101,6 +102,7 @@ There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules wh
 \end{figure}
 
 First we consider the two extremities. 23.2\% of rules converge for all initial conditions and 49.8\% of rules converge for only 2 out 100 initial conditions. Note this is the minimum convergence number in our setting since all rules will converge for the trivial initial conditions with density 0 and density 1.  This leaves 27.0\% or 70708 of the original rules remaining. While the original dataset had a median of 3\% convergence, the reduced set of rules present a more even spread with a median of 13\%.
+---- OLD STUFF ENDS HERE
 
 \section{Maze Generation}
 
@@ -353,8 +355,30 @@ also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}
 \end{figure}
 
 
+The case for genetic algorithms is very similar. We tabulate the optima found and their distance from the target for each algorithm, chromosome initialisation method, initial condition, recombination operator, and mutation rate below. Figure~\ref{fig:big-fail-true} shows a simulation of the target pattern and figure~\ref{fig:big-fail-pred} shows a simulation of the local optimum that was discovered.\\
 
-The case for genetic algorithms is very similar. We tabulate the optima found and their distance from the target for each algorithm, chromosome initialisation method, initial condition, recombination operator, and mutation rate below.
+\begin{figure}
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/1.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/2.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/3.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/4.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/5.png}}\hfill
+            \caption{Simulation of Gray-Scott target}
+\label{fig:big-fail-true}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/pred/1.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/pred/2.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/pred/3.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/pred/4.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/pred/5.png}}\hfill
+            \caption{Simulation of Gray-Scott local optimum}
+\label{fig:big-fail-pred}
+\end{figure}
+
+\todo{EXPERIMENT 2}: TODO - Populate this table with results from experiment 2
 
 \begin{table}
     \centering\hfill
@@ -397,6 +421,3 @@ The case for genetic algorithms is very similar. We tabulate the optima found an
             \hline
     \end{tabular}
 \end{table}
-
-\todo{Test GA}
-\todo{Add image of goal vs pred}
