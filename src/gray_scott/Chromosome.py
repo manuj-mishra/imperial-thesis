@@ -10,20 +10,21 @@ class Chromosome:
   def __init__(self, state, seed, control=None):
     self.state = state
     self.seed = seed
-    self.control = control
+    if control is None:
+      self.control = 0.01
 
   @classmethod
-  def threshold(cls, seed, control=None):
+  def threshold(cls, seed):
     f = np.random.uniform(low=0.0, high=0.25)
     k = (np.sqrt(f) / 2) - f
     k = max(np.random.normal(loc=k, scale=0.1), 0)
-    return cls(state=np.array([f, k]), seed=seed, control=control)
+    return cls(state=np.array([f, k]), seed=seed)
 
   @classmethod
-  def random(cls, seed, control=None):
+  def random(cls, seed):
     f = np.random.uniform(low=0.0, high=0.30)
     k = np.random.uniform(low=0.0, high=0.08)
-    return cls(state=np.array([f, k]), seed=seed, control=control)
+    return cls(state=np.array([f, k]), seed=seed)
 
   def loss(self, real):
     losses = []

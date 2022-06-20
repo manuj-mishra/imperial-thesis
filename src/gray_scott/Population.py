@@ -90,7 +90,6 @@ class Population:
                 state=np.array([np.random.uniform(leftf, rightf),
                                 np.random.uniform(leftk, rightk)]),
                 seed = self.seed,
-                control= None,
             )
             children.append(child)
         return np.array(children)
