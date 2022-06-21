@@ -6,13 +6,13 @@ Alongside properties discussed in Sections \ref{sec: life-like-exploration} and 
 \subsection{Dynamic Metrics}
 We say a dynamic metric is one that tells us about the way a CA's state changes over time. Two useful dynamic metrics are periodicity and volatility.
 
-It is useful to know when a CA has converged to a fixed point or periodic solution. By estimating the portion of initial conditions that enter a periodic state, and the speed with which they do so, we can infer the Wolfram class of CAs with reasonable accuracy. The key distinction we intend to make here is between CAs in class 1 or 2 against CAs in class 3 or 4. The former two classes should converge relatively quickly for almost all ICs whereas the latter two will not converge for a significant proportion of ICs.
+It is useful to know when a CA has converged to a fixed point or periodic solution. By estimating the portion of initial conditions that enter a periodic state, and the speed with which they do so, we can infer the Wolfram class of CA with reasonable accuracy. The key distinction we intend to make here is between CA in class 1 or 2 against CA in class 3 or 4. The former two classes should converge relatively quickly for almost all ICs whereas the latter two will not converge for a significant proportion of ICs.
 
 \begin{definition}[CA convergence to a periodic state]
  If a state previously visited at time step $t$ is produced again at step $t+\delta$, the rule is said to have converged to a periodic solution at $t+\delta$ time steps with period $\delta$. If $\delta = 1$, this is called a fixed point solution. 
 \end{definition}
 
-For the trivial initial conditions with all zero-cells or all one-cells, all life-like CAs will converge to a periodic state with $\delta \leq 2$. The proof of this is detailed in \ref{quiescent-nullity}.
+For the trivial initial conditions with all zero-cells or all one-cells, all life-like CA will converge to a periodic state with $\delta \leq 2$. The proof of this is detailed in \ref{quiescent-nullity}.
 
 \begin{definition}[Quiescence]
 A CA is quiescent if all cells are in the same state. A CA with each cell $c_i$ in state $\sigma_i(t) = 0$ is denoted $\vec{0}$ and the opposite quiescent CA with $\sigma_i(t) = 1$ is denoted $\vec{1}$. 
@@ -49,17 +49,17 @@ Another useful measure is volatility, which measures the average number of cells
 
 \todo{Def of density?}
 A static metric is one that assesses the state of the CA at one snapshot in time, ideally after some fixed number of time steps $t$.
-A good way to separate class 1 and class 2 CA is to observe their density at $t$ time steps. Density is the average number of live cells in the CA state. If the CAs have converged to their respective cycles, we will find that class 1 CA have density of 0 or 1 for almost all initial conditions whereas class 2 CA will regularly have densities that are in between 0 and 1.\\
+A good way to separate class 1 and class 2 CA is to observe their density at $t$ time steps. Density is the average number of live cells in the CA state. If the CA have converged to their respective cycles, we will find that class 1 CA have density of 0 or 1 for almost all initial conditions whereas class 2 CA will regularly have densities that are in between 0 and 1.\\
 
 \todo{Entropy metric??}
 % \subsection{Entropy}
-% By making repeated observations on the state of the CA after a set number of time steps, say $t$, we can assess average the amount of "information" in the state at time $t$. This helps us differentiate class 3 CAs which enter a state of unending chaos after transient patterns have dissolved. Information entropy is a useful measure of this information.
+% By making repeated observations on the state of the CA after a set number of time steps, say $t$, we can assess average the amount of "information" in the state at time $t$. This helps us differentiate class 3 CA which enter a state of unending chaos after transient patterns have dissolved. Information entropy is a useful measure of this information.
 % \begin{definition}[Entropy] Consider a CA with state $X$ at time $t$. We define the entropy of the CA at this point as
     
 % \end{definition}
 
 % %COMMENT
-% % The problem here is that IC ~ binomial which is approx normal for p =0.5 but only using ICs with p=0.5 unfairly advantages CAs with birth or survival rates around 4. But if we use ICs uniform across density then the binomial = normal assumption breaks.
+% % The problem here is that IC ~ binomial which is approx normal for p =0.5 but only using ICs with p=0.5 unfairly advantages CA with birth or survival rates around 4. But if we use ICs uniform across density then the binomial = normal assumption breaks.
 
 \subsection{Similarity}
 
@@ -94,18 +94,18 @@ There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules wh
 \centering
             \subfloat[Full dataset (262144 rules)]{\includegraphics[width=.5\textwidth]{images/full-taxonomy.png}}\hfill
             \subfloat[Reduced dataset (74425 rules)]{\includegraphics[width=.5\textwidth]{images/reduced-taxonomy.png}}\hfill
-            \caption{Distributions of convergence of full and reduced set of life-like CAs}
+            \caption{Distributions of convergence of full and reduced set of life-like CA}
 \label{fig:taxonomy-dist}
 \end{figure}
 
-First we consider the two extremities. 11.4\% of rules converge for all initial conditions and 60.3\% converge for no initial conditions. This leaves 28.3\% or 74425 of the original rules remaining. Although most rules in this reduced dataset have a relatively low convergence proportion, there is no clear decision boundary visible to separate trivial and periodic CAs (class 1 and 2) from chaotic and complex CAs (class 3 and 4).\\
+First we consider the two extremities. 11.4\% of rules converge for all initial conditions and 60.3\% converge for no initial conditions. This leaves 28.3\% or 74425 of the original rules remaining. Although most rules in this reduced dataset have a relatively low convergence proportion, there is no clear decision boundary visible to separate trivial and periodic CA (class 1 and 2) from chaotic and complex CA (class 3 and 4).\\
 
 For the 39.7\% of rules that converge for at least one initial condition, we consider 3 key properties. The mean convergence time (i.e. how many time steps did it take before a periodic cycle was entered), the mean period, the density of the state after 100 time steps, and the average volatility throughout 100 time steps. Figure~\ref{fig:tax-pairplot} shows the distributions and relationships between these properties. We separate rules based on whether they converged for \textit{all} initial conditions or only \textit{some} initial conditions.\\
 
 \begin{figure}[!h]
 \centering 
 \includegraphics[width=\textwidth]{images/tax-pairplot.png}
-\caption{KDE plots showing distributions between convergence mean, density of final state, and volatility for all CAs that converged to a periodic cycle for at least one initial condition}
+\caption{KDE plots showing distributions between convergence mean, density of final state, and volatility for all CA that converged to a periodic cycle for at least one initial condition}
 \label{fig:tax-pairplot}
 \end{figure}
 
@@ -307,9 +307,9 @@ We now perform the same hyperparameter grid search on the second fitness functio
     \end{tabular}}\hfill
 \end{table}
 
-We find that multi-resolution loss is patently worse than single resolution loss. When learning with multi-resolution loss, all configurations are able to learn fewer targets and convergence time is higher. This suggests that the algorithm is not using high level, stable features to distinguish between different CAs. Instead, it is using high-fidelity behaviour in the early chaotic stages of each CA to uniquely identify them. This also explains why performance decreases as the number of observations increase.
+We find that multi-resolution loss is patently worse than single resolution loss. When learning with multi-resolution loss, all configurations are able to learn fewer targets and convergence time is higher. This suggests that the algorithm is not using high level, stable features to distinguish between different CA. Instead, it is using high-fidelity behaviour in the early chaotic stages of each CA to uniquely identify them. This also explains why performance decreases as the number of observations increase.
 
-\subsection{Class Evaluation}
+% \subsection{Class Evaluation}
 \todo{Class evaluation}
 
 \section{Gray-Scott Models}
@@ -337,8 +337,10 @@ Using a self-adapting evolutionary strategy, we find that the patterns converge 
 
 \begin{figure}[!h]
 \centering
-            \subfloat[State paramaters]{\includegraphics[width=.5\textwidth]{images/flower-params.png}}\hfill
-            \subfloat[Control parameters]{\includegraphics[width=.5\textwidth]{images/flower-derivs.png}}\hfill
+            \hfill
+            \subfloat[State paramaters]{\includegraphics[width=.4\textwidth]{images/flower-params.png}}\hfill
+            \subfloat[Control parameters]{\includegraphics[width=.4\textwidth]{images/flower-derivs.png}}\hfill
+            \hfill
             \caption{Evolution of \textit{flower} pattern using evolutionary strategy (population size = 20)}
 \label{fig:flower-fail}
 \end{figure}
@@ -355,14 +357,28 @@ also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}\\
 
 \begin{figure}[!h]
 \centering
-            \subfloat[State paramaters for \textit{zebrafish} pattern (pop size = 50, Laplacian = nine-point stencil)]{\includegraphics[width=.5\textwidth]{images/zebra-params.png}}\hfill
-            \subfloat[State paramaters for \textit{soliton} pattern (population size = 25, Laplacian = Compeau operator)]{\includegraphics[width=.5\textwidth]{images/soliton-params.png}}\hfill
+            \hfill
+            \subfloat[State paramaters for \textit{zebrafish} pattern (pop size = 50, Laplacian = nine-point stencil)]{\includegraphics[width=.4\textwidth]{images/zebra-params.png}}\hfill
+            \subfloat[State paramaters for \textit{soliton} pattern (population size = 25, Laplacian = Compeau operator)]{\includegraphics[width=.4\textwidth]{images/soliton-params.png}}\hfill
+            \hfill
             \caption{Evolution of Gray-Scott models with different population sizes and Laplacian operators}
 \label{fig:more-fails}
 \end{figure}
 
 
-The case for genetic algorithms is very similar. We tabulate the optima found and their distance from the target for each algorithm, chromosome initialisation method, initial condition, recombination operator, and mutation rate below. Figure~\ref{fig:big-fail-true} shows a simulation of the target pattern and figure~\ref{fig:big-fail-pred} shows a simulation of the local optimum that was discovered.\\
+The case for genetic algorithms is very similar. We graph the local optima found for each algorithm, chromosome initialisation method, initial condition and recombination operator in Figure~\ref{fig:loc-optima}. It is clear that there are around 11 distinct regions of local optimality and, by varying the hyperparameters, we end up in different regions.\\
+
+\begin{figure}
+            \subfloat[Recombination]{\includegraphics[width=.5\textwidth]{images/gray_scott/eval/recomb.png}}\hfill
+            \subfloat[Selection]{\includegraphics[width=.5\textwidth]{images/gray_scott/eval/select.png}}\hfill
+            \newline
+            \subfloat[Initialisation]{\includegraphics[width=.5\textwidth]{images/gray_scott/eval/initi.png}}\hfill
+            \subfloat[Seed]{\includegraphics[width=.5\textwidth]{images/gray_scott/eval/seed.png}}\hfill
+            \caption{Genetic algorithm on Gray Scott model with different genetic operators. The red dot is the target and the black line is the bifurcation line.}
+\label{fig:loc-optima}
+\end{figure}
+
+Figure~\ref{fig:big-fail-true} shows a simulation of the target pattern (flower) and figure~\ref{fig:big-fail-pred} shows a simulation of a local optimum that was discovered.\\
 
 \begin{figure}
             \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/1.png}}\hfill
@@ -385,46 +401,44 @@ The case for genetic algorithms is very similar. We tabulate the optima found an
 \label{fig:big-fail-pred}
 \end{figure}
 
-\todo{EXPERIMENT 2}: TODO - Populate this table with results from experiment 2
-
-\begin{table}
-    \centering\hfill
-        \begin{tabular}{|c|c|c|c|c|c|c|}
-            \hline
-            Algorithm & Initialisation & Initial Condition & Recombination & Mutation Rate & Best Result & MSE \\
-            \hline
-            ES & Random  & Splatter & Plus & - & &  \\
-            ES & Random  & Splatter & Comma & - & &  \\
-            ES & Random  & Seed & Plus & - & &  \\
-            ES & Random  & Seed & Comma & - & &  \\
-            ES & Threshold  & Splatter & Plus & - & &  \\
-            ES & Threshold  & Splatter & Comma & - & &  \\
-            ES & Threshold  & Seed & Plus & - & &  \\
-            ES & Threshold  & Seed & Comma & - & &  \\
-            GA & Random  & Splatter & Plus & 0.001 & &  \\
-            GA & Random  & Splatter & Comma & 0.001 & &  \\
-            GA & Random  & Seed & Plus & 0.001 & &  \\
-            GA & Random  & Seed & Comma & 0.001 & &  \\
-            GA & Threshold  & Splatter & Plus & 0.001 & &  \\
-            GA & Threshold  & Splatter & Comma & 0.001 & &  \\
-            GA & Threshold  & Seed & Plus & 0.001 & &  \\
-            GA & Threshold  & Seed & Comma & 0.001 & &  \\
-            GA & Random  & Splatter & Plus & 0.01 & &  \\
-            GA & Random  & Splatter & Comma & 0.01 & &  \\
-            GA & Random  & Seed & Plus & 0.01 & &  \\
-            GA & Random  & Seed & Comma & 0.01 & &  \\
-            GA & Threshold  & Splatter & Plus & 0.01 & &  \\
-            GA & Threshold  & Splatter & Comma & 0.01 & &  \\
-            GA & Threshold  & Seed & Plus & 0.01 & &  \\
-            GA & Threshold  & Seed & Comma & 0.01 & &  \\
-            GA & Random  & Splatter & Plus & 0.1 & &  \\
-            GA & Random  & Splatter & Comma & 0.1 & &  \\
-            GA & Random  & Seed & Plus & 0.1 & &  \\
-            GA & Random  & Seed & Comma & 0.1 & &  \\
-            GA & Threshold  & Splatter & Plus & 0.1 & &  \\
-            GA & Threshold  & Splatter & Comma & 0.1 & &  \\
-            GA & Threshold  & Seed & Plus & 0.1 & &  \\
-            GA & Threshold  & Seed & Comma & 0.1 & &  \\
-            \hline
-    \end{tabular}
-\end{table}
+% \begin{table}
+%     \centering\hfill
+%         \begin{tabular}{|c|c|c|c|c|c|c|}
+%             \hline
+%             Algorithm & Initialisation & Initial Condition & Recombination & Mutation Rate & Best Result & MSE \\
+%             \hline
+%             ES & Random  & Splatter & Plus & - & &  \\
+%             ES & Random  & Splatter & Comma & - & &  \\
+%             ES & Random  & Seed & Plus & - & &  \\
+%             ES & Random  & Seed & Comma & - & &  \\
+%             ES & Threshold  & Splatter & Plus & - & &  \\
+%             ES & Threshold  & Splatter & Comma & - & &  \\
+%             ES & Threshold  & Seed & Plus & - & &  \\
+%             ES & Threshold  & Seed & Comma & - & &  \\
+%             GA & Random  & Splatter & Plus & 0.001 & &  \\
+%             GA & Random  & Splatter & Comma & 0.001 & &  \\
+%             GA & Random  & Seed & Plus & 0.001 & &  \\
+%             GA & Random  & Seed & Comma & 0.001 & &  \\
+%             GA & Threshold  & Splatter & Plus & 0.001 & &  \\
+%             GA & Threshold  & Splatter & Comma & 0.001 & &  \\
+%             GA & Threshold  & Seed & Plus & 0.001 & &  \\
+%             GA & Threshold  & Seed & Comma & 0.001 & &  \\
+%             GA & Random  & Splatter & Plus & 0.01 & &  \\
+%             GA & Random  & Splatter & Comma & 0.01 & &  \\
+%             GA & Random  & Seed & Plus & 0.01 & &  \\
+%             GA & Random  & Seed & Comma & 0.01 & &  \\
+%             GA & Threshold  & Splatter & Plus & 0.01 & &  \\
+%             GA & Threshold  & Splatter & Comma & 0.01 & &  \\
+%             GA & Threshold  & Seed & Plus & 0.01 & &  \\
+%             GA & Threshold  & Seed & Comma & 0.01 & &  \\
+%             GA & Random  & Splatter & Plus & 0.1 & &  \\
+%             GA & Random  & Splatter & Comma & 0.1 & &  \\
+%             GA & Random  & Seed & Plus & 0.1 & &  \\
+%             GA & Random  & Seed & Comma & 0.1 & &  \\
+%             GA & Threshold  & Splatter & Plus & 0.1 & &  \\
+%             GA & Threshold  & Splatter & Comma & 0.1 & &  \\
+%             GA & Threshold  & Seed & Plus & 0.1 & &  \\
+%             GA & Threshold  & Seed & Comma & 0.1 & &  \\
+%             \hline
+%     \end{tabular}
+% \end{table}

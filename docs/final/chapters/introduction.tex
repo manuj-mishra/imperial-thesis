@@ -1,9 +1,5 @@
 \chapter{Introduction}
 
-\todo{Check mark scheme}
-\todo{Forward reference chapters to show where each thing is}
-\todo{Start each chapter with what it contains}
-
 \begin{figure}[!h]
 \centering
             \subfloat[t=0]{\includegraphics[width=.25\textwidth]{images/glider_gun/1.png}}\hfill
@@ -15,45 +11,60 @@
 \end{figure}
 
 \section{Motivation}
-Predicting effects is easier than predicting causes. This is the crux of the inverse problem in science. Causal opacity makes it easier to estimate observations from a parameterised model of the world than to recover parameters from observations. For instance, a physical model of the universe may allow us to predict the subatomic particles ejected when two protons collide at high speed but building theories based on such collisions is difficult, especially when there are multiple equally valid explanations. Despite this, the pursuit of inverse problems is critical to advancing scientific theory around a system's behaviour.\\
+Predicting effects is easier than predicting causes. This is the crux of the inverse problem in science. Estimating observations from a parameterised model of the world easier than recovering parameters from observations. For instance, a physical model of the universe may allow us to predict the subatomic particles ejected when two protons collide at high speed but building theories \textit{based on} such collisions is difficult, especially when there are multiple equally valid explanations. Despite this, the pursuit of inverse problems is critical to advancing understanding around a system's behaviour.\\
 
-In this thesis, we tackle the inverse problem for cellular automata (CAs). These are simple yet powerful models of computation in which a discrete lattice of identical "cells" are simultaneously updated at regular time steps. The state of each cell depends exclusively on the state of the cells in a local neighbourhood around it in the previous time step. This localised interaction makes CAs a useful abstract representation for many physical and biological systems including tumor growth\cite{deutsch2021bio, reher2017cell}, urban land use\cite{white2000high}, and epidemics\cite{white2007modeling}. Like these systems, CAs can exhibit chaos, nonlinear dynamics, and the emergence of complexity. As well as simulatory models, CAs are powerful computational engines owing to their inherently parallel structure. This makes their study a useful endeavour in the field of distributed computation too\cite{tosic2005cellular}.\\
+In this thesis, we tackle an inverse problem for cellular automata (CA). We learn the parameters of CA based on observations of their state. CA are simple yet powerful models in which a discrete lattice of state-storing "cells" simultaneously perform localised computations at regular time steps. The state of each cell depends exclusively on the state of the cells in a neighbourhood around it in the previous time step. This localised interaction makes CA a useful representation of physical and biological systems at all scales including fluid flow\cite{wolf2004lattice}, tumor growth\cite{deutsch2021bio, reher2017cell} and urban land use\cite{white2000high}. By automatically learning CA that accurately model such systems, we can improve our ability to predict their behaviour and develop a better understanding of their internal mechanisms. As well as simulatory models, CA are powerful computational engines owing to their inherently parallel structure. This makes learning CA a useful endeavour in the field of distributed computation as well\cite{tosic2005cellular}.\\
 
 
 \section{Objectives}
 
-Top-down investigations into CA behaviour are vast and varied\cite{packard1985two, wolfram2002,eppstein2010growth}. Mathematical analyses seek to classify CAs and prove general results about long-term behaviour from intrisic properties. In the natural and social sciences, CAs are designed to model real world systems. In this thesis, we explore a bottom-up approach where we deduce the underlying properties of a CA by observing its behaviour. In particular, we use evolutionary algorithms to learn transition functions that define the behaviour of a CA.\\
+Top-down investigations, which seek to classify CA and prove general results about long-term behaviour from their parameters, are vast and varied\cite{packard1985two, wolfram2002,eppstein2010growth}. In this thesis, we explore the less common bottom-up approach, where we deduce the underlying properties of a CA by observing its behaviour. Specifically, we learn the \textit{transition function} of the CA which defines how it uses its current state to generate its state in the next time step.\\
 
-Evolutionary algorithms (EAs) have long been held as effective tools for black-box optimisation problems. Grounded in the principles of Darwinian evolution, EAs traverse over a search space by performing selection, mutation, and crossover on a population of candidate solutions. As selection pressure grows, increasingly strong solutions emerge. Using EAs, we tackle multiple optimisation problems from procedural generation of desirable states to fully learning the dynamics of the system.\\
+We consider three learning goals. From easiest to most difficult, they are:
+\begin{enumerate}
+    \item State Optimization: Learn a CA that behaves ``similarly enough'' to the target system according to some fitness function. 
+    \item State Extrapolation: Learn a CA that, for a particular initial condition, behaves exactly like the target system.
+    \item Full rule dynamics: Learn a CA that, for all initial conditions, behaves exactly like the target system.
+\end{enumerate}
 
-We focus on two classes of CA in particular. The first are binary outer-totalistic CA which are a discrete family of models in which Conway's infamous "Game of Life" CA belongs. For this reason, they are also called "life-like CA". The second are Gray-Scott models which simulate the behaviour of two diffusive chemicals. The three objectives of this project are:
+We focus on two classes of CA in particular. The first are life-like CA which are a discrete family of models in which Conway's infamous "Game of Life" CA belongs. These CA exhibit many of the properties we wish to model in real-life systems such as chaos, nonlinear dynamics and the emergence of complexity. The second are Gray-Scott models which are continuous state CA that simulate the reactions of two diffusive chemicals. They are a discrete-time simulations of Turing's original model of morphogenesis which underlies many theories in developmental biology\todo{cite}. For example, learning the full rule dynamics of Gray-Scott models could allow us to understand the interactions of hormones that elicit the stripes on a zebra or the spots on a leopard.\\
+
+We use evolutionary algorithms (EAs) as our learning framework. EAs have long been held as effective tools for black-box optimisation problems\todo{cite}. Grounded in the principles of Darwinian evolution, EAs traverse over a search space by performing selection, mutation, and crossover on a population of candidate solutions. As selection pressure grows, increasingly strong solutions emerge. Using EAs, we tackle the following objectives. Listed from easiest to most difficult, they are:
 
 \begin{enumerate}
-    \item \textbf{Procedural generation}\label{obj-1}\\
-    Use evolutionary algorithms to learn transition functions for life-like CA that induce stable states with desirable properties for random initial conditions.
-    \item \textbf{Learning discrete CA dynamics}\\
-    Use evolutionary algorithms to learn the exact transition function of life-like CA based on a small sample of observations.
-    \item \textbf{Learning continuous CA dynamics}\\
-    Use evolutionary algorithms to learn the exact transition function of Gray-Scott models based on a small sample of observations.
+    \item State optimization for life-like CA: Learn life-like CA that induce stable states with desirable properties from random initial conditions.
+    \item Full rule dynamics for life-like CA: Learn the exact transition function of life-like CA based on a small sample of observations.
+    \item Full rule dynamics for Gray-Scott models: Learn the exact transition function of Gray-Scott models based on a small sample of observations.
 \end{enumerate}
 
 \section{Contributions}
-\textbf{Software}
+To achieve these objectives, this project makes the following key contributions:
 \begin{itemize}
-    \item \textbf{Evolutionary algorithm toolkit}\\ A versatile toolkit that implements multiple evolutionary algorithms to train and optimise different classes of CA. We use this to predict the update rule of life-like CA from observations on random initial conditions. We show that this can be extended to Gray-Scott models where we predict the parameters of diffusion-reaction equations from simulations of chemical reactions.
-    \item \textbf{Cellular automaton simulators}\\ Systems to efficiently simulate discrete and continuous cellular automata. This allows various fitness functions to be implemented in the EA toolkit. These also render snapshots of the CA directly during simulation which allows animations to be automatically generated afterwards.
-    \item \textbf{Procedural maze generator}\\ A CA-based maze generation program that uses the EA toolkit to produce "difficult" mazes. Mazes generated are guaranteed to have a solution and are optimised to exhibit characteristics preferred by users such as a long solution path and many dead ends.
-    \item \textbf{Systematic analysis of life-like CA}\\ An breakdown of life-like CA based on repeated finite time simulations over random initial conditions. This provides statistical support to previous mathematical analyses on 2D CA behaviour\todo{cite}.
+    \item \textbf{Evolutionary algorithm toolkit}\\ We build a versatile toolkit that implements evolutionary algorithms to train and optimise different classes of CA. It features support for different genotypes, loss functions, genetic operators and selection methods.
+    \item \textbf{CA simulator}\\ We build simulators for discrete and continuous CA. This allows various transition functions to be implemented in the EA toolkit. These also render snapshots of the CA directly during simulation which allows animations to be automatically generated afterwards.
+    \item \textbf{Procedural maze generator}\\ We write a CA-based maze generation program to test EA toolkit for state optimization of life-like CA. The maze generator is optimised by the EA toolkit to produce ``challenging'' mazes which exhibit properties such as a long solution path and many dead ends. Mazes generated are guaranteed to have a valid solution path from start to end.
+    \item \textbf{Learning life-like CA}\\ We implement a genetic algorithm that learns full rule dynamics of life-like CA. It is able to learn all 100 randomly generated test cases. On average, it searches $0.047\%$ of the search space before converging on the global optimum. This is a significant improvement over a random search which would search $50\%$ of solutions on average.
+    \item \textbf{Learning Gray-Scott CA}\\ We implement a genetic algorithm and evolutionary strategy that converge to locally optimal regions for Gray-Scott models. These regions are visualised with respect to the target in the parameter space.
+    \item \textbf{Systematic analysis of life-like CA}\\ We provide an analysis of life-like CA based on repeated finite-time simulations over random initial conditions. This suggests characteristics of CA that make them easier or harder to learn automatically.
+    \item \textbf{Media generation}\\ A program to convert numerical data from CA simulations into high-fidelity media. In tandem with statistical summaries, this created opportunities for qualitative analysis. This also helps provide a visual intuition for the project when communicating results.
 \end{itemize}
 
-As the first work to investigate evolutionary algorithms for the discovery of 2D cellular automata transition functions, we show that genetic algorithms can learn life-like CA rules in 100\% of tested cases while traversing only 0.047\% of the total search space. We find that such genetic algorithms and evolutionary strategies are less effective at learning rules on Gray-Scott systems but we establish a strong foundation for future work to investigate more advanced evolutionary techniques in this setting.
+\todo{images of point 2}
 
 \section{Technical Challenges}
 The primary technical challenges faced during this project were:
 \begin{itemize}
-    \item \textbf{Building from the ground up} This project is built entirely from scratch with no external libraries except simple data and image processing packages (e.g. NumPy, Pandas, Python Image Library). This involved producing implementations of cellular automata, evolutionary procedures, genetic operators, and loss functions. These components went through many iterations to ensure they were extensible and modular.\\
-    \item \textbf{Ensuring efficient simulation}\\ Each evolutionary algorithm runs on large populations over multiple epochs. Fitness is calculated by repeated simulation of individual CAs which means that thousands of simulations need to be run for each experiment. Therefore, the simulator must be efficient. This is especially important for the Gray-Scott simulator which uses numerical integration to approximate solutions for 2D partial differential equations. Producing a realistic yet efficient simulation in this case required much trial and error.\\
-    \item \textbf{Avoiding local optima}\\ Evolutionary algorithms are very susceptible premature convergence. Often, it is infeasible to test every combination of evolutionary techniques, genetic operators, and loss functions from the set of ideas being considered. Therefore, we the design of these algorithms had to be approached with forethought to maximize the chances of avoiding local optima.
-    \item \textbf{Limited Experimentation}\\ Hyperparameter tuning and evaluation of each technique required running large-scale experiments. With the computational resources available, it was important to consider which experiments would provide the most insight relative to the time taken to run them. 
-    \item \textbf{Media generation}\\ Effectively learning from experiments requires statistical summaries, images, and animations to be produced. These provide quantitative and qualitative feedback for later analysis. Converting numerical data into high-fidelity media was a key point of focus in this project.
+    \item \textbf{Building from the ground up}\\ This project is built entirely from scratch with no external libraries except simple data and image processing packages (e.g. NumPy, Pandas, Python Image Library). This involved producing implementations of cellular automata, evolutionary procedures, genetic operators, and loss functions. These components went through many iterations to ensure they were extensible and modular.
+    \item \textbf{Efficient simulation}\\ Each evolutionary algorithm runs on large populations over multiple epochs. Fitness is calculated by repeated simulation of individual CA which means that thousands of simulations need to be run for each experiment. Therefore, the simulator must be efficient. This is especially important for the Gray-Scott simulator which uses numerical integration to approximate solutions for 2D partial differential equations. Producing a realistic yet efficient simulation in this case required much experimentation.
+    \item \textbf{Avoiding local optima}\\ Evolutionary algorithms are very susceptible to premature convergence to local optima. It is infeasible to test every combination of evolutionary techniques, genetic operators, loss functions, and hyperparameters. Therefore, the design of these algorithms had to be approached with forethought to maximize the chances of avoiding local optima. 
+    \item \textbf{Efficient experimentation}\\ Hyperparameter tuning and evaluation of each technique required running large-scale experiments. With the computational resources available, it was important to consider which experiments would provide the most insight relative to the time taken to run them. As an example, hyperparameter tuning on the genetic algorithm for learning full rule dynamics of life-like CA required 25 hours on a 4-core, 8GB AMD-Compute cluster. 
 \end{itemize}
+
+\section{Ethical Considerations}
+Technologies falling in the broad field of self-organising systems, distributed systems, and automated systems can be misused which presents some legal and societal issues that are worth discussing.\\
+
+An area of legal concern is the infringement of copyright law when selecting training data. To train cellular automata for real world applications, we would use many datasets collected from physical, biological, or chemical experiments. As a collection of facts, such data is exempt from copyright law. However, training data can, in theory, be derived works that fall under copyright such as terrain maps or urban land use reports. When choosing point data to train on, we will ensure that they do not fall under copyright restrictions and that they are legally suitable for academic use.\\
+
+An area of societal concern is the general application of cellular automata in distributed technology like swarm robotics. Such systems can have military applications. It could be argued that this research could pave the way for highly distributed swarms of drones or ground robots that are capable of complex self-organising behaviour. However, this is unlikely to be a true concern since we only discuss theoretical concepts in this paper with little discussion about physical applications in robotics. Furthermore, this research is only in its very preliminary stages and the academic benefits of researching self-organising cellular automata far outweigh the negligible potential contribution that this research could have to improving malicious swarm robotics systems. As a relatively mathematical project, there are few major ethical factors to consider here.\\
+
+\todo{Explainability - enabling people affected to understand it. Interpretability}
