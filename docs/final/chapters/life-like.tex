@@ -67,8 +67,8 @@ However, a fitness function that compares states cell-wise can be too fine-grain
 We define the multi-resolution fitness $F$ as
 \begin{align}
     F &= 1 - \bar{L}\\
-    \textnormal{where\ } \bar{L} &= \frac{1}{N^2M(K-1)} \sum_{k=1}^{K-1} \sum_{m=1}^{M} \left| \round{\omega_m \ast X_{\delta_{k+1}}} \oplus \round{\omega_m \ast \phi^{\delta_{k+1}}(X_{\delta_k})}\\
-    \textnormal{where\ } \omega_m &= \frac{1}{m^2} \right|
+    \textnormal{where\ } \bar{L} &= \frac{1}{N^2M(K-1)} \sum_{k=1}^{K-1} \sum_{m=1}^{M} \left| \round{\omega_m \ast X_{\delta_{k+1}}} \oplus \round{\omega_m \ast \phi^{\delta_{k+1}}(X_{\delta_k})}\right| \\
+    \textnormal{where\ } \omega_m &= \frac{1}{m^2}
     \begin{pmatrix}
         1 & \ldots & 1\\
         \vdots & \ddots & \vdots\\
