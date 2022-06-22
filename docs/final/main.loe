@@ -1,6 +1,6 @@
 \addvspace {10\p@ }
 \contentsline {definition}{\ifthmt@listswap Definition~2.1\else \numberline {2.1}Definition\fi \thmtformatoptarg {Cellular Automaton}}{11}{definition.2.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~2.2\else \numberline {2.2}Definition\fi \thmtformatoptarg {Inner-Totalistic}}{12}{definition.2.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~2.2\else \numberline {2.2}Definition\fi \thmtformatoptarg {Inner-Totalistic}}{13}{definition.2.2}%
 \contentsline {definition}{\ifthmt@listswap Definition~2.3\else \numberline {2.3}Definition\fi \thmtformatoptarg {Outer-Totalistic}}{13}{definition.2.3}%
 \contentsline {definition}{\ifthmt@listswap Definition~2.4\else \numberline {2.4}Definition\fi \thmtformatoptarg {Birth-Survival notation}}{13}{definition.2.4}%
 \contentsline {definition}{\ifthmt@listswap Definition~2.5\else \numberline {2.5}Definition\fi \thmtformatoptarg {Reaction-Diffusion System}}{15}{definition.2.5}%
@@ -18,4 +18,6 @@
 \contentsline {definition}{\ifthmt@listswap Definition~7.1\else \numberline {7.1}Definition\fi \thmtformatoptarg {CA convergence to a periodic state}}{44}{definition.7.1}%
 \contentsline {definition}{\ifthmt@listswap Definition~7.2\else \numberline {7.2}Definition\fi \thmtformatoptarg {Quiescence}}{44}{definition.7.2}%
 \contentsline {lemma}{\ifthmt@listswap Lemma~7.1\else \numberline {7.1}Lemma\fi }{44}{lemma.7.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~7.3\else \numberline {7.3}Definition\fi \thmtformatoptarg {Simple Matching Coefficient}}{45}{definition.7.3}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.3\else \numberline {7.3}Definition\fi \thmtformatoptarg {Volatility}}{45}{definition.7.3}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.4\else \numberline {7.4}Definition\fi \thmtformatoptarg {Density}}{45}{definition.7.4}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.5\else \numberline {7.5}Definition\fi \thmtformatoptarg {Simple Matching Coefficient}}{45}{definition.7.5}%
