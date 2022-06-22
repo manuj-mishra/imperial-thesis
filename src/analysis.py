@@ -131,39 +131,56 @@ if __name__ == "__main__":
   # print(df.conv_perc)
 
 
-  # df = pd.read_csv('./gray_scott/res.csv')
-  # sns.color_palette("flare", as_cmap=True)
-  # df = df[df.t > 10]
-  # g = sns.lineplot(x=df.k, y=df.f, sort=False)
-  # plt.show()
-
-  # runs_vs_convperc()
+  df = pd.read_csv('./lifelike/out/3_23(pop 20, ep 30)/fit-div.csv')
 
 
-  with open('lifelike/ics.npy', 'rb') as file:
-    ics = np.load(file)
+  fig, ax1 = plt.subplots()
 
-  hyp = pd.read_csv('./lifelike/single-hyper/single_max5_eval5.csv')
-  tax = pd.read_csv('./taxonomy.csv')
-  tax = tax[tax.conv_perc != 0]
-  tax['type'] = pd.cut(tax.conv_perc, bins= [0.0, 0.99, 1], labels=['Some', 'All'])
-  tax = tax.drop(columns=['conv_perc', 'conv_std', 'period_std', 'entropy', 'rstring'])
-  sns.pairplot(tax, plot_kws={'fill':True}, kind='kde', diag_kind='kde', hue='type')
+  color = 'tab:red'
+  ax1.set_xlabel('Epoch')
+  ax1.set_ylabel('Average SMD', color=color)
+  ax1.plot(df.index, df.smc, color=color)
+  ax1.tick_params(axis='y', labelcolor=color)
+
+  color = 'tab:green'
+  ax2 = ax1.twinx()
+  ax2.set_ylabel('Fitness', color=color)
+  ax2.plot(df.index, df.fitness, color=color)
+  ax2.tick_params(axis='y', labelcolor=color)
+
+  fig.tight_layout()
+  plt.legend()
   plt.show()
+  # runs_vs_convperc()
+  #
+  #
+  # with open('lifelike/ics.npy', 'rb') as file:
+  #   ics = np.load(file)
+  #
+  # hyp = pd.read_csv('./lifelike/single-hyper/single_max5_eval5.csv')
+  # print(hyp)
+  # tax = pd.read_csv('./taxonomy.csv')
+  # tax = tax[tax.conv_perc != 0]
+  # tax['type'] = pd.cut(tax.conv_perc, bins= [0.0, 0.99, 1], labels=['Some', 'All'])
+  # tax = tax.drop(columns=['conv_std', 'period_std', 'entropy'])
+  # # sns.pairplot(tax, plot_kws={'fill':True}, kind='kde', diag_kind='kde', hue='type')
+  # plt.show()
   # hyp = hyp.set_index('rstring')
   # hyp['conv_perc'] = tax.conv_perc
   # hyp['conv_mean'] = tax.conv_mean
   # hyp['period_mean'] = tax.period_mean
   # hyp['density'] = tax.density
   # hyp['volatility'] = tax.volatility
-  # print(df.conv_perc.value_counts())
-  # df = odf[odf.conv_perc != 0]
-  # df = df[df.conv_perc != 1]
-  # print(len(df.index))
-  # print(len(df.index))
-  # graph(df.entropy, "", "")
-  # taxonomy_graphs(df)
-  # print(hyp)
+  # # hyp = hyp[(hyp['conv_perc'] > 0.95)]
+  # # hyp = hyp[(hyp['density'] < 0.9) & (hyp['density'] > 0.1)]
+  # # print(df.conv_perc.value_counts())
+  # # df = df[odf.conv_perc != 0]
+  # # df = df[df.conv_perc != 1]
+  # # print(len(df.index))
+  # # print(len(df.index))
+  # # graph(df.entropy, "", "")
+  # # taxonomy_graphs(df)
+  # # print(hyp)
   # for thing in ('conv_perc', 'conv_mean', 'period_mean', 'density', 'volatility'):
   #   sns.scatterplot(data=hyp, x = 'visited', y =thing)
   #   plt.show()

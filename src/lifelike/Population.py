@@ -11,7 +11,7 @@ from lifelike.constants import CHROMOSOME_LEN
 class Population:
   def __init__(self, pop_size, elitism, mutation, trueB, trueS, ics, init_method = 'decimal', hyperparams=None):
     if hyperparams is None:
-      hyperparams = {"max_step": 5, "eval_step": 10}
+      hyperparams = {"max_step": 5, "eval_step": 5}
     self.pop_size = pop_size
     self.elitism = elitism
     self.mutation = mutation
@@ -73,6 +73,13 @@ class Population:
 
   def num_unique_inds(self):
     return len(set(i.rstring for i in self.inds))
+
+  def avg_smc(self):
+    smc = 0
+    for i in self.inds:
+      for j in self.inds:
+        smc += bin(i.rstring ^ j.rstring).count("1")
+    return smc / (2 * len(self.inds))
 
   def __str__(self):
     res = "["

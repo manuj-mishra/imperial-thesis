@@ -1,0 +1,6 @@
+Experiment ES_30EP_20POP
+Algorithm ES
+Recombination PLUS
+Selection LINEAR
+InitialisationRANDOM
+Seed SPLATTER

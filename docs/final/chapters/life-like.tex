@@ -81,8 +81,6 @@ where $\omega \ast f$ is a 2D convolution over image $f$ with filter kernel $\om
 
 The filter kernel used, $\omega_m$, is the all-ones matrix divided by the size of the kernel. This ensures that $\omega_m \ast X$ has entries between 0 and 1 and that, after rounding, the convolution is a binary matrix with each cell representing whether there are more live or dead cells in an $m \times m$ region of the lattice. After XORing and summation, the loss $\bar{L}$ is between 0 and 1 and so is the fitness.
 
-
-
 \section{Software Engineering Design} \label{sec:sed}
 
 Design decisions regarding algorithms and process have been discussed throughout Chapters \ref{procedural} and \ref{lifelike}. In this section, we summarise key software engineering design decisions when writing the evolutionary algorithm toolkit.\\

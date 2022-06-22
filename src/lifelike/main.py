@@ -38,12 +38,12 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
   ics = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for i in range(20)]
   pop = Population(pop_size, elitism, mutation, trueB, trueS, ics, init_method='decimal')
   accuracies = [pop.evaluate(pop.loss())]
-  unique_inds = [pop.num_unique_inds()]
+  smc = [pop.avg_smc()]
   pop_history = {"epoch":[0]*pop.elite_n, "vals": [ind.rstring for ind in pop.inds]}
   visited = {v: 0 for v in pop.visited}
   for epoch in range(epoch_n):
     accuracies.append(pop.iterate())
-    unique_inds.append(pop.num_unique_inds())
+    smc.append(pop.avg_smc())
     for v in pop.visited:
       visited.setdefault(v, epoch + 1)
     pop_history["epoch"].extend([epoch + 1] * pop.elite_n)
@@ -52,50 +52,50 @@ def test_single_GA(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_RATE,
   name = f"{''.join(str(i) for i in trueB)}_{''.join(str(i) for i in trueS)}"
   dir = f"out/{name}(pop {pop_size}, ep {epoch_n})"
   os.makedirs(dir, exist_ok=True)
-  file = open(f'{dir}/elite.csv', 'w+', newline='')
-  with file:
-    write = csv.writer(file)
-    write.writerow([f"{e.b}_{e.s}" for e in pop.inds])
-    write.writerow([e.get_rstring() for e in pop.inds])
+  # file = open(f'{dir}/elite.csv', 'w+', newline='')
+  # with file:
+  #   write = csv.writer(file)
+  #   write.writerow([f"{e.b}_{e.s}" for e in pop.inds])
+  #   write.writerow([e.get_rstring() for e in pop.inds])
 
   history = DataFrame.from_dict(pop_history)
   history.to_csv(f'{dir}/history.csv')
 
-  fit_div = DataFrame.from_dict({"fitness": accuracies, "num_inds": unique_inds})
+  fit_div = DataFrame.from_dict({"fitness": accuracies, "smc": smc})
   fit_div.to_csv(f'{dir}/fit-div.csv')
 
-  # print("Accuracy", accuracies[-1])
-  # print("Best", pop.inds[0].b, pop.inds[0].s)
-  print("Visited", len(pop.visited))
-  vis_df = {'epoch': [], 'val':[], 'og':[]}
-  for v, og in visited.items():
-    for epoch in range(og, epoch_n + 1):
-      vis_df['epoch'].append(epoch)
-      vis_df['val'].append(v)
-      vis_df['og'].append(og - epoch)
-
-  rtrue = Rulestring.from_bs(trueB, trueS).rstring
-
-  # CONVERGENCE GRAPH
-  g = sns.scatterplot(data=history, x="epoch", y="vals", s = 30)
-  g.set(xlabel='Epoch', ylabel='Integer value of chromosome')
-  plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
-  plt.axhline(y=rtrue, color='r')
-  ax = plt.gca()
-  ax.set(yscale="log")
-  # ax.set_ylim(ymin = 0.9*rtrue, ymax=1.1*rtrue)
-  plt.show()
-
-
-  # SEARCH SPACE GRAPH
-  g = sns.scatterplot(data=vis_df, x="epoch", y="val", hue='og', s = 30, marker='x', legend=False)
-  g.set(xlabel='Epoch', ylabel='Integer value of chromosome')
-  plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
-  plt.axhline(y=rtrue, color='r')
-  ax = plt.gca()
+  # # print("Accuracy", accuracies[-1])
+  # # print("Best", pop.inds[0].b, pop.inds[0].s)
+  # print("Visited", len(pop.visited))
+  # vis_df = {'epoch': [], 'val':[], 'og':[]}
+  # for v, og in visited.items():
+  #   for epoch in range(og, epoch_n + 1):
+  #     vis_df['epoch'].append(epoch)
+  #     vis_df['val'].append(v)
+  #     vis_df['og'].append(og - epoch)
+  #
+  # rtrue = Rulestring.from_bs(trueB, trueS).rstring
+  #
+  # # CONVERGENCE GRAPH
+  # g = sns.scatterplot(data=history, x="epoch", y="vals", s = 30)
+  # g.set(xlabel='Epoch', ylabel='Integer value of chromosome')
+  # plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
+  # plt.axhline(y=rtrue, color='r')
+  # ax = plt.gca()
   # ax.set(yscale="log")
-  ax.set_ylim(ymin = 0, ymax=2**18)
-  plt.show()
+  # # ax.set_ylim(ymin = 0.9*rtrue, ymax=1.1*rtrue)
+  # plt.show()
+  #
+  #
+  # # SEARCH SPACE GRAPH
+  # g = sns.scatterplot(data=vis_df, x="epoch", y="val", hue='og', s = 30, marker='x', legend=False)
+  # g.set(xlabel='Epoch', ylabel='Integer value of chromosome')
+  # plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
+  # plt.axhline(y=rtrue, color='r')
+  # ax = plt.gca()
+  # # ax.set(yscale="log")
+  # ax.set_ylim(ymin = 0, ymax=2**18)
+  # plt.show()
 
   return pop.inds[0], accuracies[-1]
 
@@ -184,6 +184,8 @@ def test_initial_conds(trueB, trueS, pop_size=POPULATION_SIZE, elitism=ELITISM_R
 
 
 if __name__ == "__main__":
+
+
   # d = {"mut":[], "el":[], "best":[], "accuracy":[]}
   # for mut in np.linspace(0,0.5, num=12):
   #   for el in np.linspace(0.2, 0.7, num=12):

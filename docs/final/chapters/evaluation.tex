@@ -1,6 +1,6 @@
 \chapter{Evaluation} \label{evaluation}
 
-In this chapter, we begin by outlining metrics used to evaluate individual CAs, and EAs as a whole. We then systematically analyse the life-like CA rulespace using these metrics. Finally, we evaluate the evolutionary algorithms developed in this project against each goal. We establish which types of rules are easier or harder to learn based on our systematic analysis. 
+In this chapter, we begin by outlining metrics used to evaluate individual CA, and EAs as a whole. We then systematically analyse the life-like CA rule space using these metrics. Finally, we evaluate the evolutionary algorithms developed in this project against each goal. We establish which types of rules are easier or harder to learn based on our systematic analysis. 
 
 \section{Metrics}
 Alongside properties discussed in Sections \ref{sec: life-like-exploration} and \ref{sec: gs-exploration}, we design metrics to categorise CA and assess the effectiveness of evolutionary algorithms.
@@ -205,7 +205,7 @@ Figure~\ref{fig:bias-tuning} shows that the algorithm performs best for higher b
 \subsection{Single Case Evaluation} \label{sub:single-case}
 
 We begin by learning a few specific life-like CA rules to test the efficacy of the learning process. Consider Conway's Life rule B3/S23. In binary this is '000100000001100000' and as an integer it is 16480. Based on spot checks, we use the following hyperparameters\\ 
-\begin{center}
+\begin{center}\label{tab:hyperparams}
     \begin{tabular}{ l c }
         Number of Epochs & 30\\
         Population Size & 20\\
@@ -336,7 +336,7 @@ We would expect our algorithm to be far better at predicting class 1 and class 2
 \label{fig:conv-perc}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
             \subfloat{\includegraphics[width=.2\textwidth]{images/metrics/conv_mean.png}}\hfill
             \subfloat{\includegraphics[width=.2\textwidth]{images/metrics/period_mean.png}}\hfill
             \newline
@@ -344,6 +344,15 @@ We would expect our algorithm to be far better at predicting class 1 and class 2
             \subfloat{\includegraphics[width=.2\textwidth]{images/metrics/density.png}}\hfill
             \caption{Exploration metrics against number of rules visited by GA before discovering goal}
 \label{fig:all-metrics}
+\end{figure}
+
+We can visualise populations converging to optimal solutions very easily using the simple matching coefficient (SMC). On every epoch, we measure the fitness of the population and the average SMC between individuals in the population. As Figure~\ref{fig:smd} shows, fitnesses increases and average SMC decreases in the population over multiple epochs. These metrics change in a symmetrically opposing way indicating that the population becomes fitter and more genotypically homogenous as time progresses.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{images/smd.png}
+\caption{Change in fitness and diversity of the population over time. Learning B3/S23 with the standard hyperparameters outlined in \ref{tab:hyperparams}}
+\label{fig:smd}
 \end{figure}
 
 \section{Gray-Scott Models}
@@ -372,7 +381,7 @@ Using a self-adapting evolutionary strategy, we find that the patterns converge 
 \begin{figure}[!h]
 \centering
             \hfill
-            \subfloat[State paramaters]{\includegraphics[width=.4\textwidth]{images/flower-params.png}}\hfill
+            \subfloat[State parameters]{\includegraphics[width=.4\textwidth]{images/flower-params.png}}\hfill
             \subfloat[Control parameters]{\includegraphics[width=.4\textwidth]{images/flower-derivs.png}}\hfill
             \hfill
             \caption{Evolution of \textit{flower} pattern using evolutionary strategy (population size = 20)}
@@ -392,8 +401,8 @@ also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}\\
 \begin{figure}[!h]
 \centering
             \hfill
-            \subfloat[State paramaters for \textit{zebrafish} pattern (pop size = 50, Laplacian = nine-point stencil)]{\includegraphics[width=.4\textwidth]{images/zebra-params.png}}\hfill
-            \subfloat[State paramaters for \textit{soliton} pattern (population size = 25, Laplacian = Compeau operator)]{\includegraphics[width=.4\textwidth]{images/soliton-params.png}}\hfill
+            \subfloat[State parameters for \textit{zebrafish} pattern (pop size = 50, Laplacian = nine-point stencil)]{\includegraphics[width=.4\textwidth]{images/zebra-params.png}}\hfill
+            \subfloat[State parameters for \textit{soliton} pattern (population size = 25, Laplacian = Compeau operator)]{\includegraphics[width=.4\textwidth]{images/soliton-params.png}}\hfill
             \hfill
             \caption{Evolution of Gray-Scott models with different population sizes and Laplacian operators}
 \label{fig:more-fails}
@@ -401,7 +410,7 @@ also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}\\
 
 The case for genetic algorithms is very similar. We graph the local optima found for each algorithm, chromosome initialisation method, initial condition and recombination operator in Figure~\ref{fig:loc-optima}. It is clear that there are around many distinct regions of local optimality and, by varying the hyperparameters, we end up in different regions.\\
 
-\begin{figure}
+\begin{figure}[!h]
             \subfloat[Recombination]{\includegraphics[width=.5\textwidth]{images/gray_scott/eval/recomb.png}}\hfill
             \subfloat[Selection]{\includegraphics[width=.5\textwidth]{images/gray_scott/eval/select.png}}\hfill
             \newline
@@ -413,7 +422,7 @@ The case for genetic algorithms is very similar. We graph the local optima found
 
 Figure~\ref{fig:big-fail-true} shows a simulation of the target pattern (flower) and figure~\ref{fig:big-fail-pred} shows a simulation of a local optimum that was discovered.
 
-\begin{figure}
+\begin{figure}[!h]
             \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/1.png}}\hfill
             \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/2.png}}\hfill
             \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/3.png}}\hfill
@@ -433,45 +442,3 @@ Figure~\ref{fig:big-fail-true} shows a simulation of the target pattern (flower)
             \caption{Simulation of Gray-Scott local optimum}
 \label{fig:big-fail-pred}
 \end{figure}
-
-% \begin{table}
-%     \centering\hfill
-%         \begin{tabular}{|c|c|c|c|c|c|c|}
-%             \hline
-%             Algorithm & Initialisation & Initial Condition & Recombination & Mutation Rate & Best Result & MSE \\
-%             \hline
-%             ES & Random  & Splatter & Plus & - & &  \\
-%             ES & Random  & Splatter & Comma & - & &  \\
-%             ES & Random  & Seed & Plus & - & &  \\
-%             ES & Random  & Seed & Comma & - & &  \\
-%             ES & Threshold  & Splatter & Plus & - & &  \\
-%             ES & Threshold  & Splatter & Comma & - & &  \\
-%             ES & Threshold  & Seed & Plus & - & &  \\
-%             ES & Threshold  & Seed & Comma & - & &  \\
-%             GA & Random  & Splatter & Plus & 0.001 & &  \\
-%             GA & Random  & Splatter & Comma & 0.001 & &  \\
-%             GA & Random  & Seed & Plus & 0.001 & &  \\
-%             GA & Random  & Seed & Comma & 0.001 & &  \\
-%             GA & Threshold  & Splatter & Plus & 0.001 & &  \\
-%             GA & Threshold  & Splatter & Comma & 0.001 & &  \\
-%             GA & Threshold  & Seed & Plus & 0.001 & &  \\
-%             GA & Threshold  & Seed & Comma & 0.001 & &  \\
-%             GA & Random  & Splatter & Plus & 0.01 & &  \\
-%             GA & Random  & Splatter & Comma & 0.01 & &  \\
-%             GA & Random  & Seed & Plus & 0.01 & &  \\
-%             GA & Random  & Seed & Comma & 0.01 & &  \\
-%             GA & Threshold  & Splatter & Plus & 0.01 & &  \\
-%             GA & Threshold  & Splatter & Comma & 0.01 & &  \\
-%             GA & Threshold  & Seed & Plus & 0.01 & &  \\
-%             GA & Threshold  & Seed & Comma & 0.01 & &  \\
-%             GA & Random  & Splatter & Plus & 0.1 & &  \\
-%             GA & Random  & Splatter & Comma & 0.1 & &  \\
-%             GA & Random  & Seed & Plus & 0.1 & &  \\
-%             GA & Random  & Seed & Comma & 0.1 & &  \\
-%             GA & Threshold  & Splatter & Plus & 0.1 & &  \\
-%             GA & Threshold  & Splatter & Comma & 0.1 & &  \\
-%             GA & Threshold  & Seed & Plus & 0.1 & &  \\
-%             GA & Threshold  & Seed & Comma & 0.1 & &  \\
-%             \hline
-%     \end{tabular}
-% \end{table}

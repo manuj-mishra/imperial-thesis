@@ -1,0 +1,6 @@
+Experiment GA_30EP_25POP_(new)
+Algorithm GA
+Recombination PLUS
+Selection LINEAR
+InitialisationRANDOM
+Seed SPLATTER
