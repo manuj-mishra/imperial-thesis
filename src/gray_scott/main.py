@@ -17,9 +17,9 @@ ACCURACY_EPOCH_N = 30  # Epochs for accuracy experiment
 N_PARENTS = 5
 N_CHILDREN = N_PARENTS * 4
 
-def test_single_EA(true_f, true_k, algorithm, recombination, selection, initialisation, seed,
+def test_single_EA(true_f, true_k, mut, algorithm, recombination, selection, initialisation, seed,
                    n_parents=N_PARENTS, n_children=N_CHILDREN, epoch_n=ACCURACY_EPOCH_N):
-    pop = Population(n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation, seed)
+    pop = Population(n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation, seed, mut)
     # losses = [pop.evaluate(pop.loss())]
     top_f = [pop.inds[0].state[0]]
     top_k = [pop.inds[0].state[1]]
@@ -76,18 +76,13 @@ def test_single_EA(true_f, true_k, algorithm, recombination, selection, initiali
     return top_f, top_k
 
 if __name__ == "__main__":
-    res = {"fs":[], "ks":[], "recomb": [], "select": [], "initi": [], "seed": []}
-    for recomb in ("PLUS", "COMMA"):
-        for select in ("LINEAR", "ROULETTE"):
-            for initi in ("RANDOM", "THRESHOLD"):
-                for seed in ("SPLATTER", "PATCH"):
-                  rname = f"GA_{recomb}_{select}_{initi}_{seed}"
-                  f,k = test_single_EA(true_f=0.03, true_k=0.06, algorithm="ES", recombination=recomb,
-                                 selection=select, initialisation=initi, seed=seed)
-                  res["fs"].append(f)
-                  res["ks"].append(k)
-                  res["recomb"].append(recomb)
-                  res["select"].append(select)
-                  res["initi"].append(initi)
-                  res["seed"].append(seed)
-                  DataFrame.from_dict(res).to_csv("chonkyboi2.csv")
+    res = {"mut": [],"fs":[], "ks":[]}
+
+    for mut in (0.001, 0.005, 0.01, 0.05, 0.1, 0.5):
+        rname = f"GA_{mut}"
+        f,k = test_single_EA(true_f=0.03, true_k=0.06, mut=mut, algorithm="GA", recombination="PLUS",
+                       selection="LINEAR", initialisation="THRESHOLD", seed="PATCH")
+        res["mut"].append(mut)
+        res["fs"].append(f)
+        res["ks"].append(k)
+        DataFrame.from_dict(res).to_csv("hypergray.csv")

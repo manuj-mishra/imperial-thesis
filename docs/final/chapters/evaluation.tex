@@ -341,11 +341,13 @@ We would expect our algorithm to be far better at predicting class 1 and class 2
 \end{figure}
 
 \begin{figure}[!h]
-            \subfloat{\includegraphics[width=.2\textwidth]{images/metrics/conv_mean.png}}\hfill
-            \subfloat{\includegraphics[width=.2\textwidth]{images/metrics/period_mean.png}}\hfill
+            \hfill
+            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/conv_mean.png}}\hfill
+            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/period_mean.png}}\hfill
             \newline
-            \subfloat{\includegraphics[width=.2\textwidth]{images/metrics/volatility.png}}\hfill
-            \subfloat{\includegraphics[width=.2\textwidth]{images/metrics/density.png}}\hfill
+            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/volatility.png}}\hfill
+            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/density.png}}\hfill
+            \hfill
             \caption{Exploration metrics against number of rules visited by GA before discovering goal}
 \label{fig:all-metrics}
 \end{figure}
@@ -354,7 +356,7 @@ We can visualise populations converging to optimal solutions very easily using t
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{images/smd.png}
+\includegraphics[width=0.5\textwidth]{images/smd.png}
 \caption{Change in fitness and diversity of the population over time. Learning B3/S23 with the standard hyperparameters outlined in \ref{tab:hyperparams}}
 \label{fig:smd}
 \end{figure}

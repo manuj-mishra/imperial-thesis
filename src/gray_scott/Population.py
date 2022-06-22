@@ -7,7 +7,7 @@ from gray_scott.Chromosome import Chromosome
 
 
 class Population:
-    def __init__(self, n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation, seed):
+    def __init__(self, n_parents, n_children, true_f, true_k, algorithm, recombination, selection, initialisation, seed, mut):
         self.n_parents = n_parents
         self.n_children = n_children
         self.pop_size = n_parents + n_children
@@ -19,6 +19,7 @@ class Population:
         self.recombination = recombination
         self.selection = selection
         self.seed = seed
+        self.mut = mut
         self.real = MimicCA.empty(self.true_f, self.true_k)
         if initialisation == "THRESHOLD":
             self.inds = np.array([Chromosome.threshold(seed) for _ in range(self.pop_size)])
@@ -49,7 +50,7 @@ class Population:
         if self.algorithm == "GA":
             for ind in self.inds:
                 # ind.state += np.random.normal(scale=ind.control)
-                ind.state += np.random.normal(scale=0.005)
+                ind.state += np.random.normal(scale=self.mut)
                 ind.state = ind.state.clip(min=0)
 
         # Selection
