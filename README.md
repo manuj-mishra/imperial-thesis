@@ -1,4 +1,3 @@
-# Final Year Project
+# Reverse Engineering "Life"
 
-Exploring self-organising systems. See, for example, [https://distill.pub/2020/selforg/](https://distill.pub/2020/selforg/)
-
+Developing evolutionary algorithms for the discovery of 2D cellular automata transition functions. Specifically looking at binary outer-totalistic CA and Gray-Scott models.
