@@ -5,7 +5,7 @@ In this chapter, we begin by outlining metrics used to evaluate individual CA, a
 \section{Metrics}
 Alongside properties discussed in Sections \ref{sec: life-like-exploration} and \ref{sec: gs-exploration}, we design metrics to categorise CA and assess the effectiveness of evolutionary algorithms.
 
-\subsection{CAs}
+\subsection{Cellular Automata}
 First, we consider metrics for individual CA. These are: periodicity, volatility, and density.\\
 
 By estimating the portion of initial conditions that enter a periodic cycle, and the speed with which they do so, we can infer a CA's Wolfram class. The key distinction we intend to make is between CA in class 1 or 2 and CA in class 3 or 4. The former two classes should converge relatively quickly for almost all ICs whereas the latter two will not converge for a significant proportion of ICs.
@@ -72,7 +72,7 @@ The density $d$ of a CA at time step $t$ is
 % %COMMENT
 % % The problem here is that IC ~ binomial which is approx normal for p =0.5 but only using ICs with p=0.5 unfairly advantages CA with birth or survival rates around 4. But if we use ICs uniform across density then the binomial = normal assumption breaks.
 
-\subsection{EAs}
+\subsection{Evolutionary Algorithms}
 
 It is useful to evaluate the manner in which a population converges towards solutions during evolution. Although we reuse the word convergence to describe this, note the difference between a CA converging to a periodic solution and a population converging towards an optimal transition function. An EA converges when its elite individuals are relatively homogenous. To evaluate the convergence of a population, we would like to have a notion of similarity between individuals. This allows us to quantify the speed of convergence and group individuals into families if they are converging towards different optima. For a binary string chromosome, the simple matching coefficient (SMC) between two individuals is an appropriate metric to quantify their relative similarity. 
 \begin{definition}[Simple Matching Coefficient] Consider two binary strings $A$ and $B$. The frequency table enumerating the number of instances of each possible combination of bit settings is
@@ -103,7 +103,7 @@ This is useful in settings where true negatives ought to be ignored. For example
 
 When evaluating the effectiveness of evolutionary techniques at learning life-like CA rules, it is important to contextualise quantitative properties like convergence rate, fitness, and diversity. We perform an exploratory statistical analysis to gather data on the life-like CA rule space. In conjunction with the analyses of Wolfram\cite{wolfram1986theory} and Eppstein\cite{eppstein2010growth}, this will shed light into the characteristics that make a rule easier or harder to predict.\\
 
-There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. We use this data to find the percentage of initial conditions that converge within 100 steps for each rule. This is shown in Figure~\ref{fig:taxonomy-dist}\\   
+There are $2^{18} = 262144$ possible outer-totalistic cellular automata rules which makes a systematic analysis of their properties feasible through random simulation. 100 initial conditions are sampled from a distribution uniform across densities 0 to 1. Each rule is simulated on each initial condition for 100 time steps and the state at each step is recorded in a hashmap. We use this data to find the percentage of initial conditions that converge within 100 steps for each rule. This is shown in Figure~\ref{fig:taxonomy-dist}.
 
 \begin{figure}[!h]
 \centering
@@ -124,10 +124,10 @@ For the 39.7\% of rules that converge for at least one initial condition, we con
 \label{fig:tax-pairplot}
 \end{figure}
 
-We see that the mean convergence time is positively skewed and mean period is very positively skewed. This is especially true of rules that converge for all initial conditions. Such rules also tend to converge to very high density or very low density states. These can be thought of as "explosive" or "implosive" rules respectively. Explosive rules are likely to have many elements in their birth set and few elements in their death set making them conducive to rapid growth into a high density state. The opposite is true for implosive rules. Rules at these extremities are likely to be class 1 whereas the rules in between are likely to be class 2. For rules that converge for some initial conditions, there are still indications of explosive/implosive behaviour in the form of two spikes on either side of the central KDE plot but we see that there is clear bias towards rules with a density around 0.5. This is what we would expect if we were randomly generating states. Rules that converge for all states tend to have very low volatility indicating they converge out of slowly developing patterns rather than chaos.\\
+We see that the mean convergence time is positively skewed and mean period is very positively skewed. This is especially true of rules that converge for all initial conditions. Such rules also tend to converge to very high density or very low density states. These can be thought of as "explosive" or "implosive" rules respectively. Explosive rules are likely to have many elements in their birth set and few elements in their death set making them conducive to rapid growth into a high density state. The opposite is true for implosive rules. Rules at these extremities are likely to be class 1 whereas the rules in between are likely to be class 2. For rules that converge for some initial conditions, there are still indications of explosive/implosive behaviour in the form of two spikes on either side of the central KDE plot but we see that there is clear bias towards rules with a density around 0.5. This is what we would expect if we were randomly generating states. Rules that converge for all states tend to have very low volatility indicating they converge out of slowly developing patterns rather than chaos.
 
 \section{Maze Generation}
-We evaluate the effectiveness of the procedural maze generator at maximizing the two fitness metrics. These are the length of the solution path ($p$) and the number of dead ends ($d$). From spot checks on a few examples in the simulator, we find that these two metrics happen to have similar ranges (around 70-100). For this reason we begin by treating them with equal weighting during hyperparameter tuning.\\
+We evaluate the effectiveness of the procedural maze generator at maximizing the two fitness metrics. These are the length of the solution path ($p$) and the number of dead ends ($d$). From spot checks on a few examples in the simulator, we find that these two metrics happen to have similar ranges (around 70-100). For this reason we begin by treating them with equal weighting during hyperparameter tuning.
 
 \subsection{Hyperparameter Tuning}
 
@@ -154,7 +154,7 @@ The results of this are shown in Figure~\ref{fig:maze-hyperparam}. The optimum m
 
 
 \subsection{Ablation Analysis}
-Hyperparameter tuning revealed that the lowest mutation rate produced the best results. This suggests that mutation may not be necessary for maze evolution. To test this hypothesis, we conduct an ablation analysis on the genetic operators used. We run 10 maze generations, each for 100 epochs, using the optimal runtime-adjusted hyperparameters for efficiency. We repeat this procedure, each time systematically adding and removing genetic operators from the learning procedure. Figure~\ref{fig:maze-ablation} shows KDE plots which visualise the area occupied by the optimal results from each of these learning procedures.\\
+Hyperparameter tuning revealed that the lowest mutation rate produced the best results. This suggests that mutation may not be necessary for maze evolution. To test this hypothesis, we conduct an ablation analysis on the genetic operators used. We run 10 maze generations, each for 100 epochs, using the optimal runtime-adjusted hyperparameters for efficiency. We repeat this procedure, each time systematically adding and removing genetic operators from the learning procedure. Figure~\ref{fig:maze-ablation} shows KDE plots which visualise the area occupied by the optimal results from each of these learning procedures.
 
 \begin{figure}[!h]
 \centering
@@ -169,7 +169,7 @@ It is clear that crossover is important for convergence to a strong solution as 
 
 \subsection{Objective vs Relative Fitness}
 
-Since we are optimising for two metrics, we can take a linear combination of the objective values of $p$ and $d$ or we can rank each candidate separately by $p$ and $d$ then take a linear combination of the ranks. We call this objective and relative fitness respectively. For each fitness type, we run 20 experiments with a bias of 0.5 (i.e. equal weighting to the two goals) In Figure~\ref{fig:objective}, KDE plots show the performance of roulette and truncation selection using objective and relative fitness for selection. Note that the x-axis for both plots is still objective fitness as that is what the algorithm is attempting to maximise overall.\\
+Since we are optimising for two metrics, we can take a linear combination of the objective values of $p$ and $d$ or we can rank each candidate separately by $p$ and $d$ then take a linear combination of the ranks. We call this objective and relative fitness respectively. For each fitness type, we run 20 experiments with a bias of 0.5 (i.e. equal weighting to the two goals) In Figure~\ref{fig:objective}, KDE plots show the performance of roulette and truncation selection using objective and relative fitness for selection. Note that the x-axis for both plots is still objective fitness as that is what the algorithm is attempting to maximise overall.
 
 \begin{figure}[!h]
 \centering
@@ -184,7 +184,7 @@ Under both objective and relative fitness, truncation selection outperforms roul
 \subsection{Bias Tuning}
 The bias parameter $\lambda$ decides the weighting given to solution path length over number of dead ends when calculating fitness. Although this can be set by the user based on personal preference, we can tune the bias to find the value that maximizes overall fitness  $f(\lambda) = \lambda \hat{p}_\lambda + (1-\lambda)\hat{d}_\lambda$ where $ \hat{p}_\lambda$ and $\hat{d}_\lambda$ are the optimal values discovered by the algorithm under a bias of $\lambda$.\\ 
 
-Figure~\ref{fig:bias-tuning} shows that the algorithm performs best for higher bias values except $\lambda=0.0$ which has a very high performance. For a maze with a mix of dead ends and long solution path, the user may find better results from a bias of around 0.5 than around 0.3. Figure~\ref{fig:bias-mazes} shows the top mazes produced for different bias values. Qualitatively these appear to optimize the metrics they are being tested against.\\
+Figure~\ref{fig:bias-tuning} shows that the algorithm performs best for higher bias values except $\lambda=0.0$ which has a very high performance. For a maze with a mix of dead ends and long solution path, the user may find better results from a bias of around 0.5 than around 0.3. Figure~\ref{fig:bias-mazes} shows the top mazes produced for different bias values. Qualitatively these appear to optimize the metrics they are being tested against.
 
 \begin{figure}[!h]
 \centering
@@ -223,7 +223,7 @@ These have been obtained by looking at common parameters used in the literature\
 
 Figure~\ref{fig:life-convgraph} shows the algorithm to be very successful at learning the Life rule. In this experiment, the algorithm converges to the correct solution in 5 epochs. At many epochs, and especially after the true rule has been discovered, we see less than 4 points because a few of the elite rules are the same. Note that the graph has a log y-axis, so convergence is extremely fast.\\
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{images/life_like_eval/life-convgraph.png}
 \caption{Top 4 elite rules from each epoch in an experiment learning Life. The red line represents the goal.}
@@ -232,7 +232,7 @@ Figure~\ref{fig:life-convgraph} shows the algorithm to be very successful at lea
 
 Figure~\ref{fig:life-searchgraph} shows the portion of the search space visited by the algorithm. The top areas far from the goal quickly fade away as selection pressure removes such solutions and offspring in this area are no longer produced. We can also see some dark bands emerging far from the goal at epoch 30. However, the evolution history shows that by epoch 8, all the elite candidates are identical copies of the goal. This means that the dark bands seen at the end of the graph are not local optima but rather instances of the limited types of offspring that can be produced by applying crossover between two identical rule strings representing the goal solution.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{images/life_like_eval/life-searchgraph.png}
 \caption{All visited rules during evolution. Each rule is represented as a dark cross when first discovered and gradually fades in colour from left-to-right. The red line represents the goal.}
@@ -240,7 +240,7 @@ Figure~\ref{fig:life-searchgraph} shows the portion of the search space visited 
 \end{figure}
 
 \subsection{Ablation Analysis}
-Ablation analysis reveals that both mutation and crossover are critical to achieving a performance like this. Consider Figure~\ref{fig:life-ablation}. 'Visited' indicates the number of unique candidates considered by the algorithm in 30 epochs. Under no mutation and no crossover, we see that the population does not evolve at all. The number of visited candidates is equal to the initial population size, 20. With mutation but no crossover, the algorithm is incapable of convergence as it is unable to retain generational knowledge. With crossover but no mutation, the algorithm quickly converges to a local minimum from which it is powerless to escape. This also stagnates the number of candidates visited to 37. When both mutation and crossover are maintained, the algorithm successfully converges to the global minimum.\\ 
+Ablation analysis reveals that both mutation and crossover are critical to achieving a performance like this. Consider Figure~\ref{fig:life-ablation}. 'Visited' indicates the number of unique candidates considered by the algorithm in 30 epochs. Under no mutation and no crossover, we see that the population does not evolve at all. The number of visited candidates is equal to the initial population size, 20. With mutation but no crossover, the algorithm is incapable of convergence as it is unable to retain generational knowledge. With crossover but no mutation, the algorithm quickly converges to a local minimum from which it is powerless to escape. This also stagnates the number of candidates visited to 37. When both mutation and crossover are maintained, the algorithm successfully converges to the global minimum.
 
 \begin{figure}[!h]
 \centering
@@ -257,10 +257,11 @@ Ablation analysis reveals that both mutation and crossover are critical to achie
  
 Since the rule space is of order $10^6$, performing hyperparameter tuning across all parameters on a representative sample of the search space would be infeasible in the given time frame with the resources available. We find the parameters established in \ref{sub:single-case} to be appropriate based on spot checks on a set of rules covering all 4 Wolfram classes. These bear some similarity to the hyperparameters established in the procedural generation case. One point of interest is optimising the number of evaluations and the stepsize since these factors have considerable effect on the training time.\\
 
-Considering a random uniform stepsize, $\delta_k \sim \mathit{Uniform}(D_{max}, D_{min})$ we set $D_{min} = 1$ since we would like to give the algorithm a chance of learning on very small steps. To determine $D_{max}$, the algorithm is run on 100 goal rules sampled uniformly across the integer rule values and the loss of each rule is calculated by simulating on 20 random initial conditions. Note that by initialising the population uniformly on rule densities but sampling the goals uniformly on integer values, we ensure that we are not gaining an unfair advantage by testing on a subset of the search space where our algorithm is more likely to place initial guesses. The results are shown in Table~\ref{tab:stepsize-tuning}.\\
+Considering a random uniform stepsize, $\delta_k \sim \mathit{Uniform}(D_{max}, D_{min})$ we set $D_{min} = 1$ since we would like to give the algorithm a chance of learning on very small steps. To determine $D_{max}$, the algorithm is run on 100 goal rules sampled uniformly across the integer rule values and the loss of each rule is calculated by simulating on 20 random initial conditions. Note that by initialising the population uniformly on rule densities but sampling the goals uniformly on integer values, we ensure that we are not gaining an unfair advantage by testing on a subset of the search space where our algorithm is more likely to place initial guesses. The results are shown in Table~\ref{table:stepsize-tuning}.
 
-\begin{table} 
-    \centering\hfill
+\begin{table}[h!]
+    \centering
+    \hfill
     \subfloat[Average convergence rate]{
         \begin{tabular}{|c||c|c|c|}
             \hline
@@ -285,7 +286,9 @@ Considering a random uniform stepsize, $\delta_k \sim \mathit{Uniform}(D_{max}, 
             10 & 9 & 9 & 9\\
             \hline
     \end{tabular}}\hfill
-\label{tab:stepsize-tuning}
+    \hfill
+\caption{Results of learning life-like CA.}
+\label{table:stepsize-tuning}
 \end{table}
 
 Almost all configurations of step number and step size were able to converge to 100\% of the target rules within 30 epochs. The two configurations that failed to do this involved a maximum step size of 1 and many evaluation steps. In the extreme case of the configuration with 10 consecutive steps, only 52\% of targets were learnt successfully. Here, the CA is in the early stages of simulation with many transient patterns, so additional observations appears to be counter-productive. However, we also see that the genetic algorithm can perform surprisingly well calculating fitness on a single immediate observation of the goal rule after 1 time step. Computationally, this is very efficient compared to taking multiple stochastically chosen observations over longer periods of time. \\
@@ -296,10 +299,11 @@ However, it is also important to note the size of the test set. The set of 100 t
 
 \subsection{Fitness Functions}
 
-We now perform the same hyperparameter grid search on the second fitness function designed: multi-resolution loss. This function takes 3 differently sized smoothing convolutions of the true and surrogate CA, XORs them with each other to get the difference in density in a region around each cell, and takes the average of these differences. The reasoning behind this method is that we expect candidates with similar genotypes to have similar phenotypic behaviour. Therefore, we would expect similar rules to create patterns of similar density in different regions of the lattice. A convolution leverages this effect since the loss between two states with a slight phase shift would be much higher using single-resolution loss than using multi-resolution loss. The results are shown in Table~\ref{tab:multires-loss}\\
+We now perform the same hyperparameter grid search on the second fitness function designed: multi-resolution loss. This function takes 3 differently sized smoothing convolutions of the true and surrogate CA, XORs them with each other to get the difference in density in a region around each cell, and takes the average of these differences. The reasoning behind this method is that we expect candidates with similar genotypes to have similar phenotypic behaviour. Therefore, we would expect similar rules to create patterns of similar density in different regions of the lattice. A convolution leverages this effect since the loss between two states with a slight phase shift would be much higher using single-resolution loss than using multi-resolution loss. The results are shown in Table~\ref{table:multires-loss}.
 
-\begin{table} 
-    \centering\hfill
+\begin{table}[h!]
+    \centering
+    \hfill
     \subfloat[Average convergence rate]{
         \begin{tabular}{|c||c|c|c|}
             \hline
@@ -324,48 +328,43 @@ We now perform the same hyperparameter grid search on the second fitness functio
             10 & 10 & 11 & 12\\
             \hline
     \end{tabular}}\hfill
-    \label{tab:multires-loss}
+    \hfill
+    \caption{Results of learning life-like CA with multi-resolution loss.}
+    \label{table:multires-loss}
 \end{table}
 
 We find that multi-resolution loss is patently worse than single resolution loss. When learning with multi-resolution loss, all configurations are able to learn fewer targets and convergence time is higher. This suggests that the algorithm is not using high level, stable features to distinguish between different CA. Instead, it is using high-fidelity behaviour in the early chaotic stages of each CA to uniquely identify them. This also explains why performance decreases as the number of observations increase.
 
 \subsection{Class Evaluation}
 
-We would expect our algorithm to be far better at predicting class 1 and class 2 rules than class 3 and class 4 rules due to the difference in complexity. However, Figure~\ref{fig:conv-perc} which shows the convergence percentage of rules in the exploration experiment against the number of rules visited by the GA when learning a particular rule shows no clear correlation. In fact, the difficulty of learning, measured as the number of rules visited before the correct solution was found, seems to be uncorrelated with any metric collected during the exploration phase as shown in Figure~\ref{fig:all-metrics}. This suggests that the GA is capable of learning equally well on a wide variety of CA behaviour.
+We would expect our algorithm to be far better at predicting class 1 and class 2 rules than class 3 and class 4 rules due to the difference in complexity. However, as shown in Figure~\ref{fig:all-metrics}, there is no clear correlation between the convergence percentage of a rule in the exploration experiment and the number of candidates visited by the GA when learning that rule.
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.7\textwidth]{images/metrics/conv_perc.png}
-\caption{Convergence percentage of CA on random initial conditions against number of rules visited by GA before discovering goal}
-\label{fig:conv-perc}
-\end{figure}
-
-\begin{figure}[!h]
-            \hfill
-            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/conv_mean.png}}\hfill
-            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/period_mean.png}}\hfill
+\begin{figure}[H]
+            \subfloat{\includegraphics[width=.5\textwidth]{images/metrics/conv_mean.png}}\hfill
+            \subfloat{\includegraphics[width=.5\textwidth]{images/metrics/period_mean.png}}\hfill
             \newline
-            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/volatility.png}}\hfill
-            \subfloat{\includegraphics[width=.45\textwidth]{images/metrics/density.png}}\hfill
-            \hfill
-            \caption{Exploration metrics against number of rules visited by GA before discovering goal}
+            \subfloat{\includegraphics[width=.5\textwidth]{images/metrics/conv_perc.png}}\hfill
+            \subfloat{\includegraphics[width=.5\textwidth]{images/metrics/density.png}}\hfill
+            \caption{Exploration metrics of CA on random initial conditions against number of rules visited by GA before discovering goal}
 \label{fig:all-metrics}
 \end{figure}
+
+In fact, the difficulty of learning, measured as the number of candidates visited before the correct solution was found, seems to be uncorrelated with any metric collected during the exploration phase. This suggests that the GA is capable of learning equally well on a wide variety of CA behaviour.\\
 
 We can visualise populations converging to optimal solutions very easily using the simple matching coefficient (SMC). On every epoch, we measure the fitness of the population and the average SMC between individuals in the population. As Figure~\ref{fig:smd} shows, fitnesses increases and average SMC decreases in the population over multiple epochs. These metrics change in a symmetrically opposing way indicating that the population becomes fitter and more genotypically homogenous as time progresses.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.5\textwidth]{images/smd.png}
-\caption{Change in fitness and diversity of the population over time. Learning B3/S23 with the standard hyperparameters outlined in \ref{tab:hyperparams}}
+\caption{Change in fitness and diversity of the population over time. Learning B3/S23 with the standard hyperparameters outlined in Table~\ref{tab:hyperparams}.}
 \label{fig:smd}
 \end{figure}
 
 \section{Gray-Scott Models}
 
-The search space for Gray-Scott models is infinite so in the style of Giampaolo et al.\cite{giampaolo2022physics}, we consider four example targets shown in Table~\ref{tab:gs-targets}.
+The search space for Gray-Scott models is infinite so in the style of Giampaolo et al.\cite{giampaolo2022physics}, we consider four example targets shown in Table~\ref{table:gs-targets}.\\
 
-\begin{table} 
+\begin{table}[H]
     \centering
     \begin{tabular}{ |l|c|c| } 
         \hline
@@ -377,7 +376,8 @@ The search space for Gray-Scott models is infinite so in the style of Giampaolo 
         Mitosis & 0.028 & 0.062\\
         \hline
     \end{tabular}
-\label{tab:gs-targets}
+    \caption{Example targets for Gray-Scott systems.}
+    \label{table:gs-targets}
 \end{table}
 
 We choose to train a population of 25 candidates for 30 epochs since similar values worked effectively for life-like CA. Limited computational resources also mean that it is infeasible to run the range of experiments required on larger populations for longer periods. We use a linear truncation loss, splatter initialisation for each CA, and random uniform initialisation of the parameters across $f \in [0, 0.3]$ and $k \in [0, 0.08]$.
@@ -389,8 +389,8 @@ Using a self-adapting evolutionary strategy, we find that the patterns converge 
 \begin{figure}[!h]
 \centering
             \hfill
-            \subfloat[State parameters]{\includegraphics[width=.4\textwidth]{images/flower-params.png}}\hfill
-            \subfloat[Control parameters]{\includegraphics[width=.4\textwidth]{images/flower-derivs.png}}\hfill
+            \subfloat[State parameters]{\includegraphics[width=.5\textwidth]{images/flower-params.png}}\hfill
+            \subfloat[Control parameters]{\includegraphics[width=.5\textwidth]{images/flower-derivs.png}}\hfill
             \hfill
             \caption{Evolution of \textit{flower} pattern using evolutionary strategy (population size = 20)}
 \label{fig:flower-fail}
@@ -404,13 +404,13 @@ Increasing the population size does not appear to resolve matters. Changing the 
     0.05 & 0.2 & 0.05
   \end{bmatrix}
 \]
-also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}\\
+also appears to have no effect. These are shown in Figure~\ref{fig:more-fails}.\\
 
 \begin{figure}[!h]
 \centering
             \hfill
-            \subfloat[State parameters for \textit{zebrafish} pattern (pop size = 50, Laplacian = nine-point stencil)]{\includegraphics[width=.4\textwidth]{images/zebra-params.png}}\hfill
-            \subfloat[State parameters for \textit{soliton} pattern (population size = 25, Laplacian = Compeau operator)]{\includegraphics[width=.4\textwidth]{images/soliton-params.png}}\hfill
+            \subfloat[State parameters for \textit{zebrafish} pattern (pop size = 50, Laplacian = nine-point stencil)]{\includegraphics[width=.5\textwidth]{images/zebra-params.png}}\hfill
+            \subfloat[State parameters for \textit{soliton} pattern (population size = 25, Laplacian = Compeau operator)]{\includegraphics[width=.5\textwidth]{images/soliton-params.png}}\hfill
             \hfill
             \caption{Evolution of Gray-Scott models with different population sizes and Laplacian operators}
 \label{fig:more-fails}
@@ -428,7 +428,7 @@ The case for genetic algorithms is very similar. We graph the local optima found
 \label{fig:loc-optima}
 \end{figure}
 
-Figure~\ref{fig:big-fail-true} shows a simulation of the target pattern (flower) and figure~\ref{fig:big-fail-pred} shows a simulation of a local optimum that was discovered.
+Figure~\ref{fig:big-fail-true} shows a simulation of the target pattern (flower) and Figure~\ref{fig:big-fail-pred} shows a simulation of a local optimum that was discovered.
 
 \begin{figure}[!h]
             \subfloat{\includegraphics[width=.2\textwidth]{images/gray_scott/true/1.png}}\hfill

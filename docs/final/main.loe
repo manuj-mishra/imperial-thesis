@@ -5,20 +5,20 @@
 \contentsline {definition}{\ifthmt@listswap Definition~2.4\else \numberline {2.4}Definition\fi \thmtformatoptarg {Birth-Survival notation}}{13}{definition.2.4}%
 \contentsline {definition}{\ifthmt@listswap Definition~2.5\else \numberline {2.5}Definition\fi \thmtformatoptarg {Reaction-Diffusion System}}{15}{definition.2.5}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~3.1\else \numberline {3.1}Definition\fi \thmtformatoptarg {Wolfram Classes}}{18}{definition.3.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~3.2\else \numberline {3.2}Definition\fi \thmtformatoptarg {Majority Problem}}{21}{definition.3.2}%
-\contentsline {definition}{\ifthmt@listswap Definition~3.3\else \numberline {3.3}Definition\fi \thmtformatoptarg {GKL Classifier}}{21}{definition.3.3}%
+\contentsline {definition}{\ifthmt@listswap Definition~3.1\else \numberline {3.1}Definition\fi \thmtformatoptarg {Wolfram Classes}}{17}{definition.3.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~3.2\else \numberline {3.2}Definition\fi \thmtformatoptarg {Majority Problem}}{20}{definition.3.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~3.3\else \numberline {3.3}Definition\fi \thmtformatoptarg {GKL Classifier}}{20}{definition.3.3}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~5.1\else \numberline {5.1}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 1}}{36}{definition.5.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~5.2\else \numberline {5.2}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 2}}{37}{definition.5.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~5.1\else \numberline {5.1}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 1}}{35}{definition.5.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~5.2\else \numberline {5.2}Definition\fi \thmtformatoptarg {Life-Like Fitness Function 2}}{36}{definition.5.2}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~6.1\else \numberline {6.1}Definition\fi \thmtformatoptarg {Gray-Scott Model}}{39}{definition.6.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~6.2\else \numberline {6.2}Definition\fi \thmtformatoptarg {Blended Crossover (BLX-$\alpha $)}}{42}{definition.6.2}%
+\contentsline {definition}{\ifthmt@listswap Definition~6.1\else \numberline {6.1}Definition\fi \thmtformatoptarg {Gray-Scott Model}}{38}{definition.6.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~6.2\else \numberline {6.2}Definition\fi \thmtformatoptarg {Blended Crossover (BLX-$\alpha $)}}{41}{definition.6.2}%
 \addvspace {10\p@ }
-\contentsline {definition}{\ifthmt@listswap Definition~7.1\else \numberline {7.1}Definition\fi \thmtformatoptarg {CA convergence to a periodic state}}{44}{definition.7.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~7.2\else \numberline {7.2}Definition\fi \thmtformatoptarg {Quiescence}}{44}{definition.7.2}%
-\contentsline {lemma}{\ifthmt@listswap Lemma~7.1\else \numberline {7.1}Lemma\fi }{44}{lemma.7.1}%
-\contentsline {definition}{\ifthmt@listswap Definition~7.3\else \numberline {7.3}Definition\fi \thmtformatoptarg {Volatility}}{45}{definition.7.3}%
-\contentsline {definition}{\ifthmt@listswap Definition~7.4\else \numberline {7.4}Definition\fi \thmtformatoptarg {Density}}{45}{definition.7.4}%
-\contentsline {definition}{\ifthmt@listswap Definition~7.5\else \numberline {7.5}Definition\fi \thmtformatoptarg {Simple Matching Coefficient}}{45}{definition.7.5}%
-\contentsline {definition}{\ifthmt@listswap Definition~7.6\else \numberline {7.6}Definition\fi \thmtformatoptarg {Jaccard Distance}}{45}{definition.7.6}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.1\else \numberline {7.1}Definition\fi \thmtformatoptarg {CA convergence to a periodic state}}{43}{definition.7.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.2\else \numberline {7.2}Definition\fi \thmtformatoptarg {Quiescence}}{43}{definition.7.2}%
+\contentsline {lemma}{\ifthmt@listswap Lemma~7.1\else \numberline {7.1}Lemma\fi }{43}{lemma.7.1}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.3\else \numberline {7.3}Definition\fi \thmtformatoptarg {Volatility}}{44}{definition.7.3}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.4\else \numberline {7.4}Definition\fi \thmtformatoptarg {Density}}{44}{definition.7.4}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.5\else \numberline {7.5}Definition\fi \thmtformatoptarg {Simple Matching Coefficient}}{44}{definition.7.5}%
+\contentsline {definition}{\ifthmt@listswap Definition~7.6\else \numberline {7.6}Definition\fi \thmtformatoptarg {Jaccard Distance}}{44}{definition.7.6}%

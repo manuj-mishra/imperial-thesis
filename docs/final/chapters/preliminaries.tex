@@ -37,7 +37,7 @@ There are two neighbourhoods that are frequently used on Euclidean lattices. The
 \label{fig:neighbourhoods}
 \end{figure}
 
-In a finite grid CA, border cells must be given special consideration since they do not have the same number of neighbours as interior cells and therefore cannot share the same neighbourhood function. One option is to define a case-wise neighbourhood function with different behaviour for border cells. Another option is to freeze the state of border cells. In the field of partial differential equations, this is known as setting "fixed boundary conditions".  The problem can also be circumvented entirely by relaxing the finite grid assumption and allowing cells to "wrap around" the grid. This is known as setting "periodic boundary conditions" and can be imagined visually as running the CA on an infinite periodic tiling or, alternatively, on a torus.\\
+In a finite grid CA, border cells must be given special consideration since they do not have the same number of neighbours as interior cells and therefore cannot share the same neighbourhood function. One option is to define a case-wise neighbourhood function with different behaviour for border cells. Another option is to freeze the state of border cells. In the field of partial differential equations, this is known as setting "fixed boundary conditions".  The problem can also be circumvented entirely by relaxing the finite grid assumption and allowing cells to "wrap around" the grid. This is known as setting "periodic boundary conditions" and can be imagined visually as running the CA on an infinite periodic tiling or, alternatively, on a torus.
 
 
 \subsection{Life-Like CA} \label{sub:life}
@@ -88,8 +88,8 @@ As an example of the subtle difference here, consider the configurations shown i
 \begin{figure}[!h]
   \centering
   \hfill
-  \subfloat{\includegraphics[width=.2\textwidth]{images/moore_1.png}}\hfill
-  \subfloat{\includegraphics[width=.2\textwidth]{images/moore_2.png}}\hfill\hfill
+  \subfloat{\includegraphics[width=.15\textwidth]{images/moore_1.png}}\hfill
+  \subfloat{\includegraphics[width=.15\textwidth]{images/moore_2.png}}\hfill\hfill
   \caption{Two possible configurations of a Life-like CA}
   \label{fig:two-moores}
 \end{figure}
@@ -115,22 +115,22 @@ The Wolfram code, a number between 0 and 255 obtained by converting the binary r
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{images/rule-110.png}
+\includegraphics[width=0.65\textwidth]{images/rule-110.png}
 \caption{Rule 110 progression with random initialisation \cite{wolfram2002}}
 \label{fig:rule-110}
 \end{figure}
 
 \section{Turing Patterns}
-Morphogenesis is the process by which a system develops into a particular shape or pattern.  Biologically, this is seen in most multicellular organisms which can robustly develop specialised organs and intricate skin patterns without any centralised decision-making. Through simple rules encoded in the genome and homeostatic feedback loops enforced through chemical signalling, a tissue knows exactly how to grow and when to stop.\\
-
-In \textit{The Chemical Basis for Morphogenesis (Turing, 1952)}\cite{turing1990chemical}, Alan Turing proposes that spatially periodic phenomena in the natural world like the stripes on a zebra or the skin patterns on pufferfish can arise autonomously from random or uniform initial conditions through the interaction for two diffusible substances. These patterns are known as Turing patterns and Turing's model forms the basis of major theories in developmental biology. Such patterns are visible at all scales from the fold patterns of mammalian brains\cite{cartwright2002labyrinthine} to the distribution of matter in the Milky Way\cite{smolin1996galactic}. Figure~\ref{fig:seashells} is an example of Turing patterns on sea shells.
+Morphogenesis is the process by which a system develops into a particular shape or pattern.  Biologically, this is seen in most multicellular organisms which can robustly develop specialised organs and intricate skin patterns without any centralised decision-making. Through simple rules encoded in the genome and homeostatic feedback loops enforced through chemical signalling, a tissue knows exactly how to grow and when to stop.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{images/turing-shell.png}
-\caption{Complex patterns on sea shells(left) can be replicated using Turing patterns (right) \cite{meinhardt2009algorithmic}}
+\caption{Complex patterns on sea shells (left) can be replicated using Turing patterns (right) \cite{meinhardt2009algorithmic}}
 \label{fig:seashells}
 \end{figure}
+
+In \textit{The Chemical Basis for Morphogenesis (Turing, 1952)}\cite{turing1990chemical}, Alan Turing proposes that spatially periodic phenomena in the natural world like the stripes on a zebra or the skin patterns on pufferfish can arise autonomously from random or uniform initial conditions through the interaction for two diffusible substances. These patterns are known as Turing patterns and Turing's model forms the basis of major theories in developmental biology. Such patterns are visible at all scales from the fold patterns of mammalian brains\cite{cartwright2002labyrinthine} to the distribution of matter in the Milky Way\cite{smolin1996galactic}. Figure~\ref{fig:seashells} is an example of Turing patterns on sea shells.
 
 \subsection{Gray-Scott Model}
 
@@ -149,7 +149,7 @@ where $u$ and $v$ represent the densities of each component in a given cell. $\p
 
 For most values of feed and kill rate, the Gray-Scott model attains one of two quiescent states, either completely dominated by $U$ or completely dominated $V$. However, there are certain feed and kill rates which elicit complex stable patterns. Many of these bear a strong resemblance to Turing patterns observed in nature as shown by Figure~\ref{fig:gs-turing-patterns}.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/turing-patterns.png}
 \caption{Turing patterns arising out of Grey-Scott model simulations\cite{sims}}
@@ -160,7 +160,7 @@ For most values of feed and kill rate, the Gray-Scott model attains one of two q
 
 Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A chromosome is an indirect encoding of a candidate solution. The structure of the chromosome is called the "genotype" and the behaviour of the corresponding candidate solution is called the "phenotype". The fitness of a candidate is calculated from its phenotype. An evolutionary algorithm initializes population of chromosomes and modified them through repeated recombination, mutation, and selection. The purpose of recombination is to produce new solutions with "fit" attributes by combining aspects of existing candidates. Mutation, on the other hand, is applied to explore new areas of the search space by randomly perturbing existing candidates. Mutations may lead to weaker candidates in the short term but is useful as a method of discovering new attributes that, over many generations, can produce fitter candidates. Finally, selection applies competitive pressure to the population, ensuring that the overall fitness of the population is improving and increasingly fit solutions are being discovered.\\
 
-EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.\\
+EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.
 
 \subsection{Genetic Algorithms}
 
@@ -186,7 +186,7 @@ A genetic algorithm (GA) is a particular type of evolutionary algorithm with bin
   \end{algorithmic}
 \end{algorithm}
 
-The initial selection phase ($\Call{SelectParents}$) uses a objective function, also known as a fitness function, to compare and select the top candidates. The latter selection phase ($\Call{SelectPopulation}$) produces a new population from the modified parents and children. Population-wide selection criteria can be enforced in this phase. For example, weak parents can be eliminated if they have survived for too many generations or, symmetrically, children can be granted immunity for a particular number of generations.\\
+The initial selection phase ($\Call{SelectParents}$) uses a fitness function to compare and select the top candidates. The latter selection phase ($\Call{SelectPopulation}$) produces a new population from the modified parents and children. Population-wide selection criteria can be enforced in this phase. For example, weak parents can be eliminated if they have survived for too many generations or, symmetrically, children can be granted immunity for a particular number of generations.\\
 
 Genetic operators are specific implementations of actions such as crossover and mutation. The most common mutation operator is pointwise mutation where each bit in the chromosome is flipped with some fixed probability $p$. The three common crossover operators used in genetic algorithms are:
 \begin{enumerate}

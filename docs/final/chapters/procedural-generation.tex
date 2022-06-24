@@ -19,7 +19,7 @@ The EA toolkit is written entirely in Python and features the following key clas
 Each time we learn a new class of CA or optimise for a new objective, we write a new instance of the Population,  Chromosome, and Simulator classes.
 
 \section{Simulator} \label{subsec:simulator-1}
-Due to the undecidability of various CA rules, the state of a CA after some time cannot, in general, be calculated without simulating each transition in turn. For this, a CA simulator was built. Figure~\ref{fig:stains} shows snapshots from an example simulation.\\
+Due to the undecidability of various CA rules, the state of a CA after some time cannot, in general, be calculated without simulating each transition in turn. For this, a CA simulator was built. Figure~\ref{fig:stains} shows snapshots from an example simulation.
 
 \begin{figure}[!h]
 \centering
@@ -51,7 +51,7 @@ A maze is generated from a chromosome in three stages: growth, region search, an
 
 \subsection{Region Search}
 
-The region search stage, defined by Algorithm~\ref{alg:region-find}, uses randomly initialised breadth-first searches to find all disconnected regions within the maze. In order to perform the merge stage later on, two data structures are populated during the search stage. The first is a hashmap from each cell to the index of the region it occupies. The second is the reverse, a hashmap from each index to the set of cells in that region.\\
+The region search stage, defined by Algorithm~\ref{alg:region-find}, uses randomly initialised breadth-first searches to find all disconnected regions within the maze. In order to perform the merge stage later on, two data structures are populated during the search stage. The first is a hashmap from each cell to the index of the region it occupies. The second is the reverse, a hashmap from each index to the set of cells in that region.
 
 \begin{algorithm}
   \caption{Region Search Algorithm}\label{alg:region-find}
@@ -88,21 +88,23 @@ The region search stage, defined by Algorithm~\ref{alg:region-find}, uses random
   \end{algorithmic}
 \end{algorithm}
 
-Figure~\ref{fig:region-search} shows the region search algorithm.\\
+Figure~\ref{fig:region-search} shows the region search algorithm.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_search/1.png}}\hfill
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_search/2.png}}\hfill
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_search/3.png}}\hfill
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_search/4.png}}\hfill
+            \hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_search/1.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_search/2.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_search/3.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_search/4.png}}\hfill
+            \hfill
             \caption{Snapshots from region search algorithm. Yellow represents visited path cells and red represent the goal cell. Time moves from left to right.}
 \label{fig:region-search}
 \end{figure}
 
 \subsection{Region Merge}
 
-The region merge stage, defined by Algorithm~\ref{alg:region-merge}, connects regions randomly until a connected path exists from the start cell to the goal cell or the maze is deemed invalid. It is crucial for the region merging algorithm to be stochastic. If it is deterministic and merges regions according to a pre-designed pattern, the genetic algorithm is incentivised to learn rules that lend themselves well to this pattern. For example, if mazes with longer solution paths are considered fitter and the merging algorithm connects regions in horizontal bands sweeping left-to-right (as in \cite{adams2018evolving}) then the evolutionary process is incentivised to produce rules with shorter horizontal corridors over longer vertical corridors. This is in direct conflict with the fitness function. To avoid this, we design a stochastic region merging algorithm. It begins with the region containing the start cell. Each wall cell bordering this region is examined to determine whether removing the cell would connect to a distinct region. One of these wall cells is randomly chosen and removed. This process repeats on the union of the two joined regions. If no such wall cells exist, the simulation is deemed invalid. This can be thought of as only permitting walls of width 1 to be broken when connecting regions. Allowing walls of arbitrary thickness to be joined is undesirable as it diminishes the contribution of the CA over the final solution. Consider the extreme case of a maze with only wall cells except the start and end goal. When the merging algorithm connects the start and end, the solution's form is a consequence of the merging algorithm alone and not the CA which generated a maze of walls in the first place. This would clearly be undesirable. If a chromosome does not yield valid simulations at least 80\% of the time, it is assigned a fitness of 0 and usually removed from the population in the following iteration.\\
+The region merge stage, defined by Algorithm~\ref{alg:region-merge}, connects regions randomly until a connected path exists from the start cell to the goal cell or the maze is deemed invalid. It is crucial for the region merging algorithm to be stochastic. If it is deterministic and merges regions according to a pre-designed pattern, the genetic algorithm is incentivised to learn rules that lend themselves well to this pattern. For example, if mazes with longer solution paths are considered fitter and the merging algorithm connects regions in horizontal bands sweeping left-to-right (as in \cite{adams2018evolving}) then the evolutionary process is incentivised to produce rules with shorter horizontal corridors over longer vertical corridors. This is in direct conflict with the fitness function. To avoid this, we design a stochastic region merging algorithm. It begins with the region containing the start cell. Each wall cell bordering this region is examined to determine whether removing the cell would connect to a distinct region. One of these wall cells is randomly chosen and removed. This process repeats on the union of the two joined regions. If no such wall cells exist, the simulation is deemed invalid. This can be thought of as only permitting walls of width 1 to be broken when connecting regions. Allowing walls of arbitrary thickness to be joined is undesirable as it diminishes the contribution of the CA over the final solution. Consider the extreme case of a maze with only wall cells except the start and end goal. When the merging algorithm connects the start and end, the solution's form is a consequence of the merging algorithm alone and not the CA which generated a maze of walls in the first place. This would clearly be undesirable. If a chromosome does not yield valid simulations at least 80\% of the time, it is assigned a fitness of 0 and usually removed from the population in the following iteration.
 
 \begin{algorithm}
   \caption{Region Merge Algorithm}\label{alg:region-merge}
@@ -136,14 +138,16 @@ The region merge stage, defined by Algorithm~\ref{alg:region-merge}, connects re
   \end{algorithmic}
 \end{algorithm}
 
-Figure~\ref{fig:region-merge} shows the region merge algorithm.\\
+Figure~\ref{fig:region-merge} shows the region merge algorithm.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_merge/1.png}}\hfill
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_merge/2.png}}\hfill
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_merge/3.png}}\hfill
-            \subfloat{\includegraphics[width=.25\textwidth]{images/region_merge/4.png}}\hfill
+            \hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_merge/1.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_merge/2.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_merge/3.png}}\hfill
+            \subfloat{\includegraphics[width=.2\textwidth]{images/region_merge/4.png}}\hfill
+            \hfill
             \caption{Snapshots from region merge algorithm. Yellow represents visited path cells, red represents goal cell and green represent fringe wall cells that can be considered for destruction if they border the current region and an unvisited region. Time moves from left to right.}
 \label{fig:region-merge}
 \end{figure}
