@@ -4,8 +4,8 @@ from scipy.signal import convolve2d
 
 from util.media import init_image, save_image, clear_temp_folders, make_files_clustered
 
-GRID_SIZE = 51
-RUN_ITERS = 5001
+GRID_SIZE = 101
+RUN_ITERS = 5000
 dt = 1.0  # Time delta
 dA = 0.3
 dB = dA / 2
@@ -110,5 +110,5 @@ class MimicCA(CA):
 
 
 if __name__ == "__main__":
-  ca = CA.splatter(f=0.03, k=0.06)
-  ca.run(rname='test', media=True)
+  ca = CA.patch(f=0.028 , k=0.062)
+  ca.run(rname='test3', media=True)

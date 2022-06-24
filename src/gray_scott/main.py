@@ -35,54 +35,59 @@ def test_single_EA(true_f, true_k, mut, algorithm, recombination, selection, ini
         # top_df.append(pop.inds[0].control[0])
         # top_dk.append(pop.inds[0].control[1])
 
-    # dir = f"{root}/out/{rname}"
-    # os.makedirs(dir, exist_ok=True)
-    #
-    # lines = [f'Experiment {rname}',
-    #          f'Algorithm {algorithm}',
-    #          f'Recombination {recombination}',
-    #          f'Selection {selection}',
-    #          f'Initialisation{initialisation}',
-    #          f'Seed {seed}'
-    #          ]
-    # with open(f'{dir}/config.txt', 'w') as f:
-    #     f.write('\n'.join(lines))
-    #
-    # file = open(f'{dir}/elite.csv', 'w+', newline='')
-    # with file:
-    #     write = csv.writer(file)
-    #     write.writerow(
-    #             [f"f:{e.state[0]:.3f} k:{e.state[1]:.3f}" for e in
-    #              pop.inds])
-    #
-    # epochs = [i for i in range(0, epoch_n + 1)]
-    # DataFrame.from_dict({"t": epochs, "f": top_f, "k": top_k}).to_csv("res.csv")
-    #
-    # if seed == "PATCH":
-    #     new_CA = CA.patch
-    # elif seed == "SPLATTER":
-    #     new_CA = CA.splatter
-    # else:
-    #     raise Exception("Invalid argument for CA seed type")
-    #
-    # goal = new_CA(f=true_f, k=true_k)
-    # goal.run(fname="goal", rname=rname, media=True)
-    #
-    # found = new_CA(f=top_f[-1], k=top_k[-1])
-    # found.run(fname="pred", rname=rname, media=True)
+    rname = 'demo'
+    dir = f"{root}/out/{rname}"
+    os.makedirs(dir, exist_ok=True)
+
+    lines = [f'Experiment {rname}',
+             f'Algorithm {algorithm}',
+             f'Recombination {recombination}',
+             f'Selection {selection}',
+             f'Initialisation{initialisation}',
+             f'Seed {seed}'
+             ]
+    with open(f'{dir}/config.txt', 'w') as f:
+        f.write('\n'.join(lines))
+
+    file = open(f'{dir}/elite.csv', 'w+', newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerow(
+                [f"f:{e.state[0]:.3f} k:{e.state[1]:.3f}" for e in
+                 pop.inds])
+
+    epochs = [i for i in range(0, epoch_n + 1)]
+    DataFrame.from_dict({"t": epochs, "f": top_f, "k": top_k}).to_csv("res.csv")
+
+    if seed == "PATCH":
+        new_CA = CA.patch
+    elif seed == "SPLATTER":
+        new_CA = CA.splatter
+    else:
+        raise Exception("Invalid argument for CA seed type")
+
+    goal = new_CA(f=true_f, k=true_k)
+    goal.run(fname="goal", rname=rname, media=True)
+
+    found = new_CA(f=top_f[-1], k=top_k[-1])
+    found.run(fname="pred", rname=rname, media=True)
 
     # return np.mean(losses[-1 * (ACCURACY_EPOCH_N // 10):])
 
     return top_f, top_k
 
 if __name__ == "__main__":
-    res = {"mut": [],"fs":[], "ks":[]}
+    # res = {"mut": [],"fs":[], "ks":[]}
+    #
+    # for mut in (0.001, 0.005, 0.01, 0.05, 0.1, 0.5):
+    #     rname = f"GA_{mut}"
+    #     f,k = test_single_EA(true_f=0.03, true_k=0.06, mut=mut, algorithm="GA", recombination="PLUS",
+    #                    selection="LINEAR", initialisation="THRESHOLD", seed="PATCH")
+    #     res["mut"].append(mut)
+    #     res["fs"].append(f)
+    #     res["ks"].append(k)
+    #     DataFrame.from_dict(res).to_csv("hypergray.csv")
 
-    for mut in (0.001, 0.005, 0.01, 0.05, 0.1, 0.5):
-        rname = f"GA_{mut}"
-        f,k = test_single_EA(true_f=0.03, true_k=0.06, mut=mut, algorithm="GA", recombination="PLUS",
+
+    f,k = test_single_EA(true_f=0.03, true_k=0.06, mut=0.01, algorithm="GA", recombination="PLUS",
                        selection="LINEAR", initialisation="THRESHOLD", seed="PATCH")
-        res["mut"].append(mut)
-        res["fs"].append(f)
-        res["ks"].append(k)
-        DataFrame.from_dict(res).to_csv("hypergray.csv")

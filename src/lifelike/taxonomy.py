@@ -24,7 +24,7 @@ if __name__ == "__main__":
     seeds = [np.random.random((GRID_SIZE, GRID_SIZE)) > random.random() for _ in range(NUM_EXPS)]
     for rstring in range((2**18) + 1):
         if not rstring % 2**10:
-            with open("taxonomy.csv", "w") as outfile:
+            with open("out/taxonomy.csv", "w") as outfile:
                 writer = csv.writer(outfile)
                 writer.writerow(data.keys())
                 writer.writerows(zip(*data.values()))
