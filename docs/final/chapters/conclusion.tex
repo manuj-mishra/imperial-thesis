@@ -2,7 +2,7 @@
 
 This project has shown that evolutionary algorithms can effectively tackle inverse problems for cellular automata. At the outset, we introduced three objectives. We address these in turn.
 \begin{enumerate}
-    \item \textbf{State optimization for life-like CA}\\
+    \item \textbf{State optimisation for life-like CA}\\
     We built genetic algorithms to learn life-like CA transition functions that, with minor post-processing, randomly generate mazes with desirable qualities: long solution paths and many dead ends. This pushes the boundaries on existing work using CA for maze generation\cite{adams2017procedural, adams2018evolving} through a stochastic region merging algorithm that is unbiased with respect to orientation and guarantees playability.
     \item \textbf{Full rule dynamics for life-like CA}\\
     We built genetic algorithms that successfully learned the full rule dynamics of all 100 life-like CA, sampled uniformly across the search space, based on a very small number of observations (in some cases, a single observation). This was a very quick learning process requiring an average of 9 epochs of training on a population of 20 individuals. This represents a traversal of only 0.047\% of the total search space. As the first work to learn full rule dynamics for a class of 2D CA, we establish an important result in this regard.

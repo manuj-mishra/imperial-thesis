@@ -8,7 +8,7 @@ A CA is a computational model that performs multiple parallel computations, each
 A cellular automaton is an $n$-dimensional finite grid of computational units called cells. Each cell $c_i$ is characterised by:
 \begin{itemize}
   \item A discrete state variable $\sigma_i(t) \in \Sigma$, where $i$ indicates the index of the cell in the lattice, $t$ indicates the current time step, and $\Sigma$ denotes the finite set of all state variables.
-  \item A local neighbourhood set $\mathcal{N}(c_i)$ with cardinality $N$. \todo{set of cells}
+  \item A local neighbourhood set $\mathcal{N}(c_i)$ containing $N$ cells.
   \item A transition function $\phi:\Sigma^N \to \Sigma$ which takes local neighbour states as input. This is also known as the CA "update rule".
 \end{itemize}
 
@@ -17,7 +17,7 @@ At each time step, the state of each cell is simultaneously updated according to
 
 Due to the breadth of systems studied in CA literature, the constraints of this definition are often altered to produce interesting arrangements. For example:
 \begin{itemize}
-  \item The structure need not be a square grid. CA have been studied on hexagonal grids\cite{encinas2007modelling}, aperiodic tessellations such as as the Penrose tiling\cite{goucher2012gliders}, and even randomly generated structures like the Voronoi partition\cite{shi2000development}.
+  \item The structure need not be a square grid. CA have been studied on hexagonal grids\cite{encinas2007modelling}, aperiodic tessellations such as the Penrose tiling\cite{goucher2012gliders}, and even randomly generated structures like the Voronoi partition\cite{shi2000development}.
   \item The system need not be deterministic. Probabilistic cellular automata (PCA) have stochastic transition functions which describe a probability distribution of possible outcomes for any given input. PCA are able to model random dynamical systems in the real world from stock markets\cite{bartolozzi2004stochastic} to infectious diseases\cite{mikler2005modeling}.
   \item The state space $\Sigma$ need not be finite. In this thesis we will explore multiple possible state variable representations including bit arrays and continuous vectors.
 \end{itemize}
@@ -56,7 +56,7 @@ The most popular example of a CA is the Game of Life (henceforth "Life") formula
 
 Despite its simple setup and update rule, Life can exhibit the emergence of complex patterns. It is possible to simulate a fully universal Turing machine within Life\cite{rendell} and, as a corollary of the Halting Problem, this means that Life is undecidable. Given two arbitrary configurations, it is impossible to algorithmically determine whether one will follow the other.\\
 
-Patterns found within Life include fixed-point solutions to the transition function like the \textit{block} as well as periodic oscillators like the \textit{beacon} which has period 2. There are also periodic patterns that move across the lattice such as the \textit{glider} pattern. The density of a state is the number of living cells as a ratio of total grid size. It is possible to discover new stable patterns by repeatedly running specific rules on random initial states of a pre-determined density (called soups) and classifying the objects remaining after transient patterns have dissipated. Large-scale experiments of this nature are called "soup searches"\cite{flammenkamp}.\\
+Patterns found within Life include fixed-point solutions to the transition function like the \textit{block} as well as periodic oscillators like the \textit{beacon} which has period 2. There are also periodic patterns that move across the lattice such as the \textit{glider} pattern. The density of a state is the number of living cells as a ratio of total grid size. It is possible to discover new stable patterns by repeatedly running specific rules on random initial states of a predetermined density (called soups) and classifying the objects remaining after transient patterns have dissipated. Large-scale experiments of this nature are called "soup searches"\cite{flammenkamp}.\\
 
 \begin{figure}[H]
 \centering
@@ -83,7 +83,7 @@ A Life-like CA is outer-totalistic if the output of the transition function depe
 \label{def:outer-totalistic}
 \end{definition}
 
-As an example of the subtle difference here, consider the configurations shown in Figure~\ref{fig:two-moores}. An inner-totalistic CA would yield identical configurations in the next time step since both input configurations have 3 active cells in the neighbourhood set. However, an outer-totalistic CA would treat both configurations differently as one has an live centre cell and the other has a dead centre cell. This discrepancy corresponds to a great difference in the size of search spaces. There are $2^{10}=1024$ inner-totalistic CA but $2^{18} = 262144$ outer-totalistic CA. We represent the transition function of an outer-totalistic CA in a form called birth-survival (B/S) notation. Using this notation, we can represent the Game of Life as B3/S23. In this thesis, when we refer to Life-like CA, we implicitly assume the outer-totalistic variety.\\
+As an example of the subtle difference here, consider the configurations shown in Figure~\ref{fig:two-moores}. An inner-totalistic CA would yield identical configurations in the next time step since both input configurations have 3 active cells in the neighbourhood set. However, an outer-totalistic CA would treat both configurations differently as one has a live centre cell and the other has a dead centre cell. This discrepancy corresponds to a great difference in the size of search spaces. There are $2^{10}=1024$ inner-totalistic CA but $2^{18} = 262144$ outer-totalistic CA. We represent the transition function of an outer-totalistic CA in a form called birth-survival (B/S) notation. Using this notation, we can represent the Game of Life as B3/S23. In this thesis, when we refer to Life-like CA, we implicitly assume the outer-totalistic variety.\\
 
 \begin{figure}[!h]
   \centering
@@ -111,7 +111,7 @@ Let $N_b$ and $N_s$ be sets of integers. We say an outer-totalistic CA has rules
 \subsection{Elementary CA} 
 Elementary CA are defined on the simplest nontrivial lattice, a finite one-dimensional chain. The neighbourhood of each cell contains the cell itself and the two cells adjacent to it on either side. The state variable is a boolean which means there are $2^3 = 8$ possible neighbourhood state configurations. A transition rule maps each of these neighbourhood states to a resultant state and can therefore be represented as an 8-digit binary rule table $(t_7t_6t_5t_4t_3t_2t_1t_0)$ where configuration $(000)$ maps to $t_0$, $(001)$ maps to $t_1$, ..., and $(111)$ maps to $(t_7)$. Consequently, there are $2^8=256$ possible transition functions for elementary CA.\\
 
-The Wolfram code, a number between 0 and 255 obtained by converting the binary rule table to decimal, is the standard naming convention for these rules. Rule 110 is particularly notable as it can exhibit  and is Turing complete \cite{cook2004universality}. Figure \ref{fig:rule-110} shows an example progression of a Rule 110 system. Each row of pixels represents the state of the automaton at one snapshot in time with the topmost row representing the randomized initial state. It shows the emergence, interaction, and subsequent dissipation of multiple long-lived impermanent patterns. This is called class 4 behaviour\cite{wolfram2002} (see Def~\ref{def:wolfram-classes}).
+The Wolfram code, a number between 0 and 255 obtained by converting the binary rule table to decimal, is the standard naming convention for these rules. Rule 110 is particularly notable as it can exhibit  and is Turing complete \cite{cook2004universality}. Figure \ref{fig:rule-110} shows an example progression of a Rule 110 system. Each row of pixels represents the state of the automaton at one snapshot in time with the topmost row representing the randomised initial state. It shows the emergence, interaction, and subsequent dissipation of multiple long-lived impermanent patterns. This is called class 4 behaviour\cite{wolfram2002} (see Def~\ref{def:wolfram-classes}).
 
 \begin{figure}[!h]
 \centering
@@ -126,11 +126,11 @@ Morphogenesis is the process by which a system develops into a particular shape 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{images/turing-shell.png}
-\caption{Complex patterns on sea shells (left) can be replicated using Turing patterns (right) \cite{meinhardt2009algorithmic}}
+\caption{Complex patterns on seashells (left) can be replicated using Turing patterns (right) \cite{meinhardt2009algorithmic}}
 \label{fig:seashells}
 \end{figure}
 
-In \textit{The Chemical Basis for Morphogenesis (Turing, 1952)}\cite{turing1990chemical}, Alan Turing proposes that spatially periodic phenomena in the natural world like the stripes on a zebra or the skin patterns on pufferfish can arise autonomously from random or uniform initial conditions through the interaction for two diffusible substances. These patterns are known as Turing patterns and Turing's model forms the basis of major theories in developmental biology. Such patterns are visible at all scales from the fold patterns of mammalian brains\cite{cartwright2002labyrinthine} to the distribution of matter in the Milky Way\cite{smolin1996galactic}. Figure~\ref{fig:seashells} is an example of Turing patterns on sea shells.
+In \textit{The Chemical Basis for Morphogenesis (Turing, 1952)}\cite{turing1990chemical}, Alan Turing proposes that spatially periodic phenomena in the natural world like the stripes on a zebra or the skin patterns on pufferfish can arise autonomously from random or uniform initial conditions through the interaction for two diffusible substances. These patterns are known as Turing patterns and Turing's model forms the basis of major theories in developmental biology. Such patterns are visible at all scales from the fold patterns of mammalian brains\cite{cartwright2002labyrinthine} to the distribution of matter in the Milky Way\cite{smolin1996galactic}. Figure~\ref{fig:seashells} is an example of Turing patterns on seashells.
 
 \subsection{Gray-Scott Model}
 
@@ -158,9 +158,9 @@ For most values of feed and kill rate, the Gray-Scott model attains one of two q
 
 \section{Evolutionary Algorithms}
 
-Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A chromosome is an indirect encoding of a candidate solution. The structure of the chromosome is called the "genotype" and the behaviour of the corresponding candidate solution is called the "phenotype". The fitness of a candidate is calculated from its phenotype. An evolutionary algorithm initializes population of chromosomes and modified them through repeated recombination, mutation, and selection. The purpose of recombination is to produce new solutions with "fit" attributes by combining aspects of existing candidates. Mutation, on the other hand, is applied to explore new areas of the search space by randomly perturbing existing candidates. Mutations may lead to weaker candidates in the short term but is useful as a method of discovering new attributes that, over many generations, can produce fitter candidates. Finally, selection applies competitive pressure to the population, ensuring that the overall fitness of the population is improving and increasingly fit solutions are being discovered.\\
+Evolutionary algorithms (EAs) are a family of heuristic-based search algorithms for black-box optimisation problems. They are inspired by biological evolution. A chromosome is an indirect encoding of a candidate solution. The structure of the chromosome is called the "genotype" and the behaviour of the corresponding candidate solution is called the "phenotype". The fitness of a candidate is calculated from its phenotype. An evolutionary algorithm initialises a population of chromosomes and modifies them through repeated recombination, mutation, and selection. The purpose of recombination is to produce new solutions with "fit" attributes by combining aspects of existing candidates. Mutation, on the other hand, is applied to explore new areas of the search space by randomly perturbing existing candidates. Mutation may lead to weaker candidates in the short term but is useful as a method of discovering new attributes that, over many generations, can produce fitter candidates. Finally, selection applies competitive pressure to the population, ensuring that the overall fitness of the population is improving and increasingly fit solutions are being discovered.\\
 
-EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even neccessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.
+EAs are valued for their broad applicability as they require no information about the constraints or derivative of the objective function. In fact, an explicit representation of the objective function is not even necessary to run an EA as long as candidates can be compared to each other. Selection pressure can then be introduced in the form of tournament-based elimination.
 
 \subsection{Genetic Algorithms}
 
@@ -191,7 +191,7 @@ The initial selection phase ($\Call{SelectParents}$) uses a fitness function to 
 Genetic operators are specific implementations of actions such as crossover and mutation. The most common mutation operator is pointwise mutation where each bit in the chromosome is flipped with some fixed probability $p$. The three common crossover operators used in genetic algorithms are:
 \begin{enumerate}
   \item Uniform Crossover: For each bit (or "gene") in the chromosome, copy the corresponding gene from one parent.
-  \item Single Point Crossover: Randomly pick a split point. Take the all bits to the left of the split point from one parent and all bits to the right from the other.
+  \item Single Point Crossover: Randomly pick a split point. Take all bits to the left of the split point from one parent and all bits to the right from the other.
   \item Multiple Point Crossover: Randomly pick $n$ split points. Alternate picking contiguous sections of the chromosome between split points from each parent.
 \end{enumerate}
 
